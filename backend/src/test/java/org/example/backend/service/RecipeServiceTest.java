@@ -6,11 +6,8 @@ import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

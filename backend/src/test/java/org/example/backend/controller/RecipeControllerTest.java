@@ -5,7 +5,6 @@ import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
-import org.example.backend.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,9 +15,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @AutoConfigureMockMvc
