@@ -1,0 +1,11 @@
+.recipes {
+    width: 100%;
+    padding: 20px 0;
+    border: #213547 1px solid;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #fae8d7;
+    opacity: 1;
+    gap: 50px;
+}
