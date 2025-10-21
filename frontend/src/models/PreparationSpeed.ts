@@ -1,0 +1,1 @@
+export type PreparationSpeed = "FAST" | "MEDIUM" | "LONG";
