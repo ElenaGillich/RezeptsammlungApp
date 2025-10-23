@@ -1,6 +1,5 @@
 package org.example.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.RecipeRepository;
 import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
@@ -45,8 +44,6 @@ class RecipeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     void getAllRecipes_shouldReturnListWithOneRecipe_whenCalled() throws Exception {
@@ -55,7 +52,7 @@ class RecipeControllerTest {
 
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes"))
-                //THEN
+        //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                         [
@@ -78,18 +75,17 @@ class RecipeControllerTest {
 
     @Test
     void getAllRecipes_shouldReturnEmptyList_whenCalled() throws Exception {
-        //GIVEN
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes"))
-                //THEN
+        //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
     @Test
     void updateRecipeById_shouldReturnUpdatedRecipe_whenCalledWithDto() throws Exception {
+        //GIVEN
         recipeRepository.save(recipe);
-
         String dto = """
                   {
                   "name": "Tomaten-Salat mit Sauerrahm",
@@ -110,7 +106,7 @@ class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dto))
-                //THEN
+        //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                           {
@@ -171,7 +167,7 @@ class RecipeControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1")
                         .param("isFavorite", "true"))
-                //THEN
+        //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                           {

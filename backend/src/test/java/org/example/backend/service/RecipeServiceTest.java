@@ -115,11 +115,6 @@ class RecipeServiceTest {
                 recipe.isFavorite()
         );
 
-        Recipe updatedRecipe = recipe
-                .withName(dto.name())
-                .withImage(dto.image())
-                .withNotes(dto.notes());
-
         //WHEN
         when(mockRepo.findById("1nzu98349df7gtz345")).thenReturn(Optional.empty());
 
