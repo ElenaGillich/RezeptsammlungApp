@@ -3,6 +3,7 @@ package org.example.backend.controller;
 import org.example.backend.model.Recipe;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.service.RecipeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,12 @@ public class RecipeController {
     @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Recipe addRecipe(@RequestBody RecipeDto recipeDto) {
+        return recipeService.addRecipe(recipeDto);
     }
 
     @PutMapping("/{id}/update")

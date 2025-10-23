@@ -5,6 +5,7 @@ import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
+import org.example.backend.service.IdService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,6 +42,9 @@ class RecipeControllerTest {
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private IdService idService;
 
     @Autowired
     private MockMvc mockMvc;

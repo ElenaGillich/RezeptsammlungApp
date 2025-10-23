@@ -20,7 +20,9 @@ import static org.mockito.Mockito.*;
 class RecipeServiceTest {
 
     private final RecipeRepository mockRepo = mock(RecipeRepository.class);
-    private final RecipeService recipeService = new RecipeService(mockRepo);
+    private final IdService mockIdService = mock(IdService.class);
+    private final RecipeService recipeService = new RecipeService(mockRepo, mockIdService);
+
     Recipe recipe = Recipe.builder()
             .id("1")
             .name("Tomatensalat mit Schmand")

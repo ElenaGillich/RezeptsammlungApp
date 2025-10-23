@@ -2,6 +2,9 @@ package org.example.backend.service;
 
 import org.example.backend.RecipeRepository;
 import org.example.backend.dto.RecipeDto;
+import org.example.backend.model.DishCategory;
+import org.example.backend.model.Ingredient;
+import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +14,11 @@ import java.util.NoSuchElementException;
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepository;
+    private final IdService idService;
 
-    public RecipeService(RecipeRepository recipeRepository) {
+    public RecipeService(RecipeRepository recipeRepository, IdService idService) {
         this.recipeRepository = recipeRepository;
+        this.idService = idService;
     }
 
     public List<Recipe> getAllRecipes() {
@@ -45,5 +50,24 @@ public class RecipeService {
 
         Recipe updated = existing.withFavorite(isFavorite);
         return recipeRepository.save(updated);
+    }
+
+    public Recipe addRecipe(RecipeDto recipeDto) {
+        String recipeID = idService.randomId();
+        Recipe newRecipe = Recipe.builder()
+                .id(recipeID)
+                .name(recipeDto.name().trim().isEmpty() ? "Rezept-"+recipeID : recipeDto.name().trim())
+                .category(recipeDto.category() == null ? DishCategory.OTHER : recipeDto.category() )
+                .image(recipeDto.image())
+                .speed(recipeDto.speed())
+                .ingredients(recipeDto.ingredients())
+                .description(recipeDto.description())
+                .isFavorite(recipeDto.isFavorite())
+                .linkToSource(recipeDto.linkToSource())
+                .opinionOfTheDish(recipeDto.opinionOfTheDish())
+                .notes(recipeDto.notes())
+                .build();
+
+        return recipeRepository.save(newRecipe);
     }
 }
