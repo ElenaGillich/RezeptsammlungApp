@@ -54,11 +54,46 @@ export default function FullRecipe(props: RecipeFullCardProps) {
                     </div>
                     <div className="display-flex">
                         <div className="actions">
-                            <img
-                                src={isFavorite ? favorite : noFavorite}
-                                alt="Favorite-image"
-                                onClick={() => updateFavoriteState()}
-                            />
+                            <button
+                                type={"button"}
+                                className="action-button"
+                                onClick={updateFavoriteState}
+                                aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
+                            >
+                                <img
+                                    className="heart"
+                                    width={30}
+                                    height={30}
+                                    src={isFavorite ? favorite : noFavorite}
+                                    alt={isFavorite ? "Favorisiert" : "Nicht favorisiert"}
+                                />
+                            </button>
+
+                            <button
+                                type={"button"}
+                                className="action-button"
+                                aria-label="Rezept editieren"
+                            >
+                                <img
+                                    width={30}
+                                    height={30}
+                                    src="/public/edit.png"
+                                    alt="Edit-Icon"
+                                />
+                            </button>
+
+                            <button
+                                type={"button"}
+                                className="action-button"
+                                aria-label="Rezept zum Menü hinzufügen"
+                            >
+                                <img
+                                    width={30}
+                                    height={30}
+                                    src="/public/add.png"
+                                    alt="Menu-Icon"
+                                />
+                            </button>
                         </div>
                         <div className={"recipe-image"}>
                             <img

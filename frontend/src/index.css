@@ -27,7 +27,7 @@ body {
   place-items: start;
   min-width: fit-content;
   min-height: 100vh;
-  //background: linear-gradient(312deg, rgba(219, 64, 82, 1) 0%, rgba(249, 253, 29, 1) 50%, rgba(130, 252, 69, 1) 100%);
+  /*background: linear-gradient(312deg, rgba(219, 64, 82, 1) 0%, rgba(249, 253, 29, 1) 50%, rgba(130, 252, 69, 1) 100%);*/
 }
 
 h1 {
