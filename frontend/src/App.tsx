@@ -1,11 +1,12 @@
 import './App.css'
 import {useEffect, useState} from "react";
-import type {Recipe} from "./models/Recipe.ts";
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import AllRecipes from "./pages/allRecipes/allRecipes.tsx";
 import Navbar from "./components/Navbar.tsx";
 import Dashboard from "./pages/dashboard/Dashboard.tsx";
+import FullRecipe from './pages/fullRecipe/FullRecipe.tsx';
+import type {Recipe} from "./models/Recipe.ts";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Dashboard/>}/>
         <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
+        <Route path={"/recipes/:id"} element={<FullRecipe recipes={recipeList}/>}/>
       </Routes>
     </>
   )

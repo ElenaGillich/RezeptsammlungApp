@@ -1,0 +1,25 @@
+$image-width: 400px;
+$image-height: 300px;
+$spaces: 80px;
+
+.recipe-image {
+    width: $image-width;
+    height: $image-height;
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    border: 1px solid burlywood;
+}
+
+.info {
+    max-width: calc(100% - $image-width - $spaces);
+}
+
+.actions {
+    width: 30px;
+    margin-right: 20px;
+    height: $image-height;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+}

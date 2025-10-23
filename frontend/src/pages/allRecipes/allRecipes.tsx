@@ -1,5 +1,5 @@
 import type {Recipe} from "../../models/Recipe.ts";
-import RecipeCard from "../../components/RecipeCard.tsx";
+import RecipeCard from "../../components/recipeCard/RecipeCard.tsx";
 import "./allRecipes.css"
 
 type RecipesProps = {
@@ -12,7 +12,7 @@ export default function AllRecipes(props: RecipesProps) {
         <>
             { props.recipes.length < 1 && <h2>Keine Rezepte vorhanden!</h2> }
             { props.recipes.length > 0 &&
-                <div className="recipes">
+                <div className="recipes container">
                     {props.recipes.map(recipe => <RecipeCard key={recipe.id} recipe={recipe}/>)}
                 </div>
             }
