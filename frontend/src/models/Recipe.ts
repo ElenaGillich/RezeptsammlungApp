@@ -13,5 +13,5 @@ export type Recipe = {
     notes: string,
     opinionOfTheDish: string,
     linkToSource: string,
-    isFavorite: boolean,
+    favorite: boolean,
 }

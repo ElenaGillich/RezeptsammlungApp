@@ -24,6 +24,11 @@
         background-color: white;
     }
 
+    .custom-image {
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
     .recipe-name {
         font-weight: bold;
         font-size: 18px;
@@ -39,8 +44,21 @@
         border: 1px solid #213547;
         border-radius: 4px;
         background-color: white;
-        color: #213547;
+        color: #1e1e1e;
         font-size: 13px;
         padding: 0 4px;
+    }
+
+    .favorite-icon {
+        height: 36px;
+        width: 36px;
+        border-radius: 30px;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        place-items: center;
+        position: absolute;
+        margin-top: 3px;
+        margin-left: 3px;
     }
 }

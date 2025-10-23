@@ -1,10 +1,9 @@
 package org.example.backend.controller;
 
 import org.example.backend.model.Recipe;
+import org.example.backend.dto.RecipeDto;
 import org.example.backend.service.RecipeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,15 @@ public class RecipeController {
     @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
+    }
+
+    @PutMapping("/{id}/update")
+    public Recipe updateRecipeById(@PathVariable String id, @RequestBody RecipeDto recipeDto) {
+        return recipeService.updateRecipeById(id, recipeDto);
+    }
+
+    @PutMapping("/{id}")
+    public Recipe updateFavoriteByRecipeId(@PathVariable String id, @RequestParam boolean isFavorite) {
+        return recipeService.updateFavoriteByRecipeId(id, isFavorite);
     }
 }

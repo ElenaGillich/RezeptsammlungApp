@@ -1,0 +1,41 @@
+$image-width: 400px;
+$image-height: 300px;
+$spaces: 70px;
+$actions-width: 50px;
+
+.recipe-image {
+    width: $image-width;
+    height: $image-height;
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    border: 1px solid burlywood;
+}
+
+.info {
+    max-width: calc(100% - $image-width - $spaces);
+}
+
+.actions {
+    width: $actions-width;
+    margin-right: 10px;
+    height: $image-height;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+
+    .action-button {
+        display: flex;
+        width: $actions-width;
+        height: $actions-width;
+        place-content: center;
+        border: 1px solid rgb(253, 185, 136);
+        border-radius: 30px;
+        background-color: transparent;
+        box-shadow: gray 2px 2px 3px;
+
+        &:hover {
+            background-color: rgba(253, 185, 136, 0.58);
+        }
+    }
+}
