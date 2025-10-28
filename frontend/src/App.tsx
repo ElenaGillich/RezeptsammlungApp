@@ -5,8 +5,10 @@ import {Route, Routes} from "react-router-dom";
 import AllRecipes from "./pages/allRecipes/allRecipes.tsx";
 import Navbar from "./components/Navbar.tsx";
 import Dashboard from "./pages/dashboard/Dashboard.tsx";
-import FullRecipe from './pages/fullRecipe/FullRecipe.tsx';
+import RecipeView from './pages/recipeView/RecipeView.tsx';
 import type {Recipe} from "./models/Recipe.ts";
+import RecipeForm from "./pages/recipeForm/RecipeForm.tsx";
+import Information from "./pages/information/Information.tsx";
 
 function App() {
 
@@ -28,7 +30,9 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Dashboard/>}/>
         <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
-        <Route path={"/recipes/:id"} element={<FullRecipe recipes={recipeList}/>}/>
+        <Route path={"/recipes/new"} element={<RecipeForm/>}/>
+        <Route path={"/recipes/:id"} element={<RecipeView recipes={recipeList}/>}/>
+        <Route path={"/info"} element={<Information/>}/>
       </Routes>
     </>
   )

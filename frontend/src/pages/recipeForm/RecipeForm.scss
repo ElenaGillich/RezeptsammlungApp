@@ -1,0 +1,162 @@
+$image-width: 400px;
+$image-height: 300px;
+$spaces: 70px;
+$actions-width: 50px;
+
+.recipe-image {
+  width: $image-width;
+  height: $image-height;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  border: 1px solid burlywood;
+}
+
+.new-info {
+  width: calc(100% - $image-width - $spaces);
+}
+
+.section {
+  width: calc(100% - 8px);
+}
+
+.selections {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.selection {
+  width: 47%;
+}
+
+h4 {
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 8px;
+
+  &.required::after {
+    content: " *";
+    color: red;
+  }
+}
+
+.custom-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  background-color: #fbe2cf;
+  border-radius: 3px;
+  font-weight: bold;
+  display: flex;
+  place-content: center;
+  border: 2px solid rgb(253, 185, 136);
+  box-shadow: gray 3px 2px 3px;
+
+  &:hover {
+    background-color: rgba(253, 185, 136, 0.58);
+    border-color: #ac2525;
+  }
+}
+
+.upload {
+  margin-top: 10px;
+  margin-bottom: 30px;
+
+  input {
+    max-width: 156px;
+    padding: 0;
+    margin-top: 6px;
+    background-color: transparent;
+    margin-right: 16px;
+  }
+
+  h4 {
+    margin-bottom: 0;
+  }
+
+  .icon-button {
+    margin-left: 14px;
+    top: 6px;
+    position: relative;
+
+    &:hover {
+      background-color: #fbe2cf;
+    }
+  }
+}
+
+.recipe-name-input {
+  width: calc(100% - 16px);
+}
+
+.ingredients-list {
+  border: 1px solid burlywood;
+  border-radius: 3px;
+  box-shadow: gray 3px 2px 3px;
+  padding: 10px;
+  margin-bottom: 20px;
+
+  &.empty {
+    border-left: 3px solid #ff4d4f;
+  }
+}
+
+.empty {
+  text-align: center;
+  color: gray;
+  font-size: 1.3rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0 10px;
+
+  li {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    place-items: center;
+    color: black;
+
+    .list-item {
+      width: 90%;
+      text-align: left;
+    }
+  }
+
+  .action-button {
+    width: 40px;
+    height: 40px;
+    border-color: transparent;
+    padding: 4px 0 2px;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+}
+
+input[type="file"] {
+  color: transparent;
+
+  &::file-selector-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+}
+
+select.placeholder {
+  color: gray;
+}
+
+option,
+select:not(.placeholder) {
+  color: black;
+}

@@ -7,6 +7,8 @@ export default function Navbar() {
             <nav className={"navbar"}>
                 <Link to={"/"}> Dashboard /</Link>
                 <Link to={"/recipes"}> Alle Rezepte /</Link>
+                <Link to={"/recipes/new"}> Rezept hinzufügen /</Link>
+                <Link to={"/info"}> Hinweise /</Link>
             </nav>
         </header>
     )

@@ -20,7 +20,8 @@ public enum DishCategory {
     PRESERVE("Einmachen", "Заготовка"),
     GRILL("Grillgericht", "Блюдо на гриле"),
     PASTA("Pasta", "Паста / Макароны"),
-    NO_BAKE("Ohne Backen", "Без выпечки");
+    NO_BAKE("Ohne Backen", "Без выпечки"),
+    OTHER("Andere", "Другое");
 
     private final String germanName;
     private final String russianName;
@@ -30,7 +31,7 @@ public enum DishCategory {
         this.russianName = russianName;
     }
 
-    public String getInGerman() {
+    public String getValue() {
         return germanName;
     }
 
