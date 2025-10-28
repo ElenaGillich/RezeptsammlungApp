@@ -1,0 +1,23 @@
+.units {
+    max-width: 500px;
+    margin-left: 20px;
+    display: flex;
+    line-height: 2;
+}
+
+h3 {
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+.short {
+    width: 80px;
+    font-weight: bold;
+}
+
+.full {
+    width: 250px;
+    text-align: left;
+    margin-left: 40px;
+    font-weight: 500;
+}
