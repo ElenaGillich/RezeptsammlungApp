@@ -3,8 +3,6 @@ package org.example.backend.service;
 import org.example.backend.RecipeRepository;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.model.DishCategory;
-import org.example.backend.model.Ingredient;
-import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +54,8 @@ public class RecipeService {
         String recipeID = idService.randomId();
         Recipe newRecipe = Recipe.builder()
                 .id(recipeID)
-                .name(recipeDto.name().trim().isEmpty() ? "Rezept-"+recipeID : recipeDto.name().trim())
-                .category(recipeDto.category() == null ? DishCategory.OTHER : recipeDto.category() )
+                .name(recipeDto.name().trim().isEmpty() ? "Rezept-" + recipeID : recipeDto.name().trim())
+                .category(recipeDto.category() == null ? DishCategory.OTHER : recipeDto.category())
                 .image(recipeDto.image())
                 .speed(recipeDto.speed())
                 .ingredients(recipeDto.ingredients())

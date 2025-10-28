@@ -2,6 +2,7 @@
   width: 1000px;
   height: 100%;
   margin: 0 auto;
+  font-size: 1.1rem;
 }
 
 .truncated {
@@ -12,6 +13,7 @@
 
 .container {
   width: 100%;
+  min-height: 100vh;
   padding: 20px;
   border: #213547 1px solid;
   background-color: #fae8d7;
@@ -34,4 +36,96 @@
 .section-title {
   font-weight: bold;
   text-decoration: underline;
+}
+
+input,
+select,
+textarea {
+  border-width: thin;
+  border-radius: 3px;
+}
+
+input, select, textarea {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  padding: 8px;
+  background-color: floralwhite;
+}
+
+.page-title {
+  font-size: 2.3rem;
+  font-family: "Harlow Solid Italic", monospace;
+  font-weight: 900;
+  margin: 5px 0 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.section {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  width: calc(100% - 8px);
+
+  .more {
+    width: 65%;
+  }
+
+  .less {
+    width: 30%;
+  }
+}
+
+input:required,
+select:required,
+input:required:invalid,
+select:required:invalid {
+  border-left: 3px solid #ff4d4f;
+}
+
+input:required:valid,
+select:required:valid {
+  border-left: 1px solid gray;
+}
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+  color: #ac2525;
+  padding: 4px 0 0;
+  border-radius: 30px;
+  background: transparent;
+  border: 2px solid transparent;
+
+  .delete {
+    filter: invert(15%) sepia(95%) saturate(5000%) hue-rotate(350deg) brightness(85%) contrast(90%);
+  }
+
+  &:hover {
+    border-color: #ac2525;
+    background-color: rgba(253, 185, 136, 0.58);
+    box-shadow: gray 4px 2px 3px;
+  }
+}
+
+.action-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  background-color: #fbe2cf;
+  display: flex;
+  place-content: center;
+  border: 2px solid rgb(253, 185, 136);
+  box-shadow: gray 4px 2px 3px;
+
+  &:hover {
+    background-color: rgba(253, 185, 136, 0.58);
+    border-color: #ac2525;
+  }
 }

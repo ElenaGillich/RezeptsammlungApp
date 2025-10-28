@@ -1,17 +1,19 @@
 import type {Recipe} from "../../models/Recipe.ts";
 import {useParams} from "react-router-dom";
-import noImage from "../../../public/noRecipeImage.png";
-import noFavorite from "../../../public/heart.png";
-import favorite from "../../../public/red-heart.png";
-import "./FullRecipe.scss";
+import "./RecipeView.scss";
 import {useState} from "react";
 import axios from "axios";
+import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 
-type RecipeFullCardProps = {
+type RecipeViewProps = {
     recipes: Recipe[]
 }
 
-export default function FullRecipe(props: RecipeFullCardProps) {
+export default function RecipeView(props: RecipeViewProps) {
+    const noFavorite = "/heart.png";
+    const favorite = "/red-heart.png";
+    const noImage = "/noRecipeImage.png";
+
     const params = useParams();
     const recipe: Recipe | undefined = props.recipes.find(r => r.id === params.id);
     const [isFavorite, setIsFavorite] = useState<boolean>(recipe?.favorite ?? false);
@@ -40,7 +42,7 @@ export default function FullRecipe(props: RecipeFullCardProps) {
                 <div className="display-flex">
                     <div className="info">
                         <h2>{recipe.name}</h2>
-                        <p>Zubereitungszeit: {recipe.speed}</p>
+                        <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof  typeof PreparationSpeed]}</p>
 
                         <label className="section-title">Zutaten</label>:
                         <ol>
@@ -61,7 +63,6 @@ export default function FullRecipe(props: RecipeFullCardProps) {
                                 aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
                             >
                                 <img
-                                    className="heart"
                                     width={30}
                                     height={30}
                                     src={isFavorite ? favorite : noFavorite}
@@ -77,7 +78,7 @@ export default function FullRecipe(props: RecipeFullCardProps) {
                                 <img
                                     width={30}
                                     height={30}
-                                    src="/public/edit.png"
+                                    src="/edit.png"
                                     alt="Edit-Icon"
                                 />
                             </button>
@@ -90,7 +91,7 @@ export default function FullRecipe(props: RecipeFullCardProps) {
                                 <img
                                     width={30}
                                     height={30}
-                                    src="/public/add.png"
+                                    src="/add.png"
                                     alt="Menu-Icon"
                                 />
                             </button>

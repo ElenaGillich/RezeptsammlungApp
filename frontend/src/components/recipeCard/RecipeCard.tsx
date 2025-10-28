@@ -2,14 +2,14 @@ import type {Recipe} from "../../models/Recipe.ts";
 import "./RecipeCard.css"
 import type {Ingredient} from "../../models/Ingredient.ts";
 import {Tooltip} from "react-tooltip";
-import favorite from "../../../public/red-heart.png";
 
 type RecipeCardProps = {
     recipe: Recipe
 }
 
 export default function RecipeCard(props: RecipeCardProps) {
-    const noImage: string = "public/noRecipeImage.png";
+    const noImage: string = "/noRecipeImage.png";
+    const favorite: string = "/red-heart.png";
 
     const allIngredients: string = props.recipe.ingredients
         .map((ingredient: Ingredient) =>

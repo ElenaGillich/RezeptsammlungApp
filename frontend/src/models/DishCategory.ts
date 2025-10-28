@@ -19,29 +19,8 @@ export const DishCategory = {
     GRILL: "Grillgericht",
     PASTA: "Pasta",
     NO_BAKE: "Ohne Backen",
+    OTHER: "Andere...",
 } as const;
 
 export type DishCategory = typeof DishCategory[keyof typeof DishCategory];
-
-// export type DishCategory:
-//     "Salat" |
-//     "Suppe" |
-//     "Vorspeise" |
-//     "Hauptgericht" |
-//     "Beilage" |
-//     "Soße" |
-//     "Backwaren" |
-//     "Dessert" |
-//     "Torte" |
-//     "Getränk" |
-//     "Frühstück" |
-//     "Vegan" |
-//     "Vegetarisch" |
-//     "Kindergericht" |
-//     "Diät" |
-//     "Fast Food" |
-//     "Einmachen" |
-//     "Grillgericht" |
-//     "Pasta" |
-//     "Ohne Backen"
 
