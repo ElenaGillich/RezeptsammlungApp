@@ -5,7 +5,7 @@ import axios from "axios";
 import RecipeForm from "../recipeForm/RecipeForm.tsx";
 
 type EditRecipeProps = {
-    isSaved: (isSaved: boolean) => void
+    onSave: (isSaved: boolean) => void
 }
 
 export default  function EditRecipe(props: EditRecipeProps) {
@@ -45,7 +45,7 @@ export default  function EditRecipe(props: EditRecipeProps) {
 
     return (
         <>
-            {<RecipeForm isEditMode={true} recipe={recipe as Recipe} isSaved={props.isSaved}/>}
+            {<RecipeForm isEditMode={true} recipe={recipe as Recipe} isSaved={props.onSave}/>}
         </>
     );
 }

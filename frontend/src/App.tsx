@@ -35,7 +35,7 @@ function App() {
         <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
         <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} isSaved={setIsSaved}/>}/>
         <Route path={"/recipes/:id"} element={<RecipeView isFavoriteUpdated={setIsUpdated}/>}/>
-        <Route path={"/recipes/:id/edit"} element={<EditRecipe isSaved={setIsSaved}/>}/>
+        <Route path={"/recipes/:id/edit"} element={<EditRecipe onSave={setIsSaved}/>}/>
         <Route path={"/info"} element={<Information/>}/>
       </Routes>
     </>

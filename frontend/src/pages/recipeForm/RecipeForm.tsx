@@ -84,15 +84,14 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     }
 
     function updateIngredient(ingredient: IngredientType, isEdit: boolean = false) {
-        const excluded = ingredients.filter(value => value.name !== ingredient.name);
         if (isEdit) {
-            console.log("???????????")
-            setEdibleIngredient(ingredient);
-        }
-        console.log(edibleIngredient)
+            setEdibleIngredient({...ingredient});
+        } else {
+            const updated = ingredients.filter(value => value.name !== ingredient.name);
 
-        setIngredients(excluded);
-        setFormData((prev: RecipeDto): RecipeDto => ({...prev, ["ingredients"]: excluded}));
+            setIngredients(updated);
+            setFormData((prev: RecipeDto): RecipeDto => ({...prev, ingredients: updated}));
+        }
     }
 
     const handleRemoveImage = () => {
@@ -110,11 +109,18 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     };
 
     const handleIngredients = (newIngredient: IngredientType) => {
-        setIngredients((prev) => {
-            const updated = [...prev, newIngredient];
-            setFormData((prevForm) => ({...prevForm, ingredients: updated}));
-            return updated;
-        });
+        const updated = edibleIngredient
+            ? ingredients.map(ingredient =>
+                ingredient.name === edibleIngredient.name ? newIngredient : ingredient
+            )
+            : [...ingredients, newIngredient];
+
+        setIngredients(updated);
+        setFormData((prevForm) => ({...prevForm, ingredients: updated}));
+
+        if (edibleIngredient) {
+            setEdibleIngredient(undefined)
+        }
     };
 
     async function submitForm(event: FormEvent<HTMLFormElement>) {
@@ -128,7 +134,6 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
 
         try {
             if (isEditMode && recipe?.id) {
-console.log("!!!!!!!!!!!", JSON.stringify(formData))
                 await axios.put(`/api/recipes/${recipe.id}/update`, data);
             } else {
                 await axios.post('/api/recipes', data);
@@ -148,15 +153,16 @@ console.log("!!!!!!!!!!!", JSON.stringify(formData))
 
     return (
         <>
-            <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
-
             <form onSubmit={submitForm}>
-                <button
-                    className="custom-button"
-                    disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
-                >
-                    Speichern
-                </button>
+                <div className="display-flex">
+                    <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
+                    <button
+                        className="custom-button"
+                        disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
+                    >
+                        Speichern
+                    </button>
+                </div>
 
                 <div className="container">
                     <div className="display-flex">
@@ -198,7 +204,7 @@ console.log("!!!!!!!!!!!", JSON.stringify(formData))
                                         onChange={handleChange}
                                     >
                                         <option value="" disabled hidden> Zubereitungszeit wählen...</option>
-                                        { speedValues.map(([key, label]) =>
+                                        {speedValues.map(([key, label]) =>
                                             <option key={key} value={key}>{label}</option>)
                                         }
                                     </select>
@@ -246,8 +252,8 @@ console.log("!!!!!!!!!!!", JSON.stringify(formData))
                     </div>
                     <div className="ingredients">
                         <Ingredient
-                            editableIngredient={isEditMode ? edibleIngredient : undefined}
-                            setIngredient={(value: IngredientType) => handleIngredients(value)}
+                            editableIngredient={edibleIngredient}
+                            setIngredient={handleIngredients}
                         />
 
                         <h4 className={"required"}>Zutatenliste</h4>

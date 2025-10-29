@@ -25,7 +25,7 @@ export default function RecipeView(props: RecipeViewProps) {
                 setIsFavorite(result.data.favorite)
             })
             .catch((error) => console.log(error))
-    }, [isFavorite]);
+    }, [isFavorite, params.id]);
 
     if (!recipe) {
         return <h2>Kein Rezept mit ID={params.id} gefunden!</h2>;
