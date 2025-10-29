@@ -170,7 +170,7 @@ class RecipeControllerTest {
 
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1")
-                        .param("isFavorite", "true"))
+                        .param("favorite", "true"))
         //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""

@@ -1,3 +1,5 @@
+import type {RecipeDto} from "../models/RecipeDto.ts";
+
 export type ShortFullInfo = {
     short: string,
     full: string
@@ -35,3 +37,16 @@ export const dimensions: ShortFullInfo[] = [
     {short: "1 Gl", full: "250 ml"},
     {short: "1 L", full: "1000 ml"},
 ];
+
+export const  emptyRecipeDto: RecipeDto = {
+    name: "",
+    category: "",
+    image: "",
+    ingredients: [],
+    description: "",
+    speed: "",
+    notes: "",
+    opinionOfTheDish: "",
+    linkToSource: "",
+    favorite: false
+}

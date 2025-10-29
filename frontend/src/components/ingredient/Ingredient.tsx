@@ -1,21 +1,34 @@
 import type {Ingredient} from "../../models/Ingredient.ts";
-import {type ChangeEvent, useState} from "react";
+import {type ChangeEvent, useEffect, useState} from "react";
 import {units} from "../const.ts";
 import "./Ingredient.css"
 
 type IngredientProps = {
+    editableIngredient?: Ingredient | undefined;
     setIngredient: (ingredient: Ingredient) => void
 }
 
 export default function Ingredient(props: IngredientProps) {
-    // const empty: Ingredient = {
-    //     name: "", quantity: 0, unit: "", additionalInfo: ""
-    // };
+    console.log("++++", props.editableIngredient)
+
+    const empty: Ingredient = {
+        name: "", quantity: 0, unit: "g", additionalInfo: ""
+    };
 
     const [name, setName] = useState<string>("");
+    const [editable, setEditable] = useState<Ingredient>(props.editableIngredient ?? empty);
     const [quantity, setQuantity] = useState<number>(0);
     const [unit, setUnit] = useState<string>("g");
     const [additionalInfo, setAdditionalInfo] = useState<string>("");
+    // const ingredient: Ingredient = editable ? editable : empty;
+
+    useEffect(() => {
+        const editable: Ingredient = props.editableIngredient ?? empty;
+        setName(editable.name);
+        setQuantity(editable.quantity);
+        setUnit(editable.unit);
+        setAdditionalInfo(editable.additionalInfo);
+    }, [props.editableIngredient]);
 
     const handleChange = (
         event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -52,7 +65,7 @@ export default function Ingredient(props: IngredientProps) {
         setQuantity(0);
         setUnit("g");
         setAdditionalInfo("");
-
+        setEditable(empty);
         //props.setIngredient(empty);
     }
 
@@ -66,7 +79,7 @@ export default function Ingredient(props: IngredientProps) {
                             type="text"
                             name="name"
                             value={name}
-                            className="full-width"
+                            className={editable ? "full-width edit" : "full-width"}
                             placeholder={"Zutat (z.B. Zwiebel) ..."}
                             onChange={handleChange}
                         />
@@ -77,7 +90,7 @@ export default function Ingredient(props: IngredientProps) {
                         <input
                             type="text"
                             maxLength={100}
-                            className="info-width"
+                            className={editable ? "info-width edit" : "info-width"}
                             name="additionalInfo"
                             value={additionalInfo}
                             placeholder={"z.B. fein gehackt..."}

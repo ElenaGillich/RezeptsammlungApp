@@ -7,7 +7,7 @@ type RecipeCardProps = {
     recipe: Recipe
 }
 
-export default function RecipeCard(props: RecipeCardProps) {
+export default function RecipeCard(props: Readonly<RecipeCardProps>) {
     const noImage: string = "/noRecipeImage.png";
     const favorite: string = "/red-heart.png";
 
@@ -33,7 +33,7 @@ export default function RecipeCard(props: RecipeCardProps) {
                         <img
                             className="custom-image"
                             width={props.recipe.image ? 300 : 200}
-                            height={props.recipe.image ? 170 : 150}
+                            height={props.recipe.image ? 200 : 150}
                             src={props.recipe.image ? props.recipe.image : noImage}
                             alt="Gerichtbild"
                         />

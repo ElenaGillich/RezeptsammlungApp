@@ -1,4 +1,4 @@
-import {type ChangeEvent, type FormEvent, useState} from "react";
+import {type ChangeEvent, type FormEvent, useEffect, useState} from "react";
 import axios from "axios";
 import type {RecipeDto} from "../../models/RecipeDto.ts";
 import "./RecipeForm.scss";
@@ -7,33 +7,58 @@ import {DishCategory} from "../../models/DishCategory.ts";
 import Ingredient from "../../components/ingredient/Ingredient.tsx";
 import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
+import type {Recipe} from "../../models/Recipe.ts";
+import {emptyRecipeDto} from "../../components/const.ts";
 
-export default function RecipeForm() {
-    const recipeDto: RecipeDto = {
-        name: "",
-        category: "",
-        image: "",
-        ingredients: [],
-        description: "",
-        speed: "",
-        notes: "",
-        opinionOfTheDish: "",
-        linkToSource: "",
-        favorite: false
-    };
-    const dishCategories = Object.entries(DishCategory);
-    const speedValues = Object.entries(PreparationSpeed);
-    const [ingredients, setIngredients] = useState<IngredientType[]>([]);
-    const [image, setImage] = useState<File>();
-    const [formData, setFormData] = useState(recipeDto);
-    const [imagePreview, setImagePreview] = useState<string>("");
-    const [error, setError] = useState("");
-    const [fileName, setFileName] = useState("");
+type RecipeFormProps = {
+    isEditMode: boolean,
+    recipe?: Recipe | null,
+    isSaved: (isSaved: boolean) => void
+}
+
+export default function RecipeForm(props: Readonly<RecipeFormProps>) {
+    const {isEditMode, recipe} = props;
     const navigate = useNavigate();
 
+    const dishCategories = Object.entries(DishCategory);
+    const speedValues = Object.entries(PreparationSpeed);
+
+    const [ingredients, setIngredients] = useState<IngredientType[]>([]);
+    const [image, setImage] = useState<File | string>();
+    const [fileName, setFileName] = useState("");
+    const [imagePreview, setImagePreview] = useState<string>("");
+    const [formData, setFormData] = useState<RecipeDto>(emptyRecipeDto);
+    const [error, setError] = useState<string>("");
+    const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
+
+    useEffect(() => {
+        if (isEditMode && recipe) {
+            const recipeDto: RecipeDto = {
+                name: recipe.name,
+                category: recipe.category,
+                image: recipe.image,
+                ingredients: recipe.ingredients,
+                description: recipe.description,
+                speed: recipe.speed,
+                notes: recipe.notes,
+                opinionOfTheDish: recipe.opinionOfTheDish,
+                linkToSource: recipe.linkToSource,
+                favorite: recipe.favorite
+            };
+
+            setFormData(recipeDto);
+            setIngredients(recipe.ingredients ?? []);
+
+            if (recipe.image) {
+                setFileName(recipe.image);
+                setImagePreview(recipe.image);
+            }
+        }
+
+    }, [isEditMode, recipe]);
 
     function onFileChange(event: ChangeEvent<HTMLInputElement>) {
-        const file: File | null = event.target.files ? event.target.files[0] : null;
+        const file: File | undefined = event.target.files?.[0];
         if (!file) return;
 
         const maxSize = 2 * 1024 * 1024; // 2 MB
@@ -58,14 +83,20 @@ export default function RecipeForm() {
         setFileName(file.name);
     }
 
-    function updateIngredient(ingredientName: string) {
-        setIngredients(ingredients
-            .filter(value => value.name !== ingredientName));
+    function updateIngredient(ingredient: IngredientType, isEdit: boolean = false) {
+        const excluded = ingredients.filter(value => value.name !== ingredient.name);
+        if (isEdit) {
+            console.log("???????????")
+            setEdibleIngredient(ingredient);
+        }
+        console.log(edibleIngredient)
 
-        //TODO: implement more during update of recipe
+        setIngredients(excluded);
+        setFormData((prev: RecipeDto): RecipeDto => ({...prev, ["ingredients"]: excluded}));
     }
 
-    const handleRemove = () => {
+    const handleRemoveImage = () => {
+        setFormData((prev: RecipeDto): RecipeDto => ({...prev, ["image"]: ""}));
         setFileName("");
         setImagePreview("");
         setError("");
@@ -81,37 +112,48 @@ export default function RecipeForm() {
     const handleIngredients = (newIngredient: IngredientType) => {
         setIngredients((prev) => {
             const updated = [...prev, newIngredient];
-            setFormData((prevForm) => ({ ...prevForm, ingredients: updated }));
+            setFormData((prevForm) => ({...prevForm, ingredients: updated}));
             return updated;
         });
     };
 
-    function submitForm(event: FormEvent<HTMLFormElement>) {
+    async function submitForm(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const data: FormData = new FormData();
+        data.append("data", new Blob([JSON.stringify(formData)], {'type': "application/json"}));
 
         if (image) {
             data.append("file", image);
         }
 
-        data.append("data", new Blob([JSON.stringify(formData)], {'type': "application/json"}));
+        try {
+            if (isEditMode && recipe?.id) {
+console.log("!!!!!!!!!!!", JSON.stringify(formData))
+                await axios.put(`/api/recipes/${recipe.id}/update`, data);
+            } else {
+                await axios.post('/api/recipes', data);
+            }
 
-        axios.post('/api/recipes', data)
-            .then(() => navigate("/recipes"))
-            .catch((error) => {
-                alert("Fehler beim Speichern! " + error.message);
-                console.log(error);
-            })
+            props.isSaved(true);
+
+            if (isEditMode) {
+                window.history.back();
+            } else {
+                navigate("/recipes");
+            }
+        } catch (e) {
+            alert("Fehler beim Speichern! " + e);
+        }
     }
 
     return (
         <>
-            <h2>Neues Rezept:</h2>
+            <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
 
             <form onSubmit={submitForm}>
                 <button
                     className="custom-button"
-                    disabled={!(formData.name && formData.category && formData.speed && formData.ingredients)}
+                    disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
                 >
                     Speichern
                 </button>
@@ -139,12 +181,9 @@ export default function RecipeForm() {
                                         value={formData.category}
                                         onChange={handleChange}
                                     >
-                                        <option value="" disabled hidden>
-                                            Kategorie wählen...
-                                        </option>
-                                        {
-                                            dishCategories.map(([key, label]) =>
-                                                <option key={key} value={key}>{label}</option>)
+                                        <option value="" disabled hidden> Kategorie wählen...</option>
+                                        {dishCategories.map(([key, label]) =>
+                                            <option key={key} value={key}>{label}</option>)
                                         }
                                     </select>
                                 </div>
@@ -158,12 +197,9 @@ export default function RecipeForm() {
                                         value={formData.speed}
                                         onChange={handleChange}
                                     >
-                                        <option value="" disabled hidden>
-                                            Zubereitungszeit wählen...
-                                        </option>
-                                        {
-                                            speedValues.map(([key, label]) =>
-                                                <option key={key} value={key}>{label}</option>)
+                                        <option value="" disabled hidden> Zubereitungszeit wählen...</option>
+                                        { speedValues.map(([key, label]) =>
+                                            <option key={key} value={key}>{label}</option>)
                                         }
                                     </select>
                                 </div>
@@ -177,16 +213,16 @@ export default function RecipeForm() {
                                     onChange={onFileChange}
                                 />
                                 {fileName && fileName.length > 25
-                                    ? fileName.substring(0,10).concat(" ... ")
-                                        .concat(fileName.substring(fileName.length-10, fileName.length))
+                                    ? fileName.substring(0, 10).concat(" ... ")
+                                        .concat(fileName.substring(fileName.length - 10, fileName.length))
                                     : fileName
                                 }
-                                {!fileName && <span>{error}</span>}
-                                { imagePreview &&
+                                {error && <span className="error">{error}</span>}
+                                {imagePreview &&
                                     <button
                                         type={"button"}
                                         className="icon-button"
-                                        onClick={handleRemove}
+                                        onClick={handleRemoveImage}
                                     >
                                         <img
                                             width={26}
@@ -209,13 +245,15 @@ export default function RecipeForm() {
                         </div>
                     </div>
                     <div className="ingredients">
-                        <>
-                            {<Ingredient setIngredient={(value: IngredientType) => handleIngredients(value)}/>}
-                        </>
+                        <Ingredient
+                            editableIngredient={isEditMode ? edibleIngredient : undefined}
+                            setIngredient={(value: IngredientType) => handleIngredients(value)}
+                        />
 
                         <h4 className={"required"}>Zutatenliste</h4>
                         <div className={ingredients.length < 1 ? "ingredients-list empty" : "ingredients-list"}>
                             {ingredients.length < 1 && <p className="empty">Es wurde noch keine Zutat hinzugefügt!</p>}
+
                             <ul className="list">
                                 {ingredients.map((ing, i) => (
                                     <li key={i}>
@@ -227,7 +265,7 @@ export default function RecipeForm() {
                                         <button
                                             type={"button"}
                                             className="icon-button"
-                                            onClick={() => updateIngredient(ing.name)}
+                                            onClick={() => updateIngredient(ing, true)}
                                         >
                                             <img
                                                 width={26}
@@ -240,8 +278,7 @@ export default function RecipeForm() {
                                         <button
                                             type={"button"}
                                             className="icon-button"
-                                            onClick={() => setIngredients(ingredients
-                                                .filter(value => value.name !== ing.name))}
+                                            onClick={() => updateIngredient(ing)}
                                         >
                                             <img
                                                 width={26}
@@ -309,7 +346,7 @@ export default function RecipeForm() {
                 <div className="full-width">
                     <button
                         className="custom-button"
-                        disabled={!(formData.name && formData.category && formData.speed && formData.ingredients)}
+                        disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
                     >
                         Speichern
                     </button>

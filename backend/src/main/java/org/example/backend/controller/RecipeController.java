@@ -39,12 +39,27 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}/update")
-    public Recipe updateRecipeById(@PathVariable String id, @RequestBody RecipeDto recipeDto) {
-        return recipeService.updateRecipeById(id, recipeDto);
+    public Recipe updateRecipeById(
+            @RequestPart(name = "data") RecipeDto recipeDto,
+            @RequestPart(name = "file", required = false) MultipartFile image,
+            @PathVariable String id
+    ) throws IOException {
+        RecipeDto dto = recipeDto;
+        if (image != null) {
+            String imageUrl = imageService.uploadImage(image);
+            dto = recipeDto.withImage(imageUrl);
+        }
+
+        return recipeService.updateRecipeById(id, dto);
     }
 
     @PutMapping("/{id}")
     public Recipe updateFavoriteByRecipeId(@PathVariable String id, @RequestParam boolean isFavorite) {
         return recipeService.updateFavoriteByRecipeId(id, isFavorite);
+    }
+
+    @GetMapping("/{id}")
+    public Recipe getRecipeById(@PathVariable String id) {
+        return recipeService.getRecipeById(id);
     }
 }

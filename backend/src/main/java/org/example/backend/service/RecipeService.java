@@ -26,18 +26,35 @@ public class RecipeService {
     public Recipe updateRecipeById(String id, RecipeDto dto) {
         Recipe existing = recipeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with ID=" + id + " not found"));
+System.out.println("EXISTING________ \n"+existing.toString());
 
-        Recipe updated = existing
-                .withCategory(dto.category())
-                .withName(dto.name())
-                .withIngredients(dto.ingredients())
-                .withImage(dto.image())
-                .withSpeed(dto.speed())
-                .withDescription(dto.description())
-                .withNotes(dto.notes())
-                .withOpinionOfTheDish(dto.opinionOfTheDish())
-                .withLinkToSource(dto.linkToSource())
-                .withFavorite(dto.isFavorite());
+        Recipe updated = Recipe.builder()
+                .id(existing.getId())
+                .description(dto.description())
+                .category(dto.category())
+                .ingredients(dto.ingredients())
+                .name(dto.name())
+                .notes(dto.notes())
+                .image(dto.image())
+                .speed(dto.speed())
+                .opinionOfTheDish(dto.opinionOfTheDish())
+                .isFavorite(dto.isFavorite())
+                .linkToSource(dto.linkToSource())
+                .build();
+
+System.out.println("UPDATED ________ \n"+updated.toString());
+
+//        Recipe updated = existing
+//                .withCategory(dto.category())
+//                .withName(dto.name())
+//                .withIngredients(dto.ingredients())
+//                .withImage(dto.image())
+//                .withSpeed(dto.speed())
+//                .withDescription(dto.description())
+//                .withNotes(dto.notes())
+//                .withOpinionOfTheDish(dto.opinionOfTheDish())
+//                .withLinkToSource(dto.linkToSource())
+//                .withFavorite(dto.isFavorite());
 
         return recipeRepository.save(updated);
     }
@@ -67,5 +84,10 @@ public class RecipeService {
                 .build();
 
         return recipeRepository.save(newRecipe);
+    }
+
+    public Recipe getRecipeById(String id) {
+        return recipeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with ID=" + id + " not found"));
     }
 }
