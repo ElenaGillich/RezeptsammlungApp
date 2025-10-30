@@ -5,22 +5,22 @@ import "./Ingredient.css";
 
 type IngredientProps = {
     editableIngredient?: Ingredient;
-    setIngredient: (ingredient: Ingredient) => void;
+    onSetIngredient: (ingredient: Ingredient) => void;
 };
 
 export default function Ingredient(props: IngredientProps) {
-    const { editableIngredient, setIngredient } = props;
+    const { editableIngredient, onSetIngredient } = props;
     const empty: Ingredient = { name: "", quantity: 0, unit: "g", additionalInfo: "" };
 
-    const [ingredient, setIngredientState] = useState<Ingredient>(editableIngredient ?? empty);
+    const [ingredient, setIngredient] = useState<Ingredient>(editableIngredient ?? empty);
     const [isEditable, setIsEditable] = useState<boolean>(!!editableIngredient);
 
     useEffect(() => {
         if (editableIngredient) {
-            setIngredientState(editableIngredient);
+            setIngredient(editableIngredient);
             setIsEditable(true);
         } else {
-            setIngredientState(empty);
+            setIngredient(empty);
             setIsEditable(false);
         }
     }, [editableIngredient]);
@@ -28,20 +28,20 @@ export default function Ingredient(props: IngredientProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         e.preventDefault();
         const { name, value } = e.target;
-        setIngredientState(prev => ({
+        setIngredient(prev => ({
             ...prev,
             [name]: name === "quantity" ? +value : value,
         }));
     };
 
     const handleSave = () => {
-        setIngredient(ingredient);
-        setIngredientState(empty);
+        onSetIngredient(ingredient);
+        setIngredient(empty);
         setIsEditable(false);
     };
 
     const handleCancel = () => {
-        setIngredientState(empty);
+        setIngredient(empty);
         setIsEditable(false);
     };
 
@@ -59,73 +59,75 @@ export default function Ingredient(props: IngredientProps) {
     };
 
     return (
-        <div className="section" onKeyDown={handleKeyDown}>
-            <div className="more section">
-                <div className="half-width">
-                    <h4>Zutat hinzufügen:</h4>
-                    <input
-                        type="text"
-                        name="name"
-                        value={ingredient.name}
-                        maxLength={50}
-                        className={isEditable ? "full-width edit" : "full-width"}
-                        placeholder="Zutat (z.B. Zwiebel) ..."
-                        onChange={handleChange}
-                    />
+        <>
+            <div className="section" onKeyDown={handleKeyDown}>
+                <div className="more section">
+                    <div className="half-width">
+                        <h4 className={"required"}>Zutat hinzufügen:</h4>
+                        <input
+                            type="text"
+                            name="name"
+                            value={ingredient.name}
+                            maxLength={50}
+                            className={isEditable ? "full-width edit" : "full-width"}
+                            placeholder="Zutat (z.B. Zwiebel) ..."
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="half-width">
+                        <h4>Zusätzliche Information:</h4>
+                        <input
+                            type="text"
+                            name="additionalInfo"
+                            value={ingredient.additionalInfo}
+                            maxLength={100}
+                            className={isEditable ? "info-width edit" : "info-width"}
+                            placeholder="z.B. fein gehackt..."
+                            onChange={handleChange}
+                        />
+                    </div>
                 </div>
 
-                <div className="half-width">
-                    <h4>Zusätzliche Information:</h4>
-                    <input
-                        type="text"
-                        name="additionalInfo"
-                        value={ingredient.additionalInfo}
-                        maxLength={100}
-                        className={isEditable ? "info-width edit" : "info-width"}
-                        placeholder="z.B. fein gehackt..."
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
+                <div className="with-quantity">
+                    <div className="quantity">
+                        <h4>Menge:</h4>
+                        <input
+                            type="number"
+                            name="quantity"
+                            value={ingredient.quantity}
+                            className="quantity"
+                            max={999}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="more">
+                        <h4>Einheit:</h4>
+                        <select
+                            name="unit"
+                            className="full-width"
+                            value={ingredient.unit}
+                            onChange={handleChange}
+                        >
+                            {units.map(unit => (
+                                <option key={unit.short} value={unit.short}>
+                                    {unit.full}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-            <div className="with-quantity">
-                <div className="quantity">
-                    <h4>Menge:</h4>
-                    <input
-                        type="number"
-                        name="quantity"
-                        value={ingredient.quantity}
-                        className="quantity"
-                        max={999}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="more">
-                    <h4>Einheit:</h4>
-                    <select
-                        name="unit"
-                        className="full-width"
-                        value={ingredient.unit}
-                        onChange={handleChange}
+                    <button
+                        type="button"
+                        className="add-button"
+                        aria-label="Zutat hinzufügen"
+                        disabled={ingredient.name.trim().length < 1}
+                        onClick={handleSave}
                     >
-                        {units.map(unit => (
-                            <option key={unit.short} value={unit.short}>
-                                {unit.full}
-                            </option>
-                        ))}
-                    </select>
+                        +
+                    </button>
                 </div>
-
-                <button
-                    type="button"
-                    className="add-button"
-                    aria-label="Zutat hinzufügen"
-                    disabled={ingredient.name.trim().length < 1}
-                    onClick={handleSave}
-                >
-                    +
-                </button>
             </div>
-        </div>
+        </>
     );
 }

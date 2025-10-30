@@ -13,10 +13,7 @@ export default function AllRecipes(props: RecipesProps) {
             { props.recipes.length < 1 && <h2>Keine Rezepte vorhanden!</h2> }
             { props.recipes.length > 0 &&
                 <div className="recipes container">
-                    {props.recipes.sort().map(recipe => <RecipeCard key={recipe.id} recipe={recipe}/>)}
-                    {/*{props.recipes*/}
-                    {/*    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))*/}
-                    {/*    .map(recipe => <RecipeCard key={recipe.id} recipe={recipe}/>)}*/}
+                    {props.recipes.map(recipe => <RecipeCard key={recipe.id} recipe={recipe}/>)}
                 </div>
             }
         </>

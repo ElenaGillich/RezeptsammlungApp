@@ -95,16 +95,16 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
         setFileName(file.name);
     }
 
-    function updateIngredient(ingredient: IngredientType, isEdit: boolean = false) {
-        if (isEdit) {
-            setEdibleIngredient({...ingredient});
-        } else {
-            const updated = ingredients.filter(value => value.name !== ingredient.name);
+    function updateIngredient(ingredient: IngredientType) {
+        setEdibleIngredient({...ingredient});
+    }
 
-            setIngredients(updated);
-            setFormData((prev: RecipeDto): RecipeDto => ({...prev, ingredients: updated}));
-            setEdibleIngredient(undefined);
-        }
+    function removeIngredient(ingredient: IngredientType) {
+        const updated = ingredients.filter(value => value.name !== ingredient.name);
+
+        setIngredients(updated);
+        setFormData((prev: RecipeDto): RecipeDto => ({...prev, ingredients: updated}));
+        setEdibleIngredient(undefined);
     }
 
     const handleRemoveImage = () => {
@@ -157,7 +157,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
 
 
             if (isEditMode) {
-                window.history.back();
+                globalThis.history.back();
             } else {
                 navigate("/recipes");
             }
@@ -178,7 +178,9 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     </div>
                     <button
                         className="custom-button"
-                        disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
+                        disabled={!isDirty || !(
+                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
+                        )}
                     >
                         Speichern
                     </button>
@@ -273,25 +275,30 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     <div className="ingredients">
                         <Ingredient
                             editableIngredient={edibleIngredient}
-                            setIngredient={handleIngredients}
+                            onSetIngredient={handleIngredients}
                         />
 
-                        <h4 className={"required"}>Zutatenliste</h4>
+                        <div className={"section"}>
+                            <h4>Zutatenliste </h4>
+                            {isEditMode && <span>
+                                (Vergessen Sie nicht, nach der Anpassung der Zutaten auf <b>„Speichern“</b> zu klicken)
+                            </span>}
+                        </div>
                         <div className={ingredients.length < 1 ? "ingredients-list empty" : "ingredients-list"}>
                             {ingredients.length < 1 && <p className="empty">Es wurde noch keine Zutat hinzugefügt!</p>}
 
                             <ul className="list">
-                                {ingredients.map((ing, i) => (
+                                {ingredients.map((ingredient, i) => (
                                     <li key={i}>
                                         <span className="list-item">
-                                            {ing.name} {ing.additionalInfo && `(${ing.additionalInfo})`}
-                                            {ing.quantity > 0 && ` - ${ing.quantity} ${ing.unit}`}
+                                            {ingredient.name} {ingredient.additionalInfo && `(${ingredient.additionalInfo})`}
+                                            {ingredient.quantity > 0 && ` - ${ingredient.quantity} ${ingredient.unit}`}
                                         </span>
 
                                         <button
                                             type={"button"}
                                             className="icon-button"
-                                            onClick={() => updateIngredient(ing, true)}
+                                            onClick={() => updateIngredient(ingredient)}
                                         >
                                             <img
                                                 width={26}
@@ -304,7 +311,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                         <button
                                             type={"button"}
                                             className="icon-button"
-                                            onClick={() => updateIngredient(ing)}
+                                            onClick={() => removeIngredient(ingredient)}
                                         >
                                             <img
                                                 width={26}
@@ -369,10 +376,12 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     </div>
                 </div>
 
-                <div className="full-width">
+                <div className="full-width item-right">
                     <button
                         className="custom-button"
-                        disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}
+                        disabled={isDirty || !(
+                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
+                        )}
                     >
                         Speichern
                     </button>

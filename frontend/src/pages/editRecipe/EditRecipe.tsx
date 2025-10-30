@@ -8,7 +8,7 @@ type EditRecipeProps = {
     onSave: (isSaved: boolean) => void
 }
 
-export default  function EditRecipe(props: EditRecipeProps) {
+export default  function EditRecipe(props: Readonly<EditRecipeProps>) {
     const params = useParams();
     const id = params.id;
 

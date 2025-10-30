@@ -135,7 +135,7 @@ select:required:valid {
 .custom-button,
 .action-button {
   &:disabled {
-    opacity: .4;
+    opacity: .5;
     cursor: not-allowed;
   }
 
