@@ -9,6 +9,7 @@ import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
 import {emptyRecipeDto} from "../../components/const.ts";
+import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 
 type RecipeFormProps = {
     isEditMode: boolean,
@@ -30,6 +31,17 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [formData, setFormData] = useState<RecipeDto>(emptyRecipeDto);
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
+    const [isDirty, setIsDirty] = useState(false);
+
+    useUnsavedChangesWarning(isDirty);
+    useEffect(() => {
+        const isChanged =
+            JSON.stringify(formData) !== JSON.stringify(recipe ?? emptyRecipeDto) ||
+            ingredients.length !== (recipe?.ingredients?.length ?? 0) ||
+            !!image;
+
+        setIsDirty(isChanged);
+    }, [formData, ingredients, image, recipe]);
 
     useEffect(() => {
         if (isEditMode && recipe) {
@@ -141,6 +153,8 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             }
 
             props.isSaved(true);
+            setIsDirty(false);
+
 
             if (isEditMode) {
                 window.history.back();
