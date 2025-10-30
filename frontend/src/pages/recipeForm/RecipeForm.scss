@@ -42,21 +42,15 @@ h4 {
 }
 
 .custom-button {
+  height: 48px;
   margin-top: 20px;
   margin-bottom: 20px;
   text-transform: uppercase;
   background-color: #fbe2cf;
   border-radius: 3px;
   font-weight: bold;
-  display: flex;
-  place-content: center;
   border: 2px solid rgb(253, 185, 136);
   box-shadow: gray 3px 2px 3px;
-
-  &:hover {
-    background-color: rgba(253, 185, 136, 0.58);
-    border-color: #ac2525;
-  }
 }
 
 .upload {
@@ -98,7 +92,7 @@ h4 {
   margin-bottom: 20px;
 
   &.empty {
-    border-left: 3px solid #ff4d4f;
+    border-left: 3px solid #f10e11;
   }
 }
 
@@ -162,6 +156,6 @@ select:not(.placeholder) {
 }
 
 .error {
-  color: #ac2525;
-
+  color: #f10e11;
+  font-weight: 600;
 }

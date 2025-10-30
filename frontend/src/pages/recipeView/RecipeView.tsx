@@ -19,7 +19,7 @@ export default function RecipeView(props: RecipeViewProps) {
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
     useEffect(() => {
-        axios.get(`/api/recipes/${params.id}/favorite`)
+        axios.get(`/api/recipes/${params.id}`)
             .then((result) => {
                 setRecipe(result.data);
                 setIsFavorite(result.data.favorite)
@@ -34,7 +34,7 @@ export default function RecipeView(props: RecipeViewProps) {
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
         setIsFavorite(newFavorite);
-        axios.put("/api/recipes/" + recipe?.id + "?isFavorite=" + newFavorite, {
+        axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=" + newFavorite, {
             headers: {
                 'Content-Type': 'application/json'
             }

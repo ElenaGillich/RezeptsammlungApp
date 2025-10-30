@@ -16,7 +16,7 @@ export const units: ShortFullInfo[] = [
     {short: "g", full: "Gramm"},
     {short: "kg", full: "Kilogramm"},
     {short: "L", full: "Liter"},
-    {short: "Msp.", full: "Messerspitze (1g - 2g)"},
+    {short: "Msp.", full: "Messerspitze (1-2g)"},
     {short: "ml", full: "Milliliter"},
     {short: "nB.", full: "nach Belieben"},
     {short: "Pck.", full: "Päckchen"},

@@ -91,6 +91,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
 
             setIngredients(updated);
             setFormData((prev: RecipeDto): RecipeDto => ({...prev, ingredients: updated}));
+            setEdibleIngredient(undefined);
         }
     }
 
@@ -155,7 +156,12 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
         <>
             <form onSubmit={submitForm}>
                 <div className="display-flex">
-                    <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
+                    <div>
+                        <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
+                        {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
+                            <span className="error">* Bereiche mit Sternchen sind Pflichtfelder!</span>
+                        }
+                    </div>
                     <button
                         className="custom-button"
                         disabled={!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)}

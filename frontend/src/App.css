@@ -45,7 +45,7 @@ textarea {
   border-radius: 3px;
   font-size: 1.1rem;
   margin-bottom: 20px;
-  padding: 8px;
+  padding: 10px 8px;
   background-color: floralwhite;
 }
 
@@ -66,17 +66,26 @@ textarea {
 
 .section {
   display: flex;
-  justify-content: space-between;
   gap: 40px;
   width: calc(100% - 8px);
 
   .more {
-    width: 65%;
+    width: 60%;
   }
 
   .less {
-    width: 30%;
+    width: 35%;
   }
+}
+
+.with-quantity {
+  margin-left: -14px;
+  display: flex;
+  gap: 40px;
+}
+
+.quantity {
+  width: 80px;
 }
 
 input:required,
@@ -120,8 +129,18 @@ select:required:valid {
   place-content: center;
   border: 2px solid rgb(253, 185, 136);
   box-shadow: gray 4px 2px 3px;
+}
 
-  &:hover {
+.add-button,
+.custom-button,
+.action-button {
+  &:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+
+  &:hover,
+  &:disabled:hover {
     background-color: rgba(253, 185, 136, 0.58);
     border-color: #ac2525;
   }

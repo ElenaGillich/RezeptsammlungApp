@@ -35,7 +35,7 @@ class RecipeServiceTest {
                     new Ingredient("Schmand", 100, "g", "Man kann Creme Fraiche, Sauer Rahm oder Griechischer Yogurt (10%) benutzen")
             ))
             .description("Alle Zutaten miteinander vermischen. Nach Belieben können Sie Zwiebeln und/oder Kräuter (z. B. Dill) hinzufügen.")
-            .isFavorite(false)
+            .favorite(false)
             .linkToSource("")
             .opinionOfTheDish("")
             .notes("")

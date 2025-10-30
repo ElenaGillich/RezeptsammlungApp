@@ -26,7 +26,6 @@ public class RecipeService {
     public Recipe updateRecipeById(String id, RecipeDto dto) {
         Recipe existing = recipeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with ID=" + id + " not found"));
-System.out.println("EXISTING________ \n"+existing.toString());
 
         Recipe updated = Recipe.builder()
                 .id(existing.getId())
@@ -38,23 +37,9 @@ System.out.println("EXISTING________ \n"+existing.toString());
                 .image(dto.image())
                 .speed(dto.speed())
                 .opinionOfTheDish(dto.opinionOfTheDish())
-                .isFavorite(dto.isFavorite())
+                .favorite(dto.favorite())
                 .linkToSource(dto.linkToSource())
                 .build();
-
-System.out.println("UPDATED ________ \n"+updated.toString());
-
-//        Recipe updated = existing
-//                .withCategory(dto.category())
-//                .withName(dto.name())
-//                .withIngredients(dto.ingredients())
-//                .withImage(dto.image())
-//                .withSpeed(dto.speed())
-//                .withDescription(dto.description())
-//                .withNotes(dto.notes())
-//                .withOpinionOfTheDish(dto.opinionOfTheDish())
-//                .withLinkToSource(dto.linkToSource())
-//                .withFavorite(dto.isFavorite());
 
         return recipeRepository.save(updated);
     }
@@ -77,7 +62,7 @@ System.out.println("UPDATED ________ \n"+updated.toString());
                 .speed(recipeDto.speed())
                 .ingredients(recipeDto.ingredients())
                 .description(recipeDto.description())
-                .isFavorite(recipeDto.isFavorite())
+                .favorite(recipeDto.favorite())
                 .linkToSource(recipeDto.linkToSource())
                 .opinionOfTheDish(recipeDto.opinionOfTheDish())
                 .notes(recipeDto.notes())

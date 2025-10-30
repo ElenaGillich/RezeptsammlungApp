@@ -35,8 +35,7 @@ export default function Ingredient(props: IngredientProps) {
     };
 
     const handleSave = () => {
-        const newIngredient: Ingredient = ingredient;
-        setIngredient(newIngredient);
+        setIngredient(ingredient);
         setIngredientState(empty);
         setIsEditable(false);
     };
@@ -49,7 +48,9 @@ export default function Ingredient(props: IngredientProps) {
     const handleKeyDown = (e: KeyboardEvent<HTMLDivElement> ) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            handleSave();
+            if (ingredient.name) {
+                handleSave();
+            }
         }
         else if (e.key === "Escape") {
             e.preventDefault();
@@ -66,6 +67,7 @@ export default function Ingredient(props: IngredientProps) {
                         type="text"
                         name="name"
                         value={ingredient.name}
+                        maxLength={50}
                         className={isEditable ? "full-width edit" : "full-width"}
                         placeholder="Zutat (z.B. Zwiebel) ..."
                         onChange={handleChange}
@@ -86,19 +88,19 @@ export default function Ingredient(props: IngredientProps) {
                 </div>
             </div>
 
-            <div className="less display-flex">
-                <div className="less">
+            <div className="with-quantity">
+                <div className="quantity">
                     <h4>Menge:</h4>
                     <input
                         type="number"
                         name="quantity"
                         value={ingredient.quantity}
-                        className="full-width"
+                        className="quantity"
+                        max={999}
                         onChange={handleChange}
                     />
                 </div>
-
-                <div className="less">
+                <div className="more">
                     <h4>Einheit:</h4>
                     <select
                         name="unit"
@@ -108,7 +110,7 @@ export default function Ingredient(props: IngredientProps) {
                     >
                         {units.map(unit => (
                             <option key={unit.short} value={unit.short}>
-                                {unit.short}
+                                {unit.full}
                             </option>
                         ))}
                     </select>
@@ -118,7 +120,7 @@ export default function Ingredient(props: IngredientProps) {
                     type="button"
                     className="add-button"
                     aria-label="Zutat hinzufügen"
-                    disabled={ingredient.name.trim().length < 2}
+                    disabled={ingredient.name.trim().length < 1}
                     onClick={handleSave}
                 >
                     +
