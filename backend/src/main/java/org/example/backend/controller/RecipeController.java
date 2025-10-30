@@ -53,7 +53,7 @@ public class RecipeController {
         return recipeService.updateRecipeById(id, dto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/favorite")
     public Recipe updateFavoriteByRecipeId(@PathVariable String id, @RequestParam boolean isFavorite) {
         return recipeService.updateFavoriteByRecipeId(id, isFavorite);
     }
