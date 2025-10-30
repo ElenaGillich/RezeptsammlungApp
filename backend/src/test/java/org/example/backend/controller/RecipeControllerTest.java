@@ -6,17 +6,25 @@ import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
 import org.example.backend.service.IdService;
+import org.example.backend.service.ImageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +42,7 @@ class RecipeControllerTest {
                     new Ingredient("Schmand", 100, "g", "Man kann Creme Fraiche, Sauer Rahm oder Griechischer Yogurt (10%) benutzen")
             ))
             .description("Alle Zutaten miteinander vermischen. Nach Belieben können Sie Zwiebeln und/oder Kräuter (z. B. Dill) hinzufügen.")
-            .isFavorite(false)
+            .favorite(false)
             .linkToSource("")
             .opinionOfTheDish("")
             .notes("")
@@ -45,6 +53,9 @@ class RecipeControllerTest {
 
     @Autowired
     private IdService idService;
+
+    @MockitoBean
+    ImageService imageService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,7 +68,7 @@ class RecipeControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes"))
         //THEN
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                         [
                           {
@@ -82,7 +93,7 @@ class RecipeControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/recipes"))
         //THEN
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
@@ -90,34 +101,28 @@ class RecipeControllerTest {
     void updateRecipeById_shouldReturnUpdatedRecipe_whenCalledWithDto() throws Exception {
         //GIVEN
         recipeRepository.save(recipe);
-        String dto = """
-                  {
-                  "name": "Tomaten-Salat mit Sauerrahm",
-                  "category": "SALAD",
-                  "image": "",
-                  "speed": "FAST",
-                  "ingredients": [
-                    {"name": "Tomaten", "quantity": 3, "unit": "Stück", "additionalInfo": "in Scheiben geschnitten"},
-                    {"name": "Salz", "quantity": 0.25, "unit": "TL", "additionalInfo": ""},
-                    {"name": "Schmand", "quantity": 100, "unit": "g", "additionalInfo": "Man kann Creme Fraiche, Sauer Rahm oder Griechischer Yogurt (10%) benutzen"}
-                  ],
-                  "description": "Alle Zutaten miteinander vermischen. Nach Belieben können Sie Zwiebeln und/oder Kräuter (z. B. Dill) hinzufügen.",
-                  "notes": "Tomaten sollen am besten frisch, lecker und saftig sein."
-                  }
-                """;
+        MockMultipartFile json = getMockMultipartFile();
+        MockMultipartFile file = new MockMultipartFile("file", "fake image content".getBytes());
 
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1/update")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(dto))
+        when(imageService.uploadImage(any())).thenReturn("https://mock.cloudinary.com/image.jpg");
+
+        mockMvc.perform(multipart("/api/recipes/1/update")
+                .file(json)
+                .file(file)
+                .with(request -> {
+                    request.setMethod("PUT");
+                    return request;
+                })
+                .contentType(MediaType.MULTIPART_FORM_DATA))
         //THEN
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                           {
                           "id": "1",
                           "name": "Tomaten-Salat mit Sauerrahm",
                           "category": "SALAD",
-                          "image": "",
+                          "image": "https://mock.cloudinary.com/image.jpg",
                           "speed": "FAST",
                           "ingredients": [
                             {"name": "Tomaten", "quantity": 3, "unit": "Stück", "additionalInfo": "in Scheiben geschnitten"},
@@ -130,11 +135,7 @@ class RecipeControllerTest {
                         """));
     }
 
-    @Test
-    void updateRecipeById_shouldThrowException_whenCalledWithInvalidId() throws Exception {
-        //GIVEN
-        recipeRepository.save(recipe);
-
+    private static MockMultipartFile getMockMultipartFile() {
         String dto = """
                   {
                   "name": "Tomaten-Salat mit Sauerrahm",
@@ -150,14 +151,30 @@ class RecipeControllerTest {
                   "notes": "Tomaten sollen am besten frisch, lecker und saftig sein."
                   }
                 """;
+        return new MockMultipartFile("data", null, MediaType.APPLICATION_JSON_VALUE, dto.getBytes());
+    }
+
+    @Test
+    void updateRecipeById_shouldThrowException_whenCalledWithInvalidId() throws Exception {
+        //GIVEN
+        recipeRepository.save(recipe);
+        MockMultipartFile json = getMockMultipartFile();
+        MockMultipartFile file = new MockMultipartFile("file", "fake image content".getBytes());
 
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/gffhfz23654dhgf9gh/update")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(dto))
-                //THEN
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+        when(imageService.uploadImage(any())).thenReturn("https://mock.cloudinary.com/image.jpg");
+
+        mockMvc.perform(multipart("/api/recipes/gffhfz23654dhgf9gh/update")
+                .file(json)
+                .file(file)
+                .with(request -> {
+                    request.setMethod("PUT");
+                    return request;
+                })
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+        //THEN
+                .andExpect(status().is4xxClientError())
+                .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("Recipe with ID=gffhfz23654dhgf9gh not found")));
     }
 
@@ -169,10 +186,10 @@ class RecipeControllerTest {
         recipeRepository.save(recipe);
 
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/recipes/1/favorite")
                         .param("isFavorite", "true"))
         //THEN
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("""
                           {
                           "id": "1",

@@ -3,21 +3,20 @@
 }
 
 .add-button {
-    height: 38px;
-    width: 50px;
+    height: 40px;
+    width: 45px;
     font-size: 2rem;
     font-weight: bold;
     font-family: sans-serif;
     padding: 0 4px;
     margin-left: -20px;
     margin-top: 33px;
-    border-radius: 8px;
+    border-radius: 25px;
     border: 2px solid rgb(253, 185, 136);
     background-color: #fbe2cf;
     box-shadow: gray 5px 4px 3px;
+}
 
-    &:hover {
-        background-color: rgba(253, 185, 136, 0.58);
-        border-color: #ac2525;
-    }
+.edit {
+    color: #bd2929;
 }

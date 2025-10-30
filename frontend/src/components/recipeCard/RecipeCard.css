@@ -1,6 +1,6 @@
 .small-card {
     width: 300px;
-    height: 250px;
+    height: 280px;
     border: #ff9746 2px solid;
     border-radius: 15px;
     box-shadow: rgba(188, 143, 143) 5px 5px 5px;
@@ -18,7 +18,7 @@
     }
 
     .card-image {
-        height: 170px;
+        height: 200px;
         border-top-right-radius: 15px;
         border-top-left-radius: 15px;
         background-color: white;

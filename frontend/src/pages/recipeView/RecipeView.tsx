@@ -1,22 +1,31 @@
 import type {Recipe} from "../../models/Recipe.ts";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import "./RecipeView.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 
 type RecipeViewProps = {
-    recipes: Recipe[]
+    isFavoriteUpdated: (isUpdated: boolean) => void
 }
-
 export default function RecipeView(props: RecipeViewProps) {
+    const params = useParams();
+    const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
     const noImage = "/noRecipeImage.png";
 
-    const params = useParams();
-    const recipe: Recipe | undefined = props.recipes.find(r => r.id === params.id);
-    const [isFavorite, setIsFavorite] = useState<boolean>(recipe?.favorite ?? false);
+    const [recipe, setRecipe] = useState<Recipe>();
+    const [isFavorite, setIsFavorite] = useState<boolean>(false);
+
+    useEffect(() => {
+        axios.get(`/api/recipes/${params.id}`)
+            .then((result) => {
+                setRecipe(result.data);
+                setIsFavorite(result.data.favorite)
+            })
+            .catch((error) => console.log(error))
+    }, [isFavorite, params.id]);
 
     if (!recipe) {
         return <h2>Kein Rezept mit ID={params.id} gefunden!</h2>;
@@ -25,15 +34,17 @@ export default function RecipeView(props: RecipeViewProps) {
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
         setIsFavorite(newFavorite);
-        axios.put("/api/recipes/" + recipe?.id + "?isFavorite=" + newFavorite, {
+        axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=" + newFavorite, {
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(r => {
             setIsFavorite(newFavorite);
-            console.log(r.data);
+            props.isFavoriteUpdated(true);
+//TODO: remove log
+console.log(r.data);
         })
-            .catch(e => console.log(e));
+            .catch(e => alert("Fehler beim Favoriten update! "+e));
     }
 
     return (
@@ -74,6 +85,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                 type={"button"}
                                 className="action-button"
                                 aria-label="Rezept editieren"
+                                onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
                             >
                                 <img
                                     width={30}

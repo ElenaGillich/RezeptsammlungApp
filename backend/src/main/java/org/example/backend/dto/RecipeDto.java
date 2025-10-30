@@ -18,5 +18,5 @@ public record RecipeDto(
         String notes,
         String opinionOfTheDish,
         String linkToSource,
-        boolean isFavorite
+        boolean favorite
 ) {}

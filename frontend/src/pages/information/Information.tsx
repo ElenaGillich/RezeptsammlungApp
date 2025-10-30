@@ -70,7 +70,7 @@ export default function Information() {
                     <a href="https://www.flaticon.com/de/kostenlose-icons/erstellen" title="erstellen Icons">Erstellen Icons erstellt von Mayor Icons - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/beitrag-hinzufugen" title="beitrag hinzufügen Icons">Beitrag hinzufügen Icons erstellt von Designspace Team - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/werkzeuge-bearbeiten" title="werkzeuge bearbeiten Icons">Werkzeuge bearbeiten Icons erstellt von zky.icon - Flaticon</a>
-                    <a href="https://www.flaticon.com/de/kostenlose-icons/deinstallieren" title="deinstallieren Icons">Deinstallieren Icons erstellt von POD Gladiator - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/ui" title="ui Icons">Ui Icons erstellt von chehuna - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochen" title="kochen Icons">Kochen Icons erstellt von Sir.Vector - Flaticon</a>
                 </div>
             </div>
