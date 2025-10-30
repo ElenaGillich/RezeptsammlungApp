@@ -3,6 +3,7 @@ package org.example.backend.service;
 import org.example.backend.RecipeRepository;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.model.DishCategory;
+import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class RecipeService {
                 .name(recipeDto.name().trim().isEmpty() ? "Rezept-" + recipeID : recipeDto.name().trim())
                 .category(recipeDto.category() == null ? DishCategory.OTHER : recipeDto.category())
                 .image(recipeDto.image())
-                .speed(recipeDto.speed())
+                .speed(recipeDto.speed() == null ? PreparationSpeed.FAST : recipeDto.speed())
                 .ingredients(recipeDto.ingredients())
                 .description(recipeDto.description())
                 .favorite(recipeDto.favorite())
@@ -74,5 +75,12 @@ public class RecipeService {
     public Recipe getRecipeById(String id) {
         return recipeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with ID=" + id + " not found"));
+    }
+
+    public void deleteRecipeById(String id) {
+         recipeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with ID=" + id + " not found"));
+
+         recipeRepository.deleteById(id);
     }
 }

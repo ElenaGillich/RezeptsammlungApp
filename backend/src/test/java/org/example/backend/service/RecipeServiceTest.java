@@ -41,6 +41,19 @@ class RecipeServiceTest {
             .notes("")
             .build();
 
+    RecipeDto dto = new RecipeDto(
+            "Tomaten-Salat mit Sauerrahm",
+            recipe.getCategory(),
+            "",
+            recipe.getIngredients(),
+            recipe.getDescription(),
+            recipe.getSpeed(),
+            "Tomaten sollen am besten frisch, lecker und saftig sein.",
+            recipe.getOpinionOfTheDish(),
+            recipe.getLinkToSource(),
+            recipe.isFavorite()
+    );
+
     @Test
     void getAllRecipes_shouldReturnEmptyList() {
         //GIVEN
@@ -69,30 +82,64 @@ class RecipeServiceTest {
     }
 
     @Test
+    void addRecipe_shouldReturnNewCreatedRecipe() {
+        //GIVEN
+        Recipe expected = recipe
+                .withName(dto.name())
+                .withImage(dto.image())
+                .withNotes(dto.notes());
+
+        //WHEN
+        when(mockIdService.randomId()).thenReturn("1");
+        when(mockRepo.save(expected)).thenReturn(expected);
+
+        Recipe actual = recipeService.addRecipe(dto);
+
+        //THEN
+        verify(mockIdService).randomId();
+        verify(mockRepo).save(expected);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void addRecipe_shouldReturnNewRecipeWithDefaultValues() {
+        //GIVEN
+        RecipeDto recipeDto = dto
+                .withName("")
+                .withCategory(null)
+                .withSpeed(null);
+
+        Recipe expected = recipe
+                .withName("Rezept-1")
+                .withImage(dto.image())
+                .withNotes(dto.notes())
+                .withCategory(DishCategory.OTHER)
+                .withSpeed(PreparationSpeed.FAST);
+
+        //WHEN
+        when(mockIdService.randomId()).thenReturn("1");
+        when(mockRepo.save(expected)).thenReturn(expected);
+
+        Recipe actual = recipeService.addRecipe(recipeDto);
+
+        //THEN
+        verify(mockIdService).randomId();
+        verify(mockRepo).save(expected);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void updateRecipe_shouldSaveNewDataForGivenRecipe() {
         //GIVEN
-        RecipeDto dto = new RecipeDto(
-                "Tomaten-Salat mit Sauerrahm",
-                recipe.getCategory(),
-                "",
-                recipe.getIngredients(),
-                recipe.getDescription(),
-                recipe.getSpeed(),
-                "Tomaten sollen am besten frisch, lecker und saftig sein.",
-                recipe.getOpinionOfTheDish(),
-                recipe.getLinkToSource(),
-                recipe.isFavorite()
-        );
-
         Recipe updatedRecipe = recipe
                 .withName(dto.name())
                 .withImage(dto.image())
                 .withNotes(dto.notes());
 
-        when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
-        when(mockRepo.save(updatedRecipe)).thenReturn((updatedRecipe));
-
         //WHEN
+        when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
+        when(mockRepo.save(updatedRecipe)).thenReturn(updatedRecipe);
+
         Recipe actual = recipeService.updateRecipeById("1", dto);
 
         //THEN
@@ -104,19 +151,6 @@ class RecipeServiceTest {
     @Test
     void updateRecipe_shouldThrowException_whenCalledWithNotExistingRecipeId() {
         //GIVEN
-        RecipeDto dto = new RecipeDto(
-                "Tomaten-Salat mit Sauerrahm",
-                recipe.getCategory(),
-                "",
-                recipe.getIngredients(),
-                recipe.getDescription(),
-                recipe.getSpeed(),
-                "Tomaten sollen am besten frisch, lecker und saftig sein.",
-                recipe.getOpinionOfTheDish(),
-                recipe.getLinkToSource(),
-                recipe.isFavorite()
-        );
-
         //WHEN
         when(mockRepo.findById("1nzu98349df7gtz345")).thenReturn(Optional.empty());
 
@@ -124,5 +158,107 @@ class RecipeServiceTest {
         assertThrows(NoSuchElementException.class, () -> recipeService
                 .updateRecipeById("1nzu98349df7gtz345", dto), "Recipe with ID=1nzu98349df7gtz345 not found");
         verify(mockRepo).findById("1nzu98349df7gtz345");
+    }
+
+    @Test
+    void updateFavoriteByRecipeId_shouldReturnRecipeWithTrueFavorite_whenCalledWithFalse() {
+        //GIVEN
+        Recipe updatedRecipe = recipe
+                .withFavorite(true);
+
+        when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
+        when(mockRepo.save(updatedRecipe)).thenReturn(updatedRecipe);
+
+        //WHEN
+        Recipe actual = recipeService.updateFavoriteByRecipeId("1", true);
+
+        //THEN
+        verify(mockRepo).findById("1");
+        verify(mockRepo).save(updatedRecipe);
+        assertEquals(updatedRecipe, actual);
+    }
+
+    @Test
+    void updateFavoriteByRecipeId_shouldThrowException_whenCalledWithInvalidId() {
+        //GIVEN
+        //WHEN
+        when(mockRepo.findById("1")).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class, () -> recipeService.updateFavoriteByRecipeId("1", true)
+        );
+
+        //THEN
+        assertEquals("Recipe with ID=1 not found", exception.getMessage());
+
+        verify(mockRepo).findById("1");
+        verify(mockRepo, never()).save(any());
+        verifyNoMoreInteractions(mockRepo);
+    }
+
+    @Test
+    void deleteRecipeById_shouldDeleteRecipe_whenCalledWithValidId() {
+        //GIVEN
+        //WHEN
+        when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
+
+        recipeService.deleteRecipeById("1");
+
+        //THEN
+        verify(mockRepo).findById("1");
+        verify(mockRepo).deleteById("1");
+    }
+
+    @Test
+    void deleteRecipeById_shouldThrowException_whenCalledWithInvalidId() {
+        //GIVEN
+        String recipeId = "123";
+
+        //WHEN
+        when(mockRepo.findById(recipeId)).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class, () -> recipeService.deleteRecipeById(recipeId)
+        );
+
+        //THEN
+        assertEquals("Recipe with ID=123 not found", exception.getMessage());
+
+        verify(mockRepo).findById(recipeId);
+        verify(mockRepo, never()).deleteById(anyString());
+        verifyNoMoreInteractions(mockRepo);
+    }
+
+    @Test
+    void getRecipeById_shouldThrowException_whenCalledWithInvalidId() {
+        //GIVEN
+        String recipeId = "1";
+
+        //WHEN
+        when(mockRepo.findById(recipeId)).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class, () -> recipeService.getRecipeById(recipeId)
+        );
+
+        //THEN
+        assertEquals("Recipe with ID=1 not found", exception.getMessage());
+
+        verify(mockRepo).findById(recipeId);
+    }
+
+    @Test
+    void getRecipeById_shouldReturnRecipe_whenCalledWithValidId() {
+        //GIVEN
+        String recipeId = "1";
+        mockRepo.save(recipe);
+
+        //WHEN
+        when(mockRepo.findById(recipeId)).thenReturn(Optional.of(recipe));
+        Recipe actual = recipeService.getRecipeById(recipeId);
+
+        //THEN
+        verify(mockRepo).findById(recipeId);
+        assertEquals(recipe, actual);
     }
 }
