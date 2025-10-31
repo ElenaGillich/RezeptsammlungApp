@@ -5,7 +5,6 @@ import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
 import org.example.backend.model.Recipe;
-import org.example.backend.service.IdService;
 import org.example.backend.service.ImageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -50,9 +52,6 @@ class RecipeControllerTest {
 
     @Autowired
     private RecipeRepository recipeRepository;
-
-    @Autowired
-    private IdService idService;
 
     @MockitoBean
     ImageService imageService;
@@ -95,6 +94,39 @@ class RecipeControllerTest {
         //THEN
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
+    }
+
+    @Test
+    void addNewRecipe_shouldReturnNewCreatedRecipe_whenCalledWithDto() throws Exception {
+        //GIVEN
+        MockMultipartFile json = getMockMultipartFile();
+        MockMultipartFile file = new MockMultipartFile("file", "fake image content".getBytes());
+
+        //WHEN
+        when(imageService.uploadImage(any())).thenReturn("https://mock.cloudinary.com/image.jpg");
+
+        mockMvc.perform(multipart("/api/recipes")
+                .file(json)
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+        //THEN
+                .andExpect(status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().json("""
+                          {
+                          "name": "Tomaten-Salat mit Sauerrahm",
+                          "category": "SALAD",
+                          "image": "https://mock.cloudinary.com/image.jpg",
+                          "speed": "FAST",
+                          "ingredients": [
+                            {"name": "Tomaten", "quantity": 3, "unit": "Stück", "additionalInfo": "in Scheiben geschnitten"},
+                            {"name": "Salz", "quantity": 0.25, "unit": "TL", "additionalInfo": ""},
+                            {"name": "Schmand", "quantity": 100, "unit": "g", "additionalInfo": "Man kann Creme Fraiche, Sauer Rahm oder Griechischer Yogurt (10%) benutzen"}
+                          ],
+                          "description": "Alle Zutaten miteinander vermischen. Nach Belieben können Sie Zwiebeln und/oder Kräuter (z. B. Dill) hinzufügen.",
+                          "notes": "Tomaten sollen am besten frisch, lecker und saftig sein."
+                          }
+                        """));
+        verify(imageService).uploadImage(file);
     }
 
     @Test
@@ -207,5 +239,31 @@ class RecipeControllerTest {
                           "favorite": true
                           }
                         """));
+    }
+
+    @Test
+    @DirtiesContext
+    void deleteRecipeById_whenInvalidID_thenStatus404() throws Exception {
+        //GIVEN
+        recipeRepository.save(recipe);
+
+        //WHEN
+        mockMvc.perform(delete("/api/recipes/abc123"))
+        //THEN
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Recipe with ID=abc123 not found"));
+
+    }
+    @Test
+    @DirtiesContext
+    void deleteRecipeById_whenValidID_thenStatusOK() throws Exception {
+        //GIVEN
+        recipeRepository.save(recipe);
+
+        //WHEN
+        mockMvc.perform(delete("/api/recipes/1"))
+                //THEN
+                .andExpect(status().isOk());
+
     }
 }

@@ -62,4 +62,10 @@ public class RecipeController {
     public Recipe getRecipeById(@PathVariable String id) {
         return recipeService.getRecipeById(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteRecipeById(@PathVariable String id) {
+        recipeService.deleteRecipeById(id);
+    }
 }

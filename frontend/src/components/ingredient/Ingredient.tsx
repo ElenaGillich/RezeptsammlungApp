@@ -60,7 +60,7 @@ export default function Ingredient(props: IngredientProps) {
 
     return (
         <>
-            <div className="section" onKeyDown={handleKeyDown}>
+            <div className="section" role="button" onKeyDown={handleKeyDown}>
                 <div className="more section">
                     <div className="half-width">
                         <h4 className={"required"}>Zutat hinzufügen:</h4>
