@@ -14,7 +14,7 @@ import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 type RecipeFormProps = {
     isEditMode: boolean,
     recipe?: Recipe | null,
-    isSaved: (isSaved: boolean) => void
+    onSave: (isSaved: boolean) => void
 }
 
 export default function RecipeForm(props: Readonly<RecipeFormProps>) {
@@ -152,7 +152,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 await axios.post('/api/recipes', data);
             }
 
-            props.isSaved(true);
+            props.onSave(true);
             setIsDirty(false);
 
 
@@ -171,7 +171,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             <form onSubmit={submitForm}>
                 <div className="display-flex">
                     <div>
-                        <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept"}</h2>
+                        <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</h2>
                         {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
                             <span className="error">* Bereiche mit Sternchen sind Pflichtfelder!</span>
                         }

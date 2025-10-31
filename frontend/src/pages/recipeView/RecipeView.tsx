@@ -6,7 +6,8 @@ import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 
 type RecipeViewProps = {
-    isFavoriteUpdated: (isUpdated: boolean) => void
+    onUpdateFavorite: (isUpdated: boolean) => void;
+    onDelete: (isDelete: boolean) => void
 }
 export default function RecipeView(props: RecipeViewProps) {
     const params = useParams();
@@ -38,14 +39,27 @@ export default function RecipeView(props: RecipeViewProps) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(r => {
+        }).then(() => {
             setIsFavorite(newFavorite);
-            props.isFavoriteUpdated(true);
-//TODO: remove log
-console.log(r.data);
+            props.onUpdateFavorite(true);
         })
-            .catch(e => alert("Fehler beim Favoriten update! "+e));
+            .catch(e => alert("Fehler beim Favoriten update! " + e));
     }
+
+    const handleDelete = async () => {
+        if (!confirm("Möchten Sie das Rezept wirklich löschen?")) {
+            return;
+        }
+
+        axios.delete(`/api/recipes/${recipe.id}`)
+            .then(() => {
+                props.onDelete(true);
+                navigate("/recipes");
+            })
+            .catch(error =>
+                alert("Fehler beim Löschen des Rezepts: " + error)
+            )
+    };
 
     return (
         <>
@@ -53,7 +67,7 @@ console.log(r.data);
                 <div className="display-flex">
                     <div className="info">
                         <h2>{recipe.name}</h2>
-                        <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof  typeof PreparationSpeed]}</p>
+                        <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}</p>
 
                         <label className="section-title">Zutaten</label>:
                         <ol>
@@ -90,7 +104,7 @@ console.log(r.data);
                                 <img
                                     width={30}
                                     height={30}
-                                    src="/edit.png"
+                                    src="/edit-pen.png"
                                     alt="Edit-Icon"
                                 />
                             </button>
@@ -103,7 +117,21 @@ console.log(r.data);
                                 <img
                                     width={30}
                                     height={30}
-                                    src="/add.png"
+                                    src="/list.png"
+                                    alt="Menu-Icon"
+                                />
+                            </button>
+
+                            <button
+                                type={"button"}
+                                className="action-button"
+                                aria-label="Rezept löschen"
+                                onClick={handleDelete}
+                            >
+                                <img
+                                    width={26}
+                                    height={26}
+                                    src="/delete.png"
                                     alt="Menu-Icon"
                                 />
                             </button>

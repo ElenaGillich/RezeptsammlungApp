@@ -68,10 +68,11 @@ export default function Information() {
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von msidiqf - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/erstellen" title="erstellen Icons">Erstellen Icons erstellt von Mayor Icons - Flaticon</a>
-                    <a href="https://www.flaticon.com/de/kostenlose-icons/beitrag-hinzufugen" title="beitrag hinzufügen Icons">Beitrag hinzufügen Icons erstellt von Designspace Team - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/machen" title="machen Icons">Machen Icons erstellt von yaicon - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/werkzeuge-bearbeiten" title="werkzeuge bearbeiten Icons">Werkzeuge bearbeiten Icons erstellt von zky.icon - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/ui" title="ui Icons">Ui Icons erstellt von chehuna - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochen" title="kochen Icons">Kochen Icons erstellt von Sir.Vector - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/schreiben" title="schreiben Icons">Schreiben Icons erstellt von Freepik - Flaticon</a>
                 </div>
             </div>
         </>

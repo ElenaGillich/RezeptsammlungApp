@@ -45,7 +45,7 @@ export default  function EditRecipe(props: Readonly<EditRecipeProps>) {
 
     return (
         <>
-            {<RecipeForm isEditMode={true} recipe={recipe as Recipe} isSaved={props.onSave}/>}
+            {<RecipeForm isEditMode={true} recipe={recipe as Recipe} onSave={props.onSave}/>}
         </>
     );
 }

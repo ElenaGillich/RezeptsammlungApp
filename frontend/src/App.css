@@ -105,7 +105,7 @@ select:required:valid {
   height: 40px;
   color: #ac2525;
   padding: 4px 0 0;
-  border-radius: 30px;
+  border-radius: 25px;
   background: transparent;
   border: 2px solid transparent;
 
@@ -123,7 +123,7 @@ select:required:valid {
 .action-button {
   width: 50px;
   height: 50px;
-  border-radius: 30px;
+  border-radius: 25px;
   background-color: #fbe2cf;
   display: flex;
   place-content: center;
