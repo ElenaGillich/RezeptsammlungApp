@@ -9,6 +9,10 @@ $spaces: 70px;
     place-items: center;
     justify-content: center;
     border: 1px solid burlywood;
+
+    img {
+        object-fit: cover; // обрезает картинку, сохраняя пропорции
+    }
 }
 
 .info {

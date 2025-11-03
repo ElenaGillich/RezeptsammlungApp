@@ -73,6 +73,7 @@ export default function Information() {
                     <a href="https://www.flaticon.com/de/kostenlose-icons/ui" title="ui Icons">Ui Icons erstellt von chehuna - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochen" title="kochen Icons">Kochen Icons erstellt von Sir.Vector - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/schreiben" title="schreiben Icons">Schreiben Icons erstellt von Freepik - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/keine-favoriten" title="keine favoriten Icons">Keine favoriten Icons erstellt von Wyasa.Design - Flaticon</a>
                 </div>
             </div>
         </>
