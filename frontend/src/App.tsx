@@ -10,6 +10,7 @@ import type {Recipe} from "./models/Recipe.ts";
 import RecipeForm from "./pages/recipeForm/RecipeForm.tsx";
 import Information from "./pages/information/Information.tsx";
 import EditRecipe from "./pages/editRecipe/EditRecipe.tsx";
+import FavoriteList from "./pages/favoriteList/FavoriteList.tsx";
 
 function App() {
 
@@ -25,7 +26,7 @@ function App() {
   function loadAllRecipes() {
     axios.get("/api/recipes")
         .then((result) => setRecipeList(result.data))
-        .catch(() => console.log("No data found!"));
+        .catch(() => alert("No data found!"));
   }
 
   return (
@@ -34,6 +35,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Dashboard/>}/>
         <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
+        <Route path={"/recipes/favorites"} element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated} />}/>
         <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
         <Route path={"/recipes/:id"}
                element={<RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved}/>}/>

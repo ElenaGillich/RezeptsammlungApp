@@ -7,7 +7,7 @@ export type ShortFullInfo = {
 
 export const units: ShortFullInfo[] = [
     {short: "Bch.", full: "Becher"},
-    {short: "Bd./Bn.", full: "Bund"},
+    {short: "Bnd.", full: "Bund"},
     {short: "Bl.", full: "Blatt"},
     {short: "Btl.", full: "Beutel"},
     {short: "Do.", full: "Dose"},

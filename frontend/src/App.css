@@ -3,6 +3,16 @@
   height: 100%;
   margin: 0 auto;
   font-size: 1.1rem;
+
+  .tooltip {
+    border: 1px solid #213547;
+    border-radius: 4px;
+    background-color: white;
+    color: #1e1e1e;
+    font-size: 1rem;
+    padding: 0 4px 2px;
+    opacity: 1;
+  }
 }
 
 .truncated {
@@ -120,6 +130,15 @@ select:required:valid {
   }
 }
 
+.list .action-button,
+table .action-button {
+  width: 40px;
+  height: 40px;
+  border-color: transparent;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
 .action-button {
   width: 50px;
   height: 50px;
@@ -144,4 +163,13 @@ select:required:valid {
     background-color: rgba(253, 185, 136, 0.58);
     border-color: #ac2525;
   }
+}
+
+.custom-tooltip {
+  border: 1px solid #213547;
+  border-radius: 4px;
+  background-color: white;
+  color: #1e1e1e;
+  font-size: 1rem;
+  padding: 0 4px;
 }

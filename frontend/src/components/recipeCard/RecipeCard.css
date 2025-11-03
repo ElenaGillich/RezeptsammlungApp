@@ -22,6 +22,10 @@
         border-top-right-radius: 15px;
         border-top-left-radius: 15px;
         background-color: white;
+
+        img {
+            object-fit: cover;
+        }
     }
 
     .custom-image {
@@ -38,15 +42,6 @@
 
     .ingredients {
         padding: 0 10px;
-    }
-
-    .tooltip {
-        border: 1px solid #213547;
-        border-radius: 4px;
-        background-color: white;
-        color: #1e1e1e;
-        font-size: 1rem;
-        padding: 0 4px;
     }
 
     .favorite-icon {

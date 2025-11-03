@@ -4,6 +4,7 @@ import "./RecipeView.scss";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
+import {handleImageError} from "../../utils/HandleImageError.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
@@ -14,7 +15,6 @@ export default function RecipeView(props: RecipeViewProps) {
     const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
-    const noImage = "/noRecipeImage.png";
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
@@ -138,9 +138,10 @@ export default function RecipeView(props: RecipeViewProps) {
                         </div>
                         <div className={"recipe-image"}>
                             <img
-                                width={recipe.image ? 400 : 230}
-                                height={recipe.image ? 300 : 180}
-                                src={recipe.image ? recipe.image : noImage}
+                                width={400}
+                                height={300}
+                                src={recipe.image}
+                                onError={handleImageError}
                                 alt="Gerichtbild"/>
                         </div>
                     </div>
