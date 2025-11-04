@@ -10,6 +10,8 @@ export default function AllRecipes(props: RecipesProps) {
 
     return (
         <>
+            <p className="page-title">Alle rezepte ({props.recipes.length})</p>
+
             { props.recipes.length < 1 && <h2>Keine Rezepte vorhanden!</h2> }
             { props.recipes.length > 0 &&
                 <div className="recipes container">

@@ -9,18 +9,14 @@ public enum DishCategory {
     SAUCE("Soße", "Соус"),
     BAKED_GOODS("Backwaren", "Выпечка"),
     DESSERT("Dessert", "Десерт"),
-    CAKE("Torte", "Торт"),
     DRINK("Getränk", "Напиток"),
     BREAKFAST("Frühstück", "Завтрак"),
     VEGAN("Vegan", "Постное / Веганское"),
     VEGETARIAN("Vegetarisch", "Вегетарианское"),
     KIDS("Kindergericht", "Детское блюдо"),
-    DIET("Diät", "Диетическое"),
-    FAST_FOOD("Fast Food", "Фастфуд"),
     PRESERVE("Einmachen", "Заготовка"),
     GRILL("Grillgericht", "Блюдо на гриле"),
     PASTA("Pasta", "Паста / Макароны"),
-    NO_BAKE("Ohne Backen", "Без выпечки"),
     OTHER("Andere", "Другое");
 
     private final String germanName;

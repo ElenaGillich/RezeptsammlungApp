@@ -30,9 +30,9 @@ export default function RecipeCard(props: Readonly<RecipeCardProps>) {
                     )}
                     <img
                         className="custom-image"
-                        width={300}
-                        height={200}
-                        src={props.recipe.image}
+                        width={props.recipe.image ? 300 : 220}
+                        height={props.recipe.image ? 200 : 180}
+                        src={props.recipe.image ? props.recipe.image : "/noRecipeImage.png"}
                         alt="Gerichtbild"
                         onError={handleImageError}
                     />

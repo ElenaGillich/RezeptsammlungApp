@@ -138,9 +138,9 @@ export default function RecipeView(props: RecipeViewProps) {
                         </div>
                         <div className={"recipe-image"}>
                             <img
-                                width={400}
-                                height={300}
-                                src={recipe.image}
+                                width={recipe.image ? 300 : 220}
+                                height={recipe.image ? 200 : 180}
+                                src={recipe.image ? recipe.image : "/noRecipeImage.png"}
                                 onError={handleImageError}
                                 alt="Gerichtbild"/>
                         </div>

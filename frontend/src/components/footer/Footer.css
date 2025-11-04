@@ -1,0 +1,20 @@
+footer {
+    font-size: 0.9rem;
+    height: 50px;
+    width: calc(100% + 42px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(172, 37, 37, 0.99);
+    color: white;
+    font-weight: bold;
+
+    a {
+        color: lightskyblue;
+        font-weight: bold;
+
+        &:hover {
+            color: white;
+        }
+    }
+}

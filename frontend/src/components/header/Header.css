@@ -1,0 +1,27 @@
+header {
+    height: 80px;
+    width: calc(100% + 40px);
+    margin-top: -8px;
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(172, 37, 37, 0.99);
+
+    a {
+        font-weight: bold;
+        display: inline-block;
+        text-align: center;
+        width: 146px;
+        border-radius: 30px;
+        color: white;
+        padding: 6px 8px 10px;
+        margin-left: 20px;
+        background: rgba(246, 156, 156, 0.54);
+
+        &:hover {
+            color: black;
+            background: rgb(250, 208, 208);
+        }
+    }
+}

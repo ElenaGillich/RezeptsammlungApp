@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
 import {emptyRecipeDto} from "../../components/const.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
+import {handleImageError} from "../../utils/HandleImageError.ts";
 
 type RecipeFormProps = {
     isEditMode: boolean,
@@ -27,7 +28,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [ingredients, setIngredients] = useState<IngredientType[]>([]);
     const [image, setImage] = useState<File | string>();
     const [fileName, setFileName] = useState("");
-    const [imagePreview, setImagePreview] = useState<string>("");
+    const [imagePreview, setImagePreview] = useState<string>(isEditMode ? "/noRecipeImage.png" : "");
     const [formData, setFormData] = useState<RecipeDto>(emptyRecipeDto);
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
@@ -171,7 +172,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             <form onSubmit={submitForm}>
                 <div className="display-flex">
                     <div>
-                        <h2>{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</h2>
+                        <p className="page-title">{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</p>
                         {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
                             <span className="error">* Bereiche mit Sternchen sind Pflichtfelder!</span>
                         }
@@ -269,6 +270,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                 width={imagePreview ? 400 : 230}
                                 height={imagePreview ? 300 : 180}
                                 src={imagePreview ? imagePreview : "/noRecipeImage.png"}
+                                onError={handleImageError}
                                 alt="Rezeptbild"/>
                         </div>
                     </div>
@@ -379,7 +381,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 <div className="full-width item-right">
                     <button
                         className="custom-button"
-                        disabled={isDirty || !(
+                        disabled={!isDirty || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >

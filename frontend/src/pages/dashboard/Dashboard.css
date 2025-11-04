@@ -1,0 +1,67 @@
+.counters {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.accordion {
+    margin-top: 40px;
+}
+
+.accordion-section {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: rgb(172, 37, 37);
+        border-radius: 8px;
+    }
+}
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 12px 16px 6px;
+    background-color: #f9f9f9;
+    border: none;
+    align-items: center;
+    text-align: left;
+    font-size: 18px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: rgba(188, 143, 143, .3);
+    }
+}
+
+.accordion-content {
+    background-color: rgba(255, 255, 255, 0.3);
+
+    &.open {
+        padding: 12px;
+    }
+}
+
+.recipe-item {
+    padding: 4px 35px;
+    font-weight: 600;
+
+    a {
+        width: 100%;
+    }
+
+    &:hover {
+        background-color: rgba(188, 143, 143, .15);
+    }
+}
+
+.arrow {
+    font-size: 14px;
+    color: #777;
+}
