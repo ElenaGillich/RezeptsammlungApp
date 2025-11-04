@@ -12,7 +12,17 @@ type RecipesCounterProps = {
 
 export default function RecipesCounter(props: RecipesCounterProps) {
     return (
-        <div className="counter-box" onClick={props.onClick}>
+        <div
+            className="counter-box"
+            onClick={props.onClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    props.onClick?.();
+                }
+            }}>
             <div className="title-link">
                 <a href={props.amount > 0 && props.link ? props.link : ""} onClick={(e) => e.preventDefault()}>
                     <img
