@@ -1,0 +1,21 @@
+footer {
+    font-size: 0.9rem;
+    height: 50px;
+    width: calc(100% + 42px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgb(200, 60, 60);
+    color: white;
+    font-weight: bold;
+
+    a {
+        color: white;
+        font-weight: bold;
+
+        &:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    }
+}

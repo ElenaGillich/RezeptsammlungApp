@@ -5,7 +5,7 @@ import type {PreparationSpeed} from "./PreparationSpeed.ts";
 export type Recipe = {
     id: string,
     name: string,
-    category: DishCategory,
+    category: keyof typeof DishCategory,
     image: string,
     ingredients: Ingredient[],
     description: string,

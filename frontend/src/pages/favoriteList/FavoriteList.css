@@ -5,7 +5,7 @@
 
     .name {
         max-width: 250px;
-        font-weight: 600;
+        font-weight: bold;
         border-right: 1px solid rgba(188, 143, 143);
     }
 
