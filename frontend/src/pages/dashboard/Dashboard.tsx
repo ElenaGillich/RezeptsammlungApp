@@ -7,7 +7,7 @@ type DashboardProps = {
     recipes: Recipe[];
 }
 
-export default function Dashboard(props: DashboardProps) {
+export default function Dashboard(props: Readonly<DashboardProps>) {
     const [openSection, setOpenSection] = useState<string | null>(null);
     const href = (recipeId: string) => `/recipes/${recipeId}`;
 

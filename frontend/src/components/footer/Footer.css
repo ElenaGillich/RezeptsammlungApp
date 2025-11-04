@@ -5,16 +5,17 @@ footer {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(172, 37, 37, 0.99);
+    background: rgb(200, 60, 60);
     color: white;
     font-weight: bold;
 
     a {
-        color: lightskyblue;
+        color: white;
         font-weight: bold;
 
         &:hover {
             color: white;
+            text-decoration: underline;
         }
     }
 }

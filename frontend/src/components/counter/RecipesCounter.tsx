@@ -3,28 +3,21 @@ import "./RecipesCounter.css";
 type RecipesCounterProps = {
     amount: number;
     title: string;
-    link?: string;
     imageSrc: string;
     width?: number;
     height?: number,
     onClick?: () => void;
 }
 
-export default function RecipesCounter(props: RecipesCounterProps) {
+export default function RecipesCounter(props: Readonly<RecipesCounterProps>) {
     return (
-        <div
-            className="counter-box"
-            onClick={props.onClick}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    props.onClick?.();
-                }
-            }}>
+        <div className="counter-box">
             <div className="title-link">
-                <a href={props.amount > 0 && props.link ? props.link : ""} onClick={(e) => e.preventDefault()}>
+                <button onClick={(e) => {
+                       e.preventDefault();
+                       props.onClick?.();
+                   }}
+                >
                     <img
                         width={props.width ? props.width : 50}
                         height={props.height ? props.height : 50}
@@ -32,7 +25,7 @@ export default function RecipesCounter(props: RecipesCounterProps) {
                         alt=""
                     />
                     <div>{props.title}</div>
-                </a>
+                </button>
             </div>
             <div className="count">
                 {props.amount}
