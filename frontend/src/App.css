@@ -23,7 +23,7 @@
 
 .container {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 160px);
   padding: 20px;
   border: #213547 1px solid;
   background-color: #fae8d7;

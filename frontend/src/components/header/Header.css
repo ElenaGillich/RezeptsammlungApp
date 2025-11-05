@@ -1,6 +1,6 @@
 header {
     height: 70px;
-    width: calc(100% + 40px);
+    width: calc(100% + 42px);
     margin-top: -8px;
     display: flex;
     gap: 15px;
@@ -22,6 +22,15 @@ header {
         &:hover {
             color: black;
             background: rgb(250, 208, 208);
+        }
+    }
+
+    .action-button {
+        box-shadow: none;
+
+        &:hover {
+            border-color: #682828;
+            background-color: #fff0e5;
         }
     }
 }

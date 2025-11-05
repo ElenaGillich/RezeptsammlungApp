@@ -8,7 +8,8 @@ import {handleImageError} from "../../utils/HandleImageError.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
-    onDelete: (isDelete: boolean) => void
+    onDelete: (isDelete: boolean) => void;
+    onSetRecipeToMealPlan: (hasRecipe: boolean) => void
 }
 export default function RecipeView(props: RecipeViewProps) {
     const params = useParams();
@@ -18,12 +19,13 @@ export default function RecipeView(props: RecipeViewProps) {
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isInMealPlan, setIsInMealPlan] = useState<boolean>(false);
 
     useEffect(() => {
         axios.get(`/api/recipes/${params.id}`)
             .then((result) => {
                 setRecipe(result.data);
-                setIsFavorite(result.data.favorite)
+                setIsFavorite(result.data.favorite);
             })
             .catch((error) => console.log(error))
     }, [isFavorite, params.id]);
@@ -46,6 +48,12 @@ export default function RecipeView(props: RecipeViewProps) {
             .catch(e => alert("Fehler beim Favoriten update! " + e));
     }
 
+    function addToMealPlan() {
+        localStorage.setItem("recipe", `ID=${recipe?.id as string};NAME=${recipe?.name}` as string);
+        setIsInMealPlan(true);
+        props.onSetRecipeToMealPlan(true);
+    }
+
     const handleDelete = async () => {
         if (!confirm("Möchten Sie das Rezept wirklich löschen?")) {
             return;
@@ -63,10 +71,11 @@ export default function RecipeView(props: RecipeViewProps) {
 
     return (
         <>
+            <p className="page-title">{recipe.name}</p>
+
             <div className="container">
                 <div className="display-flex">
                     <div className="info">
-                        <h2>{recipe.name}</h2>
                         <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}</p>
 
                         <label className="section-title">Zutaten</label>:
@@ -112,7 +121,9 @@ export default function RecipeView(props: RecipeViewProps) {
                             <button
                                 type={"button"}
                                 className="action-button"
-                                aria-label="Rezept zum Menü hinzufügen"
+                                aria-label="Rezept zum Speiseplan hinzufügen"
+                                disabled={isInMealPlan}
+                                onClick={addToMealPlan}
                             >
                                 <img
                                     width={30}
@@ -138,8 +149,8 @@ export default function RecipeView(props: RecipeViewProps) {
                         </div>
                         <div className={"recipe-image"}>
                             <img
-                                width={recipe.image ? 300 : 220}
-                                height={recipe.image ? 200 : 180}
+                                width={recipe.image ? 400 : 220}
+                                height={recipe.image ? 300 : 180}
                                 src={recipe.image ? recipe.image : "/noRecipeImage.png"}
                                 onError={handleImageError}
                                 alt="Gerichtbild"/>

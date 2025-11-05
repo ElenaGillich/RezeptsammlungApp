@@ -37,7 +37,7 @@ export default function Dashboard(props: Readonly<DashboardProps>) {
         return (
             <div key={id} id={id} className="accordion-section">
                 <button className="accordion-header" onClick={() => toggleSection(id)}>
-                    <h4>{title}</h4>
+                    <h4>{title} ({recipes.length})</h4>
                     <span className="arrow">{isOpen ? "▲" : "▼"}</span>
                 </button>
                 <div className={`accordion-content ${isOpen ? "open" : ""}`}>

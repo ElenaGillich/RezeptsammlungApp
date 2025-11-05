@@ -20,8 +20,8 @@ export default function Sources() {
 
                     <p></p>
                     <h4>Weitere Icons</h4>
-
-                    <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/instrumententafel" title="instrumententafel Icons">Instrumententafel Icons erstellt von feen - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/menu-offnen" title="menü öffnen Icons">Menü öffnen Icons erstellt von Freepik - Flaticon</a>                    <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von msidiqf - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/erstellen" title="erstellen Icons">Erstellen Icons erstellt von Mayor Icons - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/machen" title="machen Icons">Machen Icons erstellt von yaicon - Flaticon</a>

@@ -93,16 +93,16 @@ export default function FavoriteList(props: FavoriteListProps) {
                     type={"button"}
                     className="icon-button"
                     onClick={() => addToMenuList(recipe)}
-                    aria-label="Zur Speisekarte hinzufügen"
+                    aria-label="Zum Speiseplan hinzufügen"
                     data-tooltip-id="toMenu"
-                    data-tooltip-content="Zur Speisekarte hinzufügen"
+                    data-tooltip-content="Zum Speiseplan hinzufügen"
                     data-tooltip-place="bottom-end"
                 >
                     <img
                         width={28}
                         height={28}
                         src="/list.png"
-                        alt="Add to menu list"
+                        alt="Add to meal plan"
                     />
                 </button>
             </div>
