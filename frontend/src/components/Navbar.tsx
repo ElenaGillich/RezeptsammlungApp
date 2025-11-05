@@ -4,7 +4,6 @@ export default function Navbar() {
 
     return (
         <nav className={"navbar"}>
-            <Link className="nav-link" to={"/"}> Dashboard </Link>
             <Link className="nav-link" to={"/recipes"}> Alle Rezepte </Link>
             <Link className="nav-link" to={"/recipes/favorites"}> Favoriten </Link>
             <Link className="nav-link" to={"/info"}> Hinweise </Link>

@@ -125,6 +125,20 @@ export default function RecipeView(props: RecipeViewProps) {
                             <button
                                 type={"button"}
                                 className="action-button"
+                                aria-label="KI-Anfrage"
+                                onClick={() => navigate("/ai")}
+                            >
+                                <img
+                                    width={30}
+                                    height={30}
+                                    src="/chatgpt.png"
+                                    alt="Chatgpt-Icon"
+                                />
+                            </button>
+
+                            <button
+                                type={"button"}
+                                className="action-button"
                                 aria-label="Rezept löschen"
                                 onClick={handleDelete}
                             >
@@ -138,8 +152,8 @@ export default function RecipeView(props: RecipeViewProps) {
                         </div>
                         <div className={"recipe-image"}>
                             <img
-                                width={recipe.image ? 300 : 220}
-                                height={recipe.image ? 200 : 180}
+                                width={recipe.image ? 400 : 220}
+                                height={recipe.image ? 300 : 180}
                                 src={recipe.image ? recipe.image : "/noRecipeImage.png"}
                                 onError={handleImageError}
                                 alt="Gerichtbild"/>
