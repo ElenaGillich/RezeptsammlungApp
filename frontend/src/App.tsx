@@ -13,6 +13,7 @@ import FavoriteList from "./pages/favoriteList/FavoriteList.tsx";
 import Sources from "./pages/Sources.tsx";
 import Footer from "./components/footer/Footer.tsx";
 import Header from "./components/header/Header.tsx";
+import AskAI from "./pages/askAI/AskAI.tsx";
 
 function App() {
 
@@ -37,13 +38,15 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Dashboard recipes={recipeList}/>}/>
         <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
-        <Route path={"/recipes/favorites"} element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated} />}/>
+        <Route path={"/recipes/favorites"}
+               element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}/>
         <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
         <Route path={"/recipes/:id"}
                element={<RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved}/>}/>
         <Route path={"/recipes/:id/edit"} element={<EditRecipe onSave={setIsSaved}/>}/>
         <Route path={"/info"} element={<Information/>}/>
         <Route path={"/icon-sources"} element={<Sources/>}/>
+        <Route path={"/ai"} element={<AskAI/>}/>
       </Routes>
       <Footer/>
     </>
