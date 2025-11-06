@@ -62,7 +62,7 @@ export default function RecipeView(props: RecipeViewProps) {
         axios.delete(`/api/recipes/${recipe.id}`)
             .then(() => {
                 props.onDelete(true);
-                navigate("/recipes");
+                navigate("/");
             })
             .catch(error =>
                 alert("Fehler beim Löschen des Rezepts: " + error)

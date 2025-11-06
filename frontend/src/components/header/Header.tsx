@@ -21,7 +21,7 @@ export default function Header(props: HeaderProps) {
                 type={"button"}
                 className="action-button"
                 aria-label="Dashboard"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/dashboard")}
             >
                 <img
                     width={30}

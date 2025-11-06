@@ -41,7 +41,7 @@ public class ChatGptService {
                 .body(ChatGptResponse.class);
         try {
             return aiResponse.choices().get(0).message().content();
-        } catch (NullPointerException exception) {
+        } catch (NullPointerException _) {
             return "No data in response!";
         }
     }

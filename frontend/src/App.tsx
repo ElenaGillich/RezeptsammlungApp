@@ -38,9 +38,9 @@ function App() {
         <>
             <Header hasMenuIcon={hasMealPlan}/>
             <Routes>
-                <Route path={"/"} element={<Dashboard recipes={recipeList}/>}/>
-                <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
-                <Route path={"/recipes/favorites"}
+                <Route path={"/dashboard"} element={<Dashboard recipes={recipeList}/>}/>
+                <Route path={"/"} element={<AllRecipes recipes={recipeList}/>}/>
+                <Route path={"/favorites"}
                        element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}/>
                 <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
                 <Route path={"/recipes/:id"}
@@ -49,6 +49,7 @@ function App() {
                 <Route path={"/recipes/:id/edit"} element={<EditRecipe onSave={setIsSaved}/>}/>
                 <Route path={"/info"} element={<Information/>}/>
                 <Route path={"/icon-sources"} element={<Sources/>}/>
+                <Route path={"/ai"} element={<AskAI/>}/>
                 <Route path={"/meal-plan"} element={<MealPlan/>}/>
             </Routes>
             <Footer/>

@@ -160,7 +160,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             if (isEditMode) {
                 globalThis.history.back();
             } else {
-                navigate("/recipes");
+                navigate("/");
             }
         } catch (e) {
             alert("Fehler beim Speichern! " + e);
