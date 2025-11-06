@@ -178,11 +178,15 @@ table .action-button {
   font-size: 1.1rem;
 }
 
-.source-note {
+.note {
   width: 100%;
   text-align: center;
   font-style: italic;
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 20px;
+}
+
+.process {
+  color: #bd2929;
 }

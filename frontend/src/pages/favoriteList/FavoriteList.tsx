@@ -22,7 +22,7 @@ export default function FavoriteList(props: FavoriteListProps) {
 
     useEffect(() => {
         const favoured = props.recipes.filter(r => r.favorite) ?? [];
-        setFavorites(favoured)
+        setFavorites(favoured);
     }, [props.recipes]);
 
     if (props.recipes.length < 1) {

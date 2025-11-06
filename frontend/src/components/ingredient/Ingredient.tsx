@@ -69,7 +69,7 @@ export default function Ingredient(props: IngredientProps) {
                             name="name"
                             value={ingredient.name}
                             maxLength={50}
-                            className={isEditable ? "full-width edit" : "full-width"}
+                            className={isEditable ? "full-width process" : "full-width"}
                             placeholder="Zutat (z.B. Zwiebel) ..."
                             onChange={handleChange}
                         />
@@ -82,7 +82,7 @@ export default function Ingredient(props: IngredientProps) {
                             name="additionalInfo"
                             value={ingredient.additionalInfo}
                             maxLength={100}
-                            className={isEditable ? "info-width edit" : "info-width"}
+                            className={isEditable ? "info-width process" : "info-width"}
                             placeholder="z.B. fein gehackt..."
                             onChange={handleChange}
                         />

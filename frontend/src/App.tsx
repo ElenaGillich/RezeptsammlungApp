@@ -13,47 +13,47 @@ import FavoriteList from "./pages/favoriteList/FavoriteList.tsx";
 import Sources from "./pages/Sources.tsx";
 import Footer from "./components/footer/Footer.tsx";
 import Header from "./components/header/Header.tsx";
+import AskAI from "./pages/askAI/AskAI.tsx";
 import MealPlan from "./pages/mealPlan/MealPlan.tsx";
 
 function App() {
 
-  const [recipeList, setRecipeList] = useState<Recipe[]>([]);
-  const [isUpdated, setIsUpdated] = useState<boolean>(false);
-  const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [removed, setRemoved] = useState<boolean>(false);
-  const [hasMealPlan, setHasMealPlan] = useState<boolean>(!!localStorage.getItem("recipe"));
+    const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+    const [isUpdated, setIsUpdated] = useState<boolean>(false);
+    const [isSaved, setIsSaved] = useState<boolean>(false);
+    const [removed, setRemoved] = useState<boolean>(false);
+    const [hasMealPlan, setHasMealPlan] = useState<boolean>(!!localStorage.getItem("recipe"));
 
-  useEffect(() => {
-    loadAllRecipes();
-  }, [isUpdated, isSaved, removed]);
+    useEffect(() => {
+        loadAllRecipes();
+    }, [isUpdated, isSaved, removed]);
 
-  function loadAllRecipes() {
-    axios.get("/api/recipes")
-        .then((result) => setRecipeList(result.data))
-        .catch(() => alert("No data found!"));
-  }
+    function loadAllRecipes() {
+        axios.get("/api/recipes")
+            .then((result) => setRecipeList(result.data))
+            .catch(() => alert("No data found!"));
+    }
 
-  return (
-    <>
-      <Header hasMenuIcon={hasMealPlan}/>
-      <div className="main-container">
-        <Routes>
-          <Route path={"/"} element={<Dashboard recipes={recipeList}/>}/>
-          <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
-          <Route path={"/recipes/favorites"} element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated} />}/>
-          <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
-          <Route path={"/recipes/:id"} element={
-            <RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved} onSetRecipeToMealPlan={setHasMealPlan}/>}
-          />
-          <Route path={"/recipes/:id/edit"} element={<EditRecipe onSave={setIsSaved}/>}/>
-          <Route path={"/info"} element={<Information/>}/>
-          <Route path={"/icon-sources"} element={<Sources/>}/>
-          <Route path={"/meal-plan"} element={<MealPlan/>}/>
-        </Routes>
-      </div>
-      <Footer/>
-    </>
-  )
+    return (
+        <>
+            <Header hasMenuIcon={hasMealPlan}/>
+            <Routes>
+                <Route path={"/"} element={<Dashboard recipes={recipeList}/>}/>
+                <Route path={"/recipes"} element={<AllRecipes recipes={recipeList}/>}/>
+                <Route path={"/recipes/favorites"}
+                       element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}/>
+                <Route path={"/recipes/new"} element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
+                <Route path={"/recipes/:id"}
+                       element={<RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved}
+                                            onSetRecipeToMealPlan={setHasMealPlan}/>}/>
+                <Route path={"/recipes/:id/edit"} element={<EditRecipe onSave={setIsSaved}/>}/>
+                <Route path={"/info"} element={<Information/>}/>
+                <Route path={"/icon-sources"} element={<Sources/>}/>
+                <Route path={"/meal-plan"} element={<MealPlan/>}/>
+            </Routes>
+            <Footer/>
+        </>
+    )
 }
 
 export default App

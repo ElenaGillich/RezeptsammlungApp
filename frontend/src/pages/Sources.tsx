@@ -3,7 +3,7 @@ export default function Sources() {
         <>
             <p className="page-title">Icon-Quellen</p>
             <div className="container">
-                <div className="source-note">
+                <div className="note">
                     Auf der Website wurden mehrere Icons von "Flaticon" verwendet. <br/>
                     Die dazugehörigen Links sind hier aufgelistet.
                 </div>
@@ -20,6 +20,7 @@ export default function Sources() {
 
                     <p></p>
                     <h4>Weitere Icons</h4>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/chatgpt" title="chatgpt Icons">Chatgpt Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/instrumententafel" title="instrumententafel Icons">Instrumententafel Icons erstellt von feen - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/menu-offnen" title="menü öffnen Icons">Menü öffnen Icons erstellt von Freepik - Flaticon</a>                    <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von msidiqf - Flaticon</a>

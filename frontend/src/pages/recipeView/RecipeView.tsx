@@ -136,6 +136,20 @@ export default function RecipeView(props: RecipeViewProps) {
                             <button
                                 type={"button"}
                                 className="action-button"
+                                aria-label="KI-Anfrage"
+                                onClick={() => navigate("/ai")}
+                            >
+                                <img
+                                    width={30}
+                                    height={30}
+                                    src="/chatgpt.png"
+                                    alt="Chatgpt-Icon"
+                                />
+                            </button>
+
+                            <button
+                                type={"button"}
+                                className="action-button"
                                 aria-label="Rezept löschen"
                                 onClick={handleDelete}
                             >

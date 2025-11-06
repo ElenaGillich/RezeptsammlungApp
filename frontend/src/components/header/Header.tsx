@@ -27,7 +27,7 @@ export default function Header(props: HeaderProps) {
                     width={30}
                     height={30}
                     src="/dashboard.png"
-                    alt="Menu-Icon"
+                    alt="Dashboard-Icon"
                 />
             </button>
             <Navbar/>
