@@ -1,6 +1,6 @@
 package org.example.backend.controller;
 
-import org.example.backend.RecipeRepository;
+import org.example.backend.repository.RecipeRepository;
 import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;

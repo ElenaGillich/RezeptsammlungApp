@@ -18,5 +18,5 @@ public class Recipe {
     String notes;
     String opinionOfTheDish;
     String linkToSource;
-    boolean favorite;
+    Boolean favorite;
 }
