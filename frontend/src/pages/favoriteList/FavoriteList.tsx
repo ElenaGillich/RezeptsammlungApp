@@ -25,19 +25,17 @@ export default function FavoriteList(props: FavoriteListProps) {
         setFavorites(favoured);
     }, [props.recipes]);
 
-    if (props.recipes.length < 1) {
-        return <h2>Keine Rezepte!</h2>
-    }
-
     const ingredientsTemplate = (recipe: Recipe) => {
         const names: string = recipe.ingredients.map((ingredient: Ingredient) => " " + ingredient.name).toString();
         return <IngredientNames ingredients={names}/>;
     }
 
     const categoryTemplate = (recipe: Recipe) => {
-        return <div className="marker">
-            <div className="normal">{DishCategory[recipe.category as keyof typeof DishCategory]}</div>
-        </div>
+        return (
+            <div className="marker">
+                <div className="normal">{DishCategory[recipe.category as keyof typeof DishCategory]}</div>
+            </div>
+        )
     }
 
     const speedTemplate = (recipe: Recipe) => {
@@ -117,21 +115,26 @@ export default function FavoriteList(props: FavoriteListProps) {
         <>
             <p className="page-title">Meine Favoriten ({favorites.length})</p>
             <div className="container">
-                <DataTable onRowClick={navigateToDetails}
-                           dataKey="id" value={favorites}
-                           removableSort
-                           rowClassName={() => "clickable"}
-                           resizableColumns>
-                    <Column field="name" header="Rezeptname"
-                            className={"truncate name"} sortable></Column>
-                    <Column field="ingredients" header="Zutaten" className="widest"
-                            body={ingredientsTemplate}></Column>
-                    <Column field="speed" header="Kategorie" className="medium"
-                            body={categoryTemplate} sortable></Column>
-                    <Column field="speed" header="Zeitaufwand" className="medium"
-                            body={speedTemplate} sortable></Column>
-                    <Column field="favorite" body={actions} className="narrowest"></Column>
-                </DataTable>
+                {props.recipes.length < 1 && <h2>Keine Favorite gefunden!</h2>}
+                {props.recipes.length > 0 &&
+                    <DataTable
+                        onRowClick={navigateToDetails}
+                        dataKey="id" value={favorites}
+                        removableSort
+                        rowClassName={() => "clickable"}
+                        resizableColumns
+                    >
+                        <Column field="name" header="Rezeptname"
+                                className={"truncate name"} sortable></Column>
+                        <Column field="ingredients" header="Zutaten" className="widest"
+                                body={ingredientsTemplate}></Column>
+                        <Column field="speed" header="Kategorie" className="medium"
+                                body={categoryTemplate} sortable></Column>
+                        <Column field="speed" header="Zeitaufwand" className="medium"
+                                body={speedTemplate} sortable></Column>
+                        <Column field="favorite" body={actions} className="narrowest"></Column>
+                    </DataTable>
+                }
             </div>
             <Tooltip id="noFavotite" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>

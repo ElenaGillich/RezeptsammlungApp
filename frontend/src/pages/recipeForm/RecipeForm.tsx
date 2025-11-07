@@ -8,7 +8,7 @@ import Ingredient from "../../components/ingredient/Ingredient.tsx";
 import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
-import {emptyRecipeDto} from "../../components/const.ts";
+import {emptyRecipeDto} from "../../const.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
 

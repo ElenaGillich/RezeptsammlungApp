@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import type { Ingredient } from "../../models/Ingredient.ts";
-import { units } from "../const.ts";
+import { units } from "../../const.ts";
 import "./Ingredient.css";
 
 type IngredientProps = {

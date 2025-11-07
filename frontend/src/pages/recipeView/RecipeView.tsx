@@ -5,21 +5,26 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
+import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import {localStorageKey} from "../../const.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
     onDelete: (isDelete: boolean) => void;
-    onSetRecipeToMealPlan: (hasRecipe: boolean) => void
+    // onSetRecipeToMealPlan: (addedRecipe: Recipe | undefined) => void
 }
+
 export default function RecipeView(props: RecipeViewProps) {
     const params = useParams();
     const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
 
+    const [activeMealPlanId, setActiveMealPlanId] = useState<string | null>(localStorage.getItem(localStorageKey));
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const [isInMealPlan, setIsInMealPlan] = useState<boolean>(false);
+    const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 
     useEffect(() => {
         axios.get(`/api/recipes/${params.id}`)
@@ -28,10 +33,14 @@ export default function RecipeView(props: RecipeViewProps) {
                 setIsFavorite(result.data.favorite);
             })
             .catch((error) => console.log(error))
-    }, [isFavorite, params.id]);
+    }, [isFavorite, params.id, isInMealPlan]);
 
     if (!recipe) {
-        return <h2>Kein Rezept mit ID={params.id} gefunden!</h2>;
+        return (
+            <div className="container">
+                <h2>Kein Rezept mit ID={params.id} gefunden!</h2>
+            </div>
+        );
     }
 
     function updateFavoriteState() {
@@ -48,13 +57,36 @@ export default function RecipeView(props: RecipeViewProps) {
             .catch(e => alert("Fehler beim Favoriten update! " + e));
     }
 
-    function addToMealPlan() {
-        localStorage.setItem("recipe", `ID=${recipe?.id as string};NAME=${recipe?.name}` as string);
-        setIsInMealPlan(true);
-        props.onSetRecipeToMealPlan(true);
+    function createNewMealPlan(name: string) {
+        axios.post("/api/meal-plan", name, {
+            headers: { "Content-Type": "text/plain" }
+        })
+            .then((result) => {
+
+                const newMailPlanId: string = result.data.id;
+                localStorage.setItem(localStorageKey, newMailPlanId);
+                setActiveMealPlanId(newMailPlanId);
+                // addRecipeToMealPlan();
+                // props.onSetRecipeToMealPlan(recipe);
+            })
+            .catch((error) => alert("Fehler beim Erstellen des Speiseplans. " + error))
     }
 
-    const handleDelete = async () => {
+    function addRecipeToMealPlan() {
+        if (!activeMealPlanId) {
+            setDialogVisible(true);
+            return;
+        }
+
+        axios.put(`/api/meal-plan/${activeMealPlanId}`, recipe)
+            .then((result) => {
+                const isInMailPlan: boolean = !!result.data.recipes.find((r: Recipe) => r.id === recipe?.id);
+                setIsInMealPlan(isInMailPlan);
+            })
+            .catch((error) => alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error));
+    }
+
+    const handleDelete = () => {
         if (!confirm("Möchten Sie das Rezept wirklich löschen?")) {
             return;
         }
@@ -123,13 +155,13 @@ export default function RecipeView(props: RecipeViewProps) {
                                 className="action-button"
                                 aria-label="Rezept zum Speiseplan hinzufügen"
                                 disabled={isInMealPlan}
-                                onClick={addToMealPlan}
+                                onClick={addRecipeToMealPlan}
                             >
                                 <img
                                     width={30}
                                     height={30}
                                     src="/list.png"
-                                    alt="Menu-Icon"
+                                    alt="AddToList-Icon"
                                 />
                             </button>
 
@@ -191,6 +223,12 @@ export default function RecipeView(props: RecipeViewProps) {
                     </div>
                 }
             </div>
+            <CustomDialog
+                visible={dialogVisible}
+                onHide={() => setDialogVisible(false)}
+                onNavigateToMealPlans={() => navigate("/meal-plans")}
+                onCreateNewPlan={createNewMealPlan}
+            />
         </>
     )
 }
