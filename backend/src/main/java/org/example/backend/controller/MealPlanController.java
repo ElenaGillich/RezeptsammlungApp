@@ -27,9 +27,14 @@ public class MealPlanController {
         return mealPlanService.getMealPlanById(id);
     }
 
-    @PutMapping("/{id}")
-    public MealPlan updateMealPlan(@PathVariable String id, @RequestBody Recipe recipe) {
+    @PostMapping("/{id}")
+    public MealPlan addRecipeToMealPlan(@PathVariable String id, @RequestBody Recipe recipe) {
         return mealPlanService.addRecipeToMealPlanById(id, recipe);
+    }
+
+    @DeleteMapping("/{id}/recipe/{recipeId}")
+    public MealPlan removeRecipeFromMealPlan(@PathVariable String id, @PathVariable String recipeId) {
+        return mealPlanService.removeRecipeFromMealPlan(id, recipeId);
     }
 
     @DeleteMapping("/{id}")

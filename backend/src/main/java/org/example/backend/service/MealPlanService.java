@@ -28,10 +28,8 @@ public class MealPlanService {
                 () -> new NoSuchElementException("Speisekarte mit ID=" + id + " nicht gefunden!"));
     }
 
-    public MealPlan addRecipeToMealPlanById(String mailPlanId, Recipe newRecipe) {
-        MealPlan existingPlan = mealPlanRepository.findById(mailPlanId).orElseThrow(
-                () -> new NoSuchElementException("Speisekarte mit ID=" + mailPlanId + " nicht gefunden!"));
-
+    public MealPlan addRecipeToMealPlanById(String mealPlanId, Recipe newRecipe) {
+        MealPlan existingPlan = getMealPlanById(mealPlanId);
         List<Recipe> recipeList = new ArrayList<>(existingPlan.getRecipes());
 
         boolean alreadyExists = recipeList.stream()
@@ -39,11 +37,22 @@ public class MealPlanService {
 
         if (alreadyExists) {
             return existingPlan;
-        } else {
-            recipeList.add(newRecipe);
-            MealPlan updated = existingPlan.withRecipes(recipeList);
-            return mealPlanRepository.save(updated);
         }
+
+        recipeList.add(newRecipe);
+        return saveUpdatedMealPlan(existingPlan, recipeList);
+    }
+
+    public MealPlan removeRecipeFromMealPlan(String mealPlanId, String recipeId) {
+        MealPlan existingPlan = getMealPlanById(mealPlanId);
+        List<Recipe> recipes = new ArrayList<>(existingPlan.getRecipes());
+
+        boolean removed = recipes.removeIf(r -> r.getId().equals(recipeId));
+        if (!removed) {
+            return existingPlan;
+        }
+
+        return saveUpdatedMealPlan(existingPlan, recipes);
     }
 
     public MealPlan createMealPlan(String name) {
@@ -52,9 +61,13 @@ public class MealPlanService {
     }
 
     public void deleteById(String id) {
-        mealPlanRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Speisekarte mit ID=" + id + " nicht gefunden!"));
+        getMealPlanById(id);
 
         mealPlanRepository.deleteById(id);
+    }
+
+    private MealPlan saveUpdatedMealPlan(MealPlan existingPlan, List<Recipe> recipes) {
+        MealPlan updated = existingPlan.withRecipes(recipes);
+        return mealPlanRepository.save(updated);
     }
 }

@@ -37,9 +37,22 @@
     }
 
     .custom-button {
-        width: 40px;
-        height: 40px;
+        width: 34px;
+        height: 30px;
         padding: 0;
         margin: -8px 0;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .circle {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+
+        &:hover {
+            border-color: green;
+        }
     }
 }

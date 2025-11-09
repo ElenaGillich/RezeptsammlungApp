@@ -22,8 +22,6 @@ export default function MealPlans() {
             .catch(() => alert("Fehler beim Laden der Speisepläne!"));
     }
 
-
-
     function removeMealPlan(planId: string) {
         if (!confirm("Möchten Sie den Speiseplan wirklich löschen?")) {
             return;
@@ -38,7 +36,7 @@ export default function MealPlans() {
                     localStorage.removeItem(localStorageKey);
                     setActiveMealPlanID(null);
                     alert("Die aktive Speisekarte wird gerade gelöscht! Damit die ausgewählten Gerichte " +
-                        "zu einer bestimmten Speisekarte  hinzugefügt werden können, muss diese aktiviert sein.");
+                        "zu einer bestimmten Speisekarte hinzugefügt werden können, muss diese erst aktiviert werden.");
                 }
             })
             .catch(() => alert("Fehler beim Löschen des Speiseplanes!"));
@@ -67,24 +65,15 @@ export default function MealPlans() {
                                     onClick={() => selectPlan(plan.id)}
                                     className={`plan-selection ${plan.id === activeMealPlanID ? "selected" : ""}`}
                                 >
-                                    {plan.id === activeMealPlanID ? (
+                                    {plan.id !== activeMealPlanID ?
+                                        <div className="circle"/> :
                                         <img
                                             width={34}
                                             height={34}
                                             src="/checked.png"
                                             alt="Checked icon"
                                         />
-                                    ) : (
-                                        // TODO: move styling
-                                        <div
-                                            style={{
-                                                width: 20,
-                                                height: 20,
-                                                borderRadius: "50%",
-                                                border: "2px solid #ccc",
-                                            }}
-                                        />
-                                    )}
+                                    }
                                 </button>
 
                                 <MealPlanCard

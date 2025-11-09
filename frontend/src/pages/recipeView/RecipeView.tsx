@@ -78,7 +78,7 @@ export default function RecipeView(props: RecipeViewProps) {
             return;
         }
 
-        axios.put(`/api/meal-plan/${activeMealPlanId}`, recipe)
+        axios.post(`/api/meal-plan/${activeMealPlanId}`, recipe)
             .then((result) => {
                 const isInMailPlan: boolean = !!result.data.recipes.find((r: Recipe) => r.id === recipe?.id);
                 setIsInMealPlan(isInMailPlan);
