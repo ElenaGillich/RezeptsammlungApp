@@ -31,6 +31,8 @@ export default function Sources() {
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochen" title="kochen Icons">Kochen Icons erstellt von Sir.Vector - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/schreiben" title="schreiben Icons">Schreiben Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/keine-favoriten" title="keine favoriten Icons">Keine favoriten Icons erstellt von Wyasa.Design - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/verkauf" title="verkauf Icons">Verkauf Icons erstellt von Freepik - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/foursquare-check-in" title="foursquare check-in Icons">Foursquare check-in Icons erstellt von juicy_fish - Flaticon</a>
                 </div>
             </div>
         </>

@@ -1,0 +1,45 @@
+.plan-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    place-items: center;
+    flex-flow: row wrap;
+}
+
+.plan {
+    display: flex;
+    gap: 10px;
+    align-items: start;
+
+    .plan-selection {
+        cursor: pointer;
+        padding: 2px;
+        height: 44px;
+        width: 46px;
+        display: flex;
+        justify-content: center;
+        border-color: #ac2525;
+        place-items: center;
+
+        &:hover {
+            border-width: 2px;
+        }
+
+        &.selected {
+            border: none;
+            background: unset;
+
+            &:hover {
+                border-color: transparent;
+                cursor: unset;
+            }
+        }
+    }
+
+    .custom-button {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        margin: -8px 0;
+    }
+}

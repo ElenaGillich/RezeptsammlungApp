@@ -1,0 +1,112 @@
+.card-box {
+    width: 575px;
+    height: fit-content;
+    overflow: scroll;
+    text-align: center;
+    padding-bottom: 20px;
+    border: 2px solid #ff9746;
+    border-radius: 8px;
+    box-shadow: rgba(188, 143, 143) 5px 5px 5px;
+    background-color: white;
+    font-size: 1.2rem;
+
+    h4 {
+        margin-bottom: 0;
+    }
+
+    /*&:hover {*/
+    /*    border-color: #ac2525;*/
+    /*}*/
+
+    &.active {
+        border-color: #4CAF50;
+        border-width: 4px;
+    }
+}
+
+.card-header {
+    width: 535px;
+    display: flex;
+    padding: 10px 20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid #ff9746;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    background-color: #FED6BA;
+
+    .buttons {
+        display: flex;
+        gap: 20px;
+    }
+
+    input {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/*.header-active {*/
+/*    background-color: rgba(76, 175, 80, 0.62);*/
+/*    color: white;*/
+/*}*/
+
+.card-body {
+    padding: 70px 10px 10px;
+
+    .icon-button {
+        margin-top: 8px;
+        padding: 1px 1px 4px;
+        color: #8C0000;
+    }
+
+    li {
+        place-items: center;
+        margin-top: 10px;
+    }
+
+    .list-item {
+        border-right: 1px double #ff9746;
+    }
+}
+
+.products {
+    margin-left: 30px;
+    font-size: 1.1rem;
+    font-style: italic;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 20px;
+    width: 280px;
+
+    .custom-button {
+        position: absolute;
+    }
+
+    .recipe-title:first-child {
+        width: 230px;
+    }
+}
+
+.card-box {
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 2px;
+    background-color: #fff;
+    transition: border 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-box.active {
+    border: 3px solid #4caf50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+}
+
+.card-header.header-active {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.close {
+    width: 245px;
+    text-align: right;
+}

@@ -10,6 +10,13 @@ type DashboardProps = {
 export default function Dashboard(props: Readonly<DashboardProps>) {
     const [openSection, setOpenSection] = useState<string | null>(null);
     const href = (recipeId: string) => `/recipes/${recipeId}`;
+    const salats = filterByCategory("SALAD");
+    const soups = filterByCategory("SOUP");
+    const mainCourses = filterByCategory("MAIN_COURSE");
+    const appetizers = filterByCategory("APPETIZER");
+    const bakedGoods = filterByCategory("BAKED_GOODS");
+    const breakfasts = filterByCategory("BREAKFAST");
+    const desserts = filterByCategory("DESSERT");
 
     function filterByCategory(category: string) {
         return props.recipes.filter(recipe => recipe.category === category);
@@ -51,13 +58,6 @@ export default function Dashboard(props: Readonly<DashboardProps>) {
         );
     }
 
-    const salats = filterByCategory("SALAD");
-    const soups = filterByCategory("SOUP");
-    const mainCourses = filterByCategory("MAIN_COURSE");
-    const appetizers = filterByCategory("APPETIZER");
-    const bakedGoods = filterByCategory("BAKED_GOODS");
-    const breakfasts = filterByCategory("BREAKFAST");
-    const desserts = filterByCategory("DESSERT");
     return (
         <>
             <p className="page-title">Rezeptenanzahl in den beliebten Kategorien</p>
