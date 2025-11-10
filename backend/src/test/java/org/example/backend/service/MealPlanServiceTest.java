@@ -4,7 +4,6 @@ import org.example.backend.model.*;
 import org.example.backend.repository.MealPlanRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.NoSuchElementException;
