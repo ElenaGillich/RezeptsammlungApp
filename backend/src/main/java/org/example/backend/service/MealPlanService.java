@@ -60,7 +60,7 @@ public class MealPlanService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    public void deleteById(String id) {
+    public void deleteMealPlanById(String id) {
         getMealPlanById(id);
 
         mealPlanRepository.deleteById(id);

@@ -39,8 +39,8 @@ public class MealPlanController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable String id) {
-        mealPlanService.deleteById(id);
+    public void deleteMealPlanById(@PathVariable String id) {
+        mealPlanService.deleteMealPlanById(id);
     }
 
     @PostMapping
