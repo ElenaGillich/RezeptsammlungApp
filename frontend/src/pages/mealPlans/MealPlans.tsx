@@ -4,6 +4,7 @@ import axios from "axios";
 import {localStorageKey} from "../../const.ts";
 import MealPlanCard from "../../components/mealPlanCard/MealPlanCard.tsx";
 import "./MealPlans.css"
+import {Tooltip} from "react-tooltip";
 
 export default function MealPlans() {
     const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
@@ -66,15 +67,27 @@ export default function MealPlans() {
                                     className={`plan-selection ${plan.id === activeMealPlanID ? "selected" : ""}`}
                                 >
                                     {plan.id !== activeMealPlanID ?
-                                        <div className="circle"/> :
+                                        <div className="circle"
+                                             data-tooltip-id="noActive"
+                                             data-tooltip-content="Aktivieren"
+                                             data-tooltip-place="left"
+                                        /> :
                                         <img
-                                            width={34}
-                                            height={34}
+                                            width={36}
+                                            height={36}
                                             src="/checked.png"
                                             alt="Checked icon"
+                                            data-tooltip-id="active"
+                                            data-tooltip-content="Der Speiseplan ist gerade aktiv"
+                                            data-tooltip-place="left"
                                         />
                                     }
                                 </button>
+
+                                <Tooltip id="noActive" noArrow className="tooltip"/>
+                                <Tooltip id="active" noArrow className="tooltip"/>
+                                <Tooltip id="remove" noArrow className="tooltip"/>
+                                <Tooltip id="products" noArrow className="tooltip"/>
 
                                 <MealPlanCard
                                     mealPlan={plan}

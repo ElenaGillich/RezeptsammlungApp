@@ -10,6 +10,8 @@ import "./FavoriteList.css"
 import {Tooltip} from "react-tooltip";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {DishCategory} from "../../models/DishCategory.ts";
+import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
+import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 
 type FavoriteListProps = {
     recipes: Recipe[],
@@ -19,6 +21,7 @@ type FavoriteListProps = {
 export default function FavoriteList(props: FavoriteListProps) {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState<Recipe[]>([]);
+    const { addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan } = useAddRecipeToMealPlan();
 
     useEffect(() => {
         const favoured = props.recipes.filter(r => r.favorite) ?? [];
@@ -63,8 +66,13 @@ export default function FavoriteList(props: FavoriteListProps) {
             .catch(e => alert("Fehler beim Entfavorisieren! " + e));
     }
 
-    function addToMenuList(recipe: Recipe) {
-        return alert(<>(Add "{recipe.name}" to menu. Function is not yet implemented!)</>)
+    function addRecipeToMealPlan(recipe: Recipe) {
+        addToMealPlan(recipe)
+            .then((isAdded: boolean) => {
+              if (isAdded) {
+                  alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
+              }
+            })
     }
 
     const actions = (recipe: Recipe) => {
@@ -75,7 +83,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                     className="icon-button"
                     onClick={() => updateFavoriteState(recipe)}
                     aria-label="Entfavorisieren"
-                    data-tooltip-id="noFavotite"
+                    data-tooltip-id="noFavorite"
                     data-tooltip-content="Entfavorisieren"
                     data-tooltip-place="bottom-end"
                 >
@@ -90,7 +98,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                 <button
                     type={"button"}
                     className="icon-button"
-                    onClick={() => addToMenuList(recipe)}
+                    onClick={() => addRecipeToMealPlan(recipe)}
                     aria-label="Zum Speiseplan hinzufügen"
                     data-tooltip-id="toMenu"
                     data-tooltip-content="Zum Speiseplan hinzufügen"
@@ -136,8 +144,15 @@ export default function FavoriteList(props: FavoriteListProps) {
                     </DataTable>
                 }
             </div>
-            <Tooltip id="noFavotite" noArrow className="tooltip"/>
+            <Tooltip id="noFavorite" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>
+
+            <CustomDialog
+                visible={dialogVisible}
+                onHide={() => setDialogVisible(false)}
+                onNavigateToMealPlans={() => navigate("/meal-plans")}
+                onCreateNewPlan={createNewMealPlan}
+            />
         </>
     )
 }

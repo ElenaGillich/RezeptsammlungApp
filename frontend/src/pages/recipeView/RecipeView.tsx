@@ -6,7 +6,9 @@ import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
-import {localStorageKey} from "../../const.ts";
+import {Tooltip} from "react-tooltip";
+import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
+import Spinner from "../../components/spinner/Spinner.tsx";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
@@ -19,12 +21,11 @@ export default function RecipeView(props: RecipeViewProps) {
     const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
+    const { addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan, isLoading } = useAddRecipeToMealPlan();
 
-    const [activeMealPlanId, setActiveMealPlanId] = useState<string | null>(localStorage.getItem(localStorageKey));
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const [isInMealPlan, setIsInMealPlan] = useState<boolean>(false);
-    const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 
     useEffect(() => {
         axios.get(`/api/recipes/${params.id}`)
@@ -57,33 +58,13 @@ export default function RecipeView(props: RecipeViewProps) {
             .catch(e => alert("Fehler beim Favoriten update! " + e));
     }
 
-    function createNewMealPlan(name: string) {
-        axios.post("/api/meal-plan", name, {
-            headers: { "Content-Type": "text/plain" }
-        })
-            .then((result) => {
-
-                const newMailPlanId: string = result.data.id;
-                localStorage.setItem(localStorageKey, newMailPlanId);
-                setActiveMealPlanId(newMailPlanId);
-                // addRecipeToMealPlan();
-                // props.onSetRecipeToMealPlan(recipe);
-            })
-            .catch((error) => alert("Fehler beim Erstellen des Speiseplans. " + error))
-    }
-
     function addRecipeToMealPlan() {
-        if (!activeMealPlanId) {
-            setDialogVisible(true);
+        if (!recipe) {
             return;
         }
 
-        axios.post(`/api/meal-plan/${activeMealPlanId}`, recipe)
-            .then((result) => {
-                const isInMailPlan: boolean = !!result.data.recipes.find((r: Recipe) => r.id === recipe?.id);
-                setIsInMealPlan(isInMailPlan);
-            })
-            .catch((error) => alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error));
+        addToMealPlan(recipe)
+            .then((isInPlan: boolean) => setIsInMealPlan(isInPlan));
     }
 
     const handleDelete = () => {
@@ -127,6 +108,9 @@ export default function RecipeView(props: RecipeViewProps) {
                                 className="action-button"
                                 onClick={updateFavoriteState}
                                 aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
+                                data-tooltip-id="favorite"
+                                data-tooltip-content={isFavorite ? "Entfavorisieren" : "Favorisieren"}
+                                data-tooltip-place="left"
                             >
                                 <img
                                     width={30}
@@ -140,6 +124,9 @@ export default function RecipeView(props: RecipeViewProps) {
                                 type={"button"}
                                 className="action-button"
                                 aria-label="Rezept editieren"
+                                data-tooltip-id="edit"
+                                data-tooltip-content="Rezept editieren"
+                                data-tooltip-place="left"
                                 onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
                             >
                                 <img
@@ -155,20 +142,30 @@ export default function RecipeView(props: RecipeViewProps) {
                                 className="action-button"
                                 aria-label="Rezept zum Speiseplan hinzufügen"
                                 disabled={isInMealPlan}
+                                data-tooltip-id="toMenu"
+                                data-tooltip-content="Zum Speiseplan hinzufügen"
+                                data-tooltip-place="left"
                                 onClick={addRecipeToMealPlan}
                             >
-                                <img
-                                    width={30}
-                                    height={30}
-                                    src="/list.png"
-                                    alt="AddToList-Icon"
-                                />
+                                {isLoading ? (
+                                    <Spinner size={20}/>
+                                ) : (
+                                    <img
+                                        width={30}
+                                        height={30}
+                                        src="/list.png"
+                                        alt="AddToList-Icon"
+                                    />
+                                )}
                             </button>
 
                             <button
                                 type={"button"}
                                 className="action-button"
                                 aria-label="KI-Anfrage"
+                                data-tooltip-id="askAI"
+                                data-tooltip-content="KI nach einer Zutat fragen"
+                                data-tooltip-place="left"
                                 onClick={() => navigate("/ai")}
                             >
                                 <img
@@ -183,6 +180,9 @@ export default function RecipeView(props: RecipeViewProps) {
                                 type={"button"}
                                 className="action-button"
                                 aria-label="Rezept löschen"
+                                data-tooltip-id="remove"
+                                data-tooltip-content="Rezept löschen"
+                                data-tooltip-place="left"
                                 onClick={handleDelete}
                             >
                                 <img
@@ -223,6 +223,12 @@ export default function RecipeView(props: RecipeViewProps) {
                     </div>
                 }
             </div>
+            <Tooltip id="favorite" noArrow className="tooltip"/>
+            <Tooltip id="edit" noArrow className="tooltip"/>
+            <Tooltip id="toMenu" noArrow className="tooltip"/>
+            <Tooltip id="askAI" noArrow className="tooltip"/>
+            <Tooltip id="remove" noArrow className="tooltip"/>
+
             <CustomDialog
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}

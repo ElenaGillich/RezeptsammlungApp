@@ -74,6 +74,10 @@
         border-bottom: 1px dotted;
         text-align: left;
 
+        a:not(:hover) {
+            color: black;
+        }
+
         .left {
             width: 95%;
         }

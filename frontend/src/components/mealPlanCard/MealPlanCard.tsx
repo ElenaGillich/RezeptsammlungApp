@@ -3,6 +3,7 @@ import "./MealPlanCard.css";
 import {useState} from "react";
 import {DishCategory} from "../../models/DishCategory.ts";
 import axios from "axios";
+import {Tooltip} from "react-tooltip";
 
 type MealPlanCardProps = {
     mealPlan: MealPlan;
@@ -35,7 +36,9 @@ export default function MealPlanCard(props: MealPlanCardProps) {
                     <ul className="list">
                         {mealPlan.recipes.map(recipe => recipe.category !== category ? "" :
                             <li className="list-item" key={recipe.id}>
-                                <div className="left">{recipe.name}</div>
+                                <div className="left">
+                                    <a href={`/recipes/${recipe.id}`}>{recipe.name}</a>
+                                </div>
                                 <div className="right">
                                     <button
                                         type="button"
@@ -62,6 +65,9 @@ export default function MealPlanCard(props: MealPlanCardProps) {
                             <button
                                 type="button"
                                 className="action-button"
+                                data-tooltip-id="products"
+                                data-tooltip-content="Lebensmittelliste anzeigen"
+                                data-tooltip-place="top"
                                 onClick={() => setIsDisplayed(true)}
                             >
                                 <img
@@ -75,6 +81,9 @@ export default function MealPlanCard(props: MealPlanCardProps) {
                         <button
                             type="button"
                             className="action-button"
+                            data-tooltip-id="remove"
+                            data-tooltip-content="Den Speiseplan löschen"
+                            data-tooltip-place="top"
                             onClick={() => props.onRemoveMealPlan(mealPlan.id)}
                         >
                             <img
@@ -86,6 +95,9 @@ export default function MealPlanCard(props: MealPlanCardProps) {
                         </button>
                     </div>
                 </div>
+
+                <Tooltip id="remove" noArrow className="tooltip"/>
+                <Tooltip id="products" noArrow className="tooltip"/>
 
                 <div className="card-body">
                     {showBodyContent()}
