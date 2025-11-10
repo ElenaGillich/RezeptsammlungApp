@@ -34,7 +34,7 @@ export default function MealPlans() {
                 setMealPlans(filtered);
 
                 if (localStorage.getItem(localStorageKey) === planId) {
-                    localStorage.removeItem(localStorageKey);
+                    localStorage.clear();
                     setActiveMealPlanID(null);
                     alert("Die aktive Speisekarte wird gerade gelöscht! Damit die ausgewählten Gerichte " +
                         "zu einer bestimmten Speisekarte hinzugefügt werden können, muss diese erst aktiviert werden.");
@@ -43,9 +43,11 @@ export default function MealPlans() {
             .catch(() => alert("Fehler beim Löschen des Speiseplanes!"));
     }
 
-    function selectPlan(planId: string) {
-        setActiveMealPlanID(planId);
-        localStorage.setItem(localStorageKey, planId);
+    function selectPlan(plan: MealPlan) {
+        setActiveMealPlanID(plan.id);
+        localStorage.clear();
+        localStorage.setItem(localStorageKey, plan.id);
+        plan.recipes.forEach(recipe => localStorage.setItem(recipe.id, plan.id));
     }
 
     return (
@@ -63,16 +65,11 @@ export default function MealPlans() {
                                 className="plan"
                             >
                                 <button
-                                    onClick={() => selectPlan(plan.id)}
+                                    onClick={() => selectPlan(plan)}
                                     className={`plan-selection ${plan.id === activeMealPlanID ? "selected" : ""}`}
                                 >
-                                    {plan.id !== activeMealPlanID ?
-                                        <div className="circle"
-                                             data-tooltip-id="noActive"
-                                             data-tooltip-content="Aktivieren"
-                                             data-tooltip-place="left"
-                                        /> :
-                                        <img
+                                    {plan.id === activeMealPlanID
+                                        ? <img
                                             width={36}
                                             height={36}
                                             src="/checked.png"
@@ -80,6 +77,11 @@ export default function MealPlans() {
                                             data-tooltip-id="active"
                                             data-tooltip-content="Der Speiseplan ist gerade aktiv"
                                             data-tooltip-place="left"
+                                        />
+                                        : <div className="circle"
+                                             data-tooltip-id="noActive"
+                                             data-tooltip-content="Aktivieren"
+                                             data-tooltip-place="left"
                                         />
                                     }
                                 </button>

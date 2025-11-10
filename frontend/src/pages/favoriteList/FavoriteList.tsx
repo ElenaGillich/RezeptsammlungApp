@@ -6,12 +6,13 @@ import type {Ingredient} from "../../models/Ingredient.ts";
 import IngredientNames from "../../components/ingredientNames/IngredientNames.tsx";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import "./FavoriteList.css"
+import "./FavoriteList.scss"
 import {Tooltip} from "react-tooltip";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {DishCategory} from "../../models/DishCategory.ts";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import {localStorageKey} from "../../const.ts";
 
 type FavoriteListProps = {
     recipes: Recipe[],
@@ -67,15 +68,13 @@ export default function FavoriteList(props: FavoriteListProps) {
     }
 
     function addRecipeToMealPlan(recipe: Recipe) {
-        addToMealPlan(recipe)
-            .then((isAdded: boolean) => {
-              if (isAdded) {
-                  alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
-              }
-            })
+        addToMealPlan(recipe);
     }
 
     const actions = (recipe: Recipe) => {
+        const isRecipeInActiveMealPlan = !!localStorage.getItem(recipe.id) &&
+            localStorage.getItem(recipe.id) === localStorage.getItem(localStorageKey);
+
         return (
             <div className="display-flex">
                 <button
@@ -99,9 +98,10 @@ export default function FavoriteList(props: FavoriteListProps) {
                     type={"button"}
                     className="icon-button"
                     onClick={() => addRecipeToMealPlan(recipe)}
-                    aria-label="Zum Speiseplan hinzufügen"
+                    aria-label="Rezept zum Speiseplan hinzufügen"
+                    disabled={isRecipeInActiveMealPlan}
                     data-tooltip-id="toMenu"
-                    data-tooltip-content="Zum Speiseplan hinzufügen"
+                    data-tooltip-content={isRecipeInActiveMealPlan ? "Das Rezept ist im aktiven Speiseplan enthalten" : "Rezept zum Speiseplan hinzufügen"}
                     data-tooltip-place="bottom-end"
                 >
                     <img

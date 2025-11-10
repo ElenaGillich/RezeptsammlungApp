@@ -10,7 +10,7 @@ type CustomDialogProps = {
     onCreateNewPlan: (name: string) => void;
 };
 
-export default function CustomDialog(props: CustomDialogProps) {
+export default function CustomDialog(props: Readonly<CustomDialogProps>) {
     const {visible, onHide, onNavigateToMealPlans, onCreateNewPlan} = props;
     const [newPlanName, setNewPlanName] = useState<string>("");
     const [isCreating, setIsCreating] = useState<boolean>(false);

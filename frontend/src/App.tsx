@@ -1,4 +1,4 @@
-import './App.css'
+import './App.scss'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
@@ -15,9 +15,6 @@ import Footer from "./components/footer/Footer.tsx";
 import Header from "./components/header/Header.tsx";
 import AskAI from "./pages/askAI/AskAI.tsx";
 import MealPlans from "./pages/mealPlans/MealPlans.tsx";
-// import {localStorageKey} from "./const.ts";
-// import "primereact/resources/themes/lara-light-blue/theme.css";
-// import "primereact/resources/primereact.min.css";
 
 function App() {
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
@@ -26,8 +23,6 @@ function App() {
     const [removed, setRemoved] = useState<boolean>(false);
 
     useEffect(() => {
-        // localStorage.removeItem(localStorageKey);
-
         loadAllRecipes();
     }, [isUpdated, isSaved, removed]);
 

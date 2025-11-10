@@ -8,12 +8,11 @@ import {handleImageError} from "../../utils/HandleImageError.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
-import Spinner from "../../components/spinner/Spinner.tsx";
+import {localStorageKey} from "../../const.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
     onDelete: (isDelete: boolean) => void;
-    // onSetRecipeToMealPlan: (addedRecipe: Recipe | undefined) => void
 }
 
 export default function RecipeView(props: RecipeViewProps) {
@@ -21,11 +20,10 @@ export default function RecipeView(props: RecipeViewProps) {
     const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
-    const { addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan, isLoading } = useAddRecipeToMealPlan();
+    const { addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan } = useAddRecipeToMealPlan();
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
-    const [isInMealPlan, setIsInMealPlan] = useState<boolean>(false);
 
     useEffect(() => {
         axios.get(`/api/recipes/${params.id}`)
@@ -34,7 +32,7 @@ export default function RecipeView(props: RecipeViewProps) {
                 setIsFavorite(result.data.favorite);
             })
             .catch((error) => console.log(error))
-    }, [isFavorite, params.id, isInMealPlan]);
+    }, [isFavorite, params.id]);
 
     if (!recipe) {
         return (
@@ -43,6 +41,9 @@ export default function RecipeView(props: RecipeViewProps) {
             </div>
         );
     }
+
+    const isRecipeInActiveMealPlan = !!localStorage.getItem(recipe.id) &&
+        localStorage.getItem(recipe.id) === localStorage.getItem(localStorageKey);
 
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
@@ -63,8 +64,7 @@ export default function RecipeView(props: RecipeViewProps) {
             return;
         }
 
-        addToMealPlan(recipe)
-            .then((isInPlan: boolean) => setIsInMealPlan(isInPlan));
+        addToMealPlan(recipe);
     }
 
     const handleDelete = () => {
@@ -141,22 +141,18 @@ export default function RecipeView(props: RecipeViewProps) {
                                 type={"button"}
                                 className="action-button"
                                 aria-label="Rezept zum Speiseplan hinzufügen"
-                                disabled={isInMealPlan}
+                                disabled={isRecipeInActiveMealPlan}
                                 data-tooltip-id="toMenu"
-                                data-tooltip-content="Zum Speiseplan hinzufügen"
+                                data-tooltip-content={isRecipeInActiveMealPlan ? "Das Rezept ist im aktiven Speiseplan enthalten" : "Rezept zum Speiseplan hinzufügen"}
                                 data-tooltip-place="left"
                                 onClick={addRecipeToMealPlan}
                             >
-                                {isLoading ? (
-                                    <Spinner size={20}/>
-                                ) : (
-                                    <img
-                                        width={30}
-                                        height={30}
-                                        src="/list.png"
-                                        alt="AddToList-Icon"
-                                    />
-                                )}
+                                <img
+                                    width={30}
+                                    height={30}
+                                    src="/list.png"
+                                    alt="AddToList-Icon"
+                                />
                             </button>
 
                             <button

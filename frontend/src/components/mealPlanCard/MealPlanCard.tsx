@@ -11,7 +11,7 @@ type MealPlanCardProps = {
     onRemoveMealPlan: (planId: string) => void;
 };
 
-export default function MealPlanCard(props: MealPlanCardProps) {
+export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
     const isActive = props.isActive;
     const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
     const [mealPlan, setMealPlan] = useState<MealPlan>(props.mealPlan);
@@ -20,6 +20,7 @@ export default function MealPlanCard(props: MealPlanCardProps) {
         axios.delete(`/api/meal-plan/${mealPlan.id}/recipe/${recipeId}`)
             .then((result) => {
                 setMealPlan(result.data);
+                localStorage.removeItem(recipeId);
             })
             .catch((error) => alert("Fehler beim Entfernen des Rezepts vom Speiseplan: " + error));
     }
@@ -33,25 +34,32 @@ export default function MealPlanCard(props: MealPlanCardProps) {
                 <div className="plan-list" key={category}>
                     <p className="category left">{DishCategory[category as keyof typeof DishCategory]}</p>
 
-                    <ul className="list">
-                        {mealPlan.recipes.map(recipe => recipe.category !== category ? "" :
-                            <li className="list-item" key={recipe.id}>
-                                <div className="left">
-                                    <a href={`/recipes/${recipe.id}`}>{recipe.name}</a>
-                                </div>
-                                <div className="right">
-                                    <button
-                                        type="button"
-                                        className="icon-button"
-                                        onClick={() => removeRecipe(recipe.id)}
-                                    >x</button>
-                                </div>
-                            </li>
-                        )}
-                    </ul>
+                    {showRecipesForCategory(category)}
                 </div>
             )
         );
+    }
+
+    function showRecipesForCategory(category: string) {
+        return (
+            <ul className="list">
+                {mealPlan.recipes.map(recipe => recipe.category === category ?
+                    <li className="list-item" key={recipe.id}>
+                        <div className="left">
+                            <a href={`/recipes/${recipe.id}`}>{recipe.name}</a>
+                        </div>
+                        <div className="right">
+                            <button
+                                type="button"
+                                className="icon-button"
+                                onClick={() => removeRecipe(recipe.id)}
+                            >x</button>
+                        </div>
+                    </li>
+                    : ""
+                )}
+            </ul>
+        )
     }
 
     return (
