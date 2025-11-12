@@ -56,7 +56,8 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
                                 type="button"
                                 className="icon-button"
                                 onClick={() => removeRecipe(recipe.id)}
-                            >x</button>
+                            >x
+                            </button>
                         </div>
                     </li>
                     : ""
@@ -108,21 +109,19 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
     }
 
     return (
-        <>
-            <div className={`card-box ${isActiveMealPlan ? "active" : ""}`}>
-                <div className={`card-header ${isActiveMealPlan ? "header-active" : ""}`}>
-                    <h4>{mealPlan.name}</h4>
+        <div className={`card-box ${isActiveMealPlan ? "active" : ""}`}>
+            <div className={`card-header ${isActiveMealPlan ? "header-active" : ""}`}>
+                <h4>{mealPlan.name}</h4>
 
-                    {showIconButtons()}
-                </div>
-
-                <Tooltip id="remove" noArrow className="tooltip"/>
-                <Tooltip id="products" noArrow className="tooltip"/>
-
-                <div className="card-body">
-                    {showBodyContent()}
-                </div>
+                {showIconButtons()}
             </div>
-        </>
+
+            <Tooltip id="remove" noArrow className="tooltip"/>
+            <Tooltip id="products" noArrow className="tooltip"/>
+
+            <div className="card-body">
+                {showBodyContent()}
+            </div>
+        </div>
     );
 }

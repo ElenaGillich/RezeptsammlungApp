@@ -150,21 +150,22 @@ export default function MealPlans() {
                                     <p className="notice">
                                         In diesem Bereich kann man alle Zutaten aus den Rezepten des
                                         <b> aktiven </b> Speiseplans einsehen, um daraus eine Einkaufsliste erstellen
-                                        zu können. <br/> Zu diesem Zweck wird das Icon &nbsp;
+                                        zu können. <br/> Zu diesem Zweck wird das Icon {' '}
                                         <img
                                             width={30}
                                             height={28}
                                             src="/grocery.png"
                                             alt="Grocery-Icon"
-                                        />&nbsp;
+                                        />{' '}
                                         zum Aufrufen der Zutatenliste verwendet, das nur für den grün markierten und
-                                        mit dem Icon &nbsp;
+                                        mit dem Icon {' '}
                                         <img
                                             width={30}
                                             height={28}
                                             src="/checked.png"
                                             alt="Checklist-Icon"
-                                        /> &nbsp; gekennzeichneten <b>aktiven Speiseplan</b> verfügbar ist,
+                                        /> {' '}
+                                        gekennzeichneten <b>aktiven Speiseplan</b> verfügbar ist,
                                         sofern dieser Speiseplan nicht leer ist.
                                     </p>
                                 }

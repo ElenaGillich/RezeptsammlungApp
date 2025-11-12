@@ -36,8 +36,8 @@ export default function FavoriteList(props: FavoriteListProps) {
             return;
         }
 
-        const storedIds = Object.keys(localStorage).filter(key => localStorage.getItem(key) === activePlanId);
-        const restored = props.recipes.filter((recipe: Recipe) => storedIds.includes(recipe.id));
+        const storedIds = new Set(Object.keys(localStorage).filter(key => localStorage.getItem(key) === activePlanId));
+        const restored = props.recipes.filter((recipe: Recipe) => storedIds.has(recipe.id));
         setAddedInMealPlan(restored);
     }, [props.recipes]);
 
@@ -52,28 +52,34 @@ export default function FavoriteList(props: FavoriteListProps) {
         </div>
     );
 
-    const speedTemplate = (recipe: Recipe) => (
-        <div className="marker">
-            <div
-                className={
-                    recipe.speed === ("FAST" as PreparationSpeed)
-                        ? "green"
-                        : recipe.speed === ("LONG" as PreparationSpeed) ? "red" : "yellow"
-                }
-            >
-                {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}
+    const speedTemplate = (recipe: Recipe) => {
+        let color = "yellow";
+
+        if (recipe.speed === ("FAST" as PreparationSpeed)) {
+            color = "green";
+        } else if (recipe.speed === ("LONG" as PreparationSpeed)) {
+            color = "red";
+        }
+
+        return (
+            <div className="marker">
+                <div className={color}>
+                    {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}
+                </div>
             </div>
-        </div>
-    );
+        )
+    };
+
+    const handleUpdateFavoriteSuccess = useCallback((recipe: Recipe) => {
+        props.onUpdateFavorite(false);
+        setFavorites((prev) => prev.filter((item) => item.id !== recipe.id));
+    }, [props]);
 
     const updateFavoriteState = useCallback((recipe: Recipe) => {
         axios.put(`/api/recipes/${recipe.id}/favorite?isFavorite=false`)
-            .then(() => {
-                props.onUpdateFavorite(false);
-                setFavorites((prev) => prev.filter((item) => item.id !== recipe.id));
-            })
+            .then(() => handleUpdateFavoriteSuccess(recipe))
             .catch((e) => alert("Fehler beim Entfavorisieren! " + e));
-    }, [props]);
+    }, [handleUpdateFavoriteSuccess]);
 
     const addRecipeToMealPlan = useCallback((recipe: Recipe) => {
             setAddedInMealPlan((prev) =>
