@@ -1,6 +1,6 @@
 package org.example.backend.controller;
 
-import org.example.backend.RecipeRepository;
+import org.example.backend.repository.RecipeRepository;
 import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
 import org.example.backend.model.PreparationSpeed;
@@ -210,8 +210,6 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.containsString("Recipe with ID=gffhfz23654dhgf9gh not found")));
     }
 
-    //TODO: add more updateRecipe tests after adding of validation
-
     @Test
     void updateFavoriteByRecipeId_shouldChangeFavoriteStatus() throws Exception {
         //GIVEN
@@ -262,7 +260,7 @@ class RecipeControllerTest {
 
         //WHEN
         mockMvc.perform(delete("/api/recipes/1"))
-                //THEN
+        //THEN
                 .andExpect(status().isOk());
 
     }

@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.RecipeRepository;
+import org.example.backend.repository.RecipeRepository;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.model.DishCategory;
 import org.example.backend.model.PreparationSpeed;

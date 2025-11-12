@@ -1,5 +1,6 @@
 package org.example.backend.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.backend.model.Recipe;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.service.ImageService;
@@ -12,15 +13,11 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/recipes")
 public class RecipeController {
     private final RecipeService recipeService;
     private final ImageService imageService;
-
-    public RecipeController(RecipeService recipeService, ImageService imageService) {
-        this.recipeService = recipeService;
-        this.imageService = imageService;
-    }
 
     @GetMapping
     public List<Recipe> getAllRecipes() {

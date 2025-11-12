@@ -1,5 +1,5 @@
 import "./Information.css";
-import {dimensions, units} from "../../components/const.ts";
+import {dimensions, units} from "../../const.ts";
 
 export default function Information() {
 

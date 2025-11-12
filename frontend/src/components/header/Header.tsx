@@ -11,16 +11,31 @@ export default function Header() {
                 type={"button"}
                 className="action-button"
                 aria-label="Dashboard"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/dashboard")}
             >
                 <img
                     width={30}
                     height={30}
                     src="/dashboard.png"
+                    alt="Dashboard-Icon"
+                />
+            </button>
+
+            <Navbar/>
+
+            <button
+                type={"button"}
+                className="action-button"
+                aria-label="Rezept zum Speiseplan hinzufügen"
+                onClick={() => navigate("/meal-plans")}
+            >
+                <img
+                    width={30}
+                    height={30}
+                    src="/meal-plan.png"
                     alt="Menu-Icon"
                 />
             </button>
-            <Navbar/>
         </header>
     )
 }

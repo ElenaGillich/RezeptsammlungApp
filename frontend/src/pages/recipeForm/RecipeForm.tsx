@@ -8,7 +8,7 @@ import Ingredient from "../../components/ingredient/Ingredient.tsx";
 import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
-import {emptyRecipeDto} from "../../components/const.ts";
+import {emptyRecipeDto} from "../../const.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
 
@@ -33,6 +33,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
     const [isDirty, setIsDirty] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useUnsavedChangesWarning(isDirty);
     useEffect(() => {
@@ -138,7 +139,9 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     };
 
     async function submitForm(event: FormEvent<HTMLFormElement>) {
+        setIsLoading(true);
         event.preventDefault();
+
         const data: FormData = new FormData();
         data.append("data", new Blob([JSON.stringify(formData)], {'type': "application/json"}));
 
@@ -160,17 +163,19 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             if (isEditMode) {
                 globalThis.history.back();
             } else {
-                navigate("/recipes");
+                navigate("/");
             }
         } catch (e) {
             alert("Fehler beim Speichern! " + e);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
         <>
             <form onSubmit={submitForm}>
-                <div className="display-flex">
+                <div className="display-flex items-center">
                     <div>
                         <p className="page-title">{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</p>
                         {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
@@ -179,11 +184,11 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     </div>
                     <button
                         className="custom-button"
-                        disabled={!isDirty || !(
+                        disabled={!isDirty || isLoading || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        Speichern
+                        {isLoading ? "Speicherung..." : "Speichern"}
                     </button>
                 </div>
 
@@ -352,40 +357,37 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                             />
                         </div>
                     </div>
+
+                    <h4>Meinung zum Rezept</h4>
                     <div className="section">
-                        <div className="full-width">
-                            <h4>Meinung zum Rezept</h4>
-                            <textarea
-                                maxLength={200}
-                                name={"opinionOfTheDish"}
-                                className="full-width"
-                                value={formData.opinionOfTheDish}
-                                onChange={handleChange}
-                            />
-                        </div>
+                        <textarea
+                            maxLength={200}
+                            name={"opinionOfTheDish"}
+                            className="full-width"
+                            value={formData.opinionOfTheDish}
+                            onChange={handleChange}
+                        />
                     </div>
 
+                    <h4>Link zum Rezeptressource (z.B. YouTube-Video)</h4>
                     <div className="section">
-                        <div className="full-width">
-                            <h4>Link zum Rezeptressource (z.B. YouTube-Video)</h4>
-                            <textarea
-                                name={"linkToSource"}
-                                className="full-width"
-                                value={formData.linkToSource}
-                                onChange={handleChange}
-                            />
-                        </div>
+                        <textarea
+                            name={"linkToSource"}
+                            className="full-width"
+                            value={formData.linkToSource}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 
                 <div className="full-width item-right">
                     <button
                         className="custom-button"
-                        disabled={!isDirty || !(
+                        disabled={!isDirty || isLoading || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        Speichern
+                        {isLoading ? "Speicherung..." : "Speichern"}
                     </button>
                 </div>
             </form>

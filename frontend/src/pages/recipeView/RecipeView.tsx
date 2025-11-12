@@ -5,36 +5,50 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
+import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import {Tooltip} from "react-tooltip";
+import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
+import {localStorageKey} from "../../const.ts";
+import Spinner from "../../components/spinner/Spinner.tsx";
+import {DishCategory} from "../../models/DishCategory.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
-    onDelete: (isDelete: boolean) => void
+    onDelete: (isDelete: boolean) => void;
 }
+
 export default function RecipeView(props: RecipeViewProps) {
     const params = useParams();
     const navigate = useNavigate();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
+    const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan} = useAddRecipeToMealPlan();
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        setIsLoading(true);
+
         axios.get(`/api/recipes/${params.id}`)
             .then((result) => {
                 setRecipe(result.data);
-                setIsFavorite(result.data.favorite)
+                setIsFavorite(result.data.favorite);
             })
             .catch((error) => console.log(error))
+            .finally(() => setIsLoading(false));
     }, [isFavorite, params.id]);
 
-    if (!recipe) {
-        return <h2>Kein Rezept mit ID={params.id} gefunden!</h2>;
-    }
+    const recipeId: string = recipe ? recipe.id : "";
+    const isRecipeInActiveMealPlan = !!localStorage.getItem(recipeId) &&
+        localStorage.getItem(recipeId) === localStorage.getItem(localStorageKey);
 
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
         setIsFavorite(newFavorite);
+        setIsLoading(true);
+
         axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=" + newFavorite, {
             headers: {
                 'Content-Type': 'application/json'
@@ -43,143 +57,236 @@ export default function RecipeView(props: RecipeViewProps) {
             setIsFavorite(newFavorite);
             props.onUpdateFavorite(true);
         })
-            .catch(e => alert("Fehler beim Favoriten update! " + e));
+            .catch(e => alert("Fehler beim Favoriten update! " + e))
+            .finally(() => setIsLoading(false));
     }
 
-    const handleDelete = async () => {
+    function addRecipeToMealPlan() {
+        if (!recipe) {
+            return;
+        }
+
+        addToMealPlan(recipe)
+            .finally(() => setIsLoading(false));
+    }
+
+    const handleDelete = () => {
         if (!confirm("Möchten Sie das Rezept wirklich löschen?")) {
             return;
         }
 
-        axios.delete(`/api/recipes/${recipe.id}`)
+        setIsLoading(true);
+        axios.delete(`/api/recipes/${recipe?.id}`)
             .then(() => {
                 props.onDelete(true);
-                navigate("/recipes");
+                navigate("/");
             })
             .catch(error =>
                 alert("Fehler beim Löschen des Rezepts: " + error)
             )
+            .finally(() => setIsLoading(false));
+    };
+
+    const colorClass = (speed: string | undefined) => {
+        switch (speed) {
+            case "Schnell":
+                return "green";
+            case "Lange":
+                return "red";
+            default:
+                return "yellow"
+        }
     };
 
     return (
         <>
+            <p className="page-title">{recipe?.name}</p>
+
             <div className="container">
-                <div className="display-flex">
-                    <div className="info">
-                        <h2>{recipe.name}</h2>
-                        <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}</p>
-
-                        <label className="section-title">Zutaten</label>:
-                        <ol>
-                            {recipe.ingredients.map(ingredient =>
-                                <li key={ingredient.name}>
-                                    {ingredient.name} - {ingredient.quantity} {ingredient.unit}
-                                    {ingredient.additionalInfo && <span> ({ingredient.additionalInfo}) </span>}
-                                </li>
-                            )}
-                        </ol>
-                    </div>
-                    <div className="display-flex">
-                        <div className="actions">
-                            <button
-                                type={"button"}
-                                className="action-button"
-                                onClick={updateFavoriteState}
-                                aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
-                            >
-                                <img
-                                    width={30}
-                                    height={30}
-                                    src={isFavorite ? favorite : noFavorite}
-                                    alt={isFavorite ? "Favorisiert" : "Nicht favorisiert"}
-                                />
-                            </button>
-
-                            <button
-                                type={"button"}
-                                className="action-button"
-                                aria-label="Rezept editieren"
-                                onClick={() => navigate(`/recipes/${recipe.id}/edit`)}
-                            >
-                                <img
-                                    width={30}
-                                    height={30}
-                                    src="/edit-pen.png"
-                                    alt="Edit-Icon"
-                                />
-                            </button>
-
-                            <button
-                                type={"button"}
-                                className="action-button"
-                                aria-label="Rezept zum Menü hinzufügen"
-                            >
-                                <img
-                                    width={30}
-                                    height={30}
-                                    src="/list.png"
-                                    alt="Menu-Icon"
-                                />
-                            </button>
-
-                            <button
-                                type={"button"}
-                                className="action-button"
-                                aria-label="KI-Anfrage"
-                                onClick={() => navigate("/ai")}
-                            >
-                                <img
-                                    width={30}
-                                    height={30}
-                                    src="/chatgpt.png"
-                                    alt="Chatgpt-Icon"
-                                />
-                            </button>
-
-                            <button
-                                type={"button"}
-                                className="action-button"
-                                aria-label="Rezept löschen"
-                                onClick={handleDelete}
-                            >
-                                <img
-                                    width={26}
-                                    height={26}
-                                    src="/delete.png"
-                                    alt="Menu-Icon"
-                                />
-                            </button>
-                        </div>
-                        <div className={"recipe-image"}>
-                            <img
-                                width={recipe.image ? 400 : 220}
-                                height={recipe.image ? 300 : 180}
-                                src={recipe.image ? recipe.image : "/noRecipeImage.png"}
-                                onError={handleImageError}
-                                alt="Gerichtbild"/>
-                        </div>
-                    </div>
-                </div>
-
-                <label className="section-title"> ZUBEREITUNG</label>:
-                <div className="info-box">
-                    {recipe.description}
-                </div>
-
-                {recipe.notes &&
-                    <div className="info-box">
-                        <label className="section-title">Anmerkungen</label>:
-                        <span> {recipe.notes} </span>
+                {isLoading &&
+                    <div className="in-center">
+                        <Spinner size={36}/>
                     </div>
                 }
 
-                {recipe.linkToSource &&
-                    <div className="info-box">
-                        <label className="section-title">Link</label>:
-                        <a href={recipe.linkToSource} title="Link zum Ressource"> {recipe.linkToSource} </a>
+                {(!isLoading && !recipe) &&
+                    <h2>Kein Rezept mit ID={params.id} gefunden!</h2>
+                }
+
+
+                {!isLoading &&
+                    <div>
+                        <div className="display-flex">
+                            <div className="info">
+                                <div className="display-flex">
+                                    <div>
+                                        <span className="section-title"> Rezeptkategorie </span>
+                                        <div className="marker">
+                                            <div
+                                                className="normal">{DishCategory[recipe?.category as keyof typeof DishCategory]}</div>
+                                        </div>
+                                    </div>
+
+                                    <img
+                                        width={60}
+                                        height={60}
+                                        src="/kochzeit.png"
+                                        alt="kochzeit-Icon"
+                                    />
+
+                                    <div>
+                                        <span className="section-title"> Zubereitungszeit </span>
+                                        <div className="marker">
+                                            <div className={colorClass(recipe?.speed)}>
+                                                {PreparationSpeed[recipe?.speed as keyof typeof PreparationSpeed]}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label className="section-title">Zutaten</label>:
+                                <ol>
+                                    {recipe?.ingredients.map(ingredient =>
+                                        <li key={ingredient.name}>
+                                            {ingredient.name} - {ingredient.quantity} {ingredient.unit}
+                                            {ingredient.additionalInfo && <span> ({ingredient.additionalInfo}) </span>}
+                                        </li>
+                                    )}
+                                </ol>
+                            </div>
+                            <div className="display-flex">
+                                <div className="actions">
+                                    <button
+                                        type={"button"}
+                                        className="action-button"
+                                        onClick={updateFavoriteState}
+                                        aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
+                                        data-tooltip-id="favorite"
+                                        data-tooltip-content={isFavorite ? "Entfavorisieren" : "Favorisieren"}
+                                        data-tooltip-place="left"
+                                    >
+                                        <img
+                                            width={30}
+                                            height={30}
+                                            src={isFavorite ? favorite : noFavorite}
+                                            alt={isFavorite ? "Favorisiert" : "Nicht favorisiert"}
+                                        />
+                                    </button>
+
+                                    <button
+                                        type={"button"}
+                                        className="action-button"
+                                        aria-label="Rezept editieren"
+                                        data-tooltip-id="edit"
+                                        data-tooltip-content="Rezept editieren"
+                                        data-tooltip-place="left"
+                                        onClick={() => navigate(`/recipes/${recipe?.id}/edit`)}
+                                    >
+                                        <img
+                                            width={30}
+                                            height={30}
+                                            src="/edit-pen.png"
+                                            alt="Edit-Icon"
+                                        />
+                                    </button>
+
+                                    <button
+                                        type={"button"}
+                                        className="action-button"
+                                        aria-label="Rezept zum Speiseplan hinzufügen"
+                                        disabled={isRecipeInActiveMealPlan}
+                                        data-tooltip-id="toMenu"
+                                        data-tooltip-content={isRecipeInActiveMealPlan ? "Das Rezept ist im aktiven Speiseplan enthalten" : "Rezept zum Speiseplan hinzufügen"}
+                                        data-tooltip-place="left"
+                                        onClick={addRecipeToMealPlan}
+                                    >
+                                        <img
+                                            width={30}
+                                            height={30}
+                                            src="/list.png"
+                                            alt="AddToList-Icon"
+                                        />
+                                    </button>
+
+                                    <button
+                                        type={"button"}
+                                        className="action-button"
+                                        aria-label="KI-Anfrage"
+                                        data-tooltip-id="askAI"
+                                        data-tooltip-content="KI nach einer Zutat fragen"
+                                        data-tooltip-place="left"
+                                        onClick={() => navigate("/ai")}
+                                    >
+                                        <img
+                                            width={30}
+                                            height={30}
+                                            src="/chatgpt.png"
+                                            alt="Chatgpt-Icon"
+                                        />
+                                    </button>
+
+                                    <button
+                                        type={"button"}
+                                        className="action-button"
+                                        aria-label="Rezept löschen"
+                                        data-tooltip-id="remove"
+                                        data-tooltip-content="Rezept löschen"
+                                        data-tooltip-place="left"
+                                        disabled={isLoading}
+                                        onClick={handleDelete}
+                                    >
+                                        <img
+                                            width={26}
+                                            height={26}
+                                            src="/delete.png"
+                                            alt="Menu-Icon"
+                                        />
+                                    </button>
+                                </div>
+                                <div className={"recipe-image"}>
+                                    <img
+                                        width={recipe?.image ? 400 : 220}
+                                        height={recipe?.image ? 300 : 180}
+                                        src={recipe?.image ? recipe?.image : "/noRecipeImage.png"}
+                                        onError={handleImageError}
+                                        alt="Gerichtbild"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label className="section-title"> ZUBEREITUNG</label>:
+                        <div className="info-box">
+                            {recipe?.description}
+                        </div>
+
+                        {recipe?.notes &&
+                            <div className="info-box">
+                                <label className="section-title">Anmerkungen</label>:
+                                <span> {recipe.notes} </span>
+                            </div>
+                        }
+
+                        {recipe?.linkToSource &&
+                            <div className="info-box">
+                                <label className="section-title">Link</label>:
+                                <a href={recipe.linkToSource} title="Link zum Ressource"> {recipe.linkToSource} </a>
+                            </div>
+                        }
                     </div>
                 }
             </div>
+            <Tooltip id="favorite" noArrow className="tooltip"/>
+            <Tooltip id="edit" noArrow className="tooltip"/>
+            <Tooltip id="toMenu" noArrow className="tooltip"/>
+            <Tooltip id="askAI" noArrow className="tooltip"/>
+            <Tooltip id="remove" noArrow className="tooltip"/>
+
+            <CustomDialog
+                visible={dialogVisible}
+                onHide={() => setDialogVisible(false)}
+                onNavigateToMealPlans={() => navigate("/meal-plans")}
+                onCreateNewPlan={createNewMealPlan}
+            />
         </>
     )
 }

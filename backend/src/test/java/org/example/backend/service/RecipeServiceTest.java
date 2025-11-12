@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.RecipeRepository;
+import org.example.backend.repository.RecipeRepository;
 import org.example.backend.dto.RecipeDto;
 import org.example.backend.model.DishCategory;
 import org.example.backend.model.Ingredient;
@@ -51,7 +51,7 @@ class RecipeServiceTest {
             "Tomaten sollen am besten frisch, lecker und saftig sein.",
             recipe.getOpinionOfTheDish(),
             recipe.getLinkToSource(),
-            recipe.isFavorite()
+            recipe.getFavorite()
     );
 
     @Test
@@ -150,7 +150,6 @@ class RecipeServiceTest {
 
     @Test
     void updateRecipe_shouldThrowException_whenCalledWithNotExistingRecipeId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1nzu98349df7gtz345")).thenReturn(Optional.empty());
 
@@ -180,7 +179,6 @@ class RecipeServiceTest {
 
     @Test
     void updateFavoriteByRecipeId_shouldThrowException_whenCalledWithInvalidId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1")).thenReturn(Optional.empty());
 
@@ -198,7 +196,6 @@ class RecipeServiceTest {
 
     @Test
     void deleteRecipeById_shouldDeleteRecipe_whenCalledWithValidId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
 

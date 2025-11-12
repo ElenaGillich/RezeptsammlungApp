@@ -1,4 +1,4 @@
-import type {RecipeDto} from "../models/RecipeDto.ts";
+import type {RecipeDto} from "./models/RecipeDto.ts";
 
 export type ShortFullInfo = {
     short: string,
@@ -51,3 +51,5 @@ export const  emptyRecipeDto: RecipeDto = {
     linkToSource: "",
     favorite: false
 }
+
+export const localStorageKey: string = "activeMealPlan";

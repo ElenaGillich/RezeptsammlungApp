@@ -1,6 +1,5 @@
 header {
     height: 70px;
-    width: calc(100% + 42px);
     margin-top: -8px;
     display: flex;
     gap: 15px;

@@ -20,6 +20,7 @@ export default function Sources() {
 
                     <p></p>
                     <h4>Weitere Icons</h4>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/kochzeit" title="kochzeit Icons">Kochzeit Icons erstellt von Flat Icons - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/chatgpt" title="chatgpt Icons">Chatgpt Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/instrumententafel" title="instrumententafel Icons">Instrumententafel Icons erstellt von feen - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/menu-offnen" title="menü öffnen Icons">Menü öffnen Icons erstellt von Freepik - Flaticon</a>                    <a href="https://www.flaticon.com/de/kostenlose-icons/herz" title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
@@ -31,6 +32,8 @@ export default function Sources() {
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochen" title="kochen Icons">Kochen Icons erstellt von Sir.Vector - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/schreiben" title="schreiben Icons">Schreiben Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/keine-favoriten" title="keine favoriten Icons">Keine favoriten Icons erstellt von Wyasa.Design - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/verkauf" title="verkauf Icons">Verkauf Icons erstellt von Freepik - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/foursquare-check-in" title="foursquare check-in Icons">Foursquare check-in Icons erstellt von juicy_fish - Flaticon</a>
                 </div>
             </div>
         </>

@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.repository;
 
 import org.example.backend.model.Recipe;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -73,10 +73,15 @@ export default function AskAI() {
                     <span>um Informationen über diese, ihre Verwendung und geeignete Ersatzprodukte zu erhalten.</span>
                 </div>
 
-                <div className="request-box" role="button" onKeyDown={handleKeyDown}>
-                    <label>Ihre Eingabe:{' '}
-                        <input type="text" className="full-width" value={request} maxLength={50}
-                               onChange={(event) => handleInput(event)}/>
+                <div className="request-box">
+                    <label>Name der Zutat:{' '}
+                        <input
+                            type="text"
+                            className="full-width"
+                            value={request} maxLength={50}
+                            onKeyDown={handleKeyDown}
+                            onChange={(event) => handleInput(event)}
+                        />
                     </label>
 
                     {loading ? (
@@ -96,7 +101,7 @@ export default function AskAI() {
                     <textarea
                         rows={15}
                         disabled
-                        value={error ? error : response}
+                        value={error || response}
                         className="full-width"
                         placeholder="Hier wird Ihre Anfrage beantwortet..."
                     ></textarea>
