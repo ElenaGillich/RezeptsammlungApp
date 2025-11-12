@@ -120,7 +120,7 @@ export default function RecipeView(props: RecipeViewProps) {
                             <div className="info">
                                 <div className="display-flex">
                                     <div>
-                                        <label className="section-title"> Rezeptkategorie </label>
+                                        <span className="section-title"> Rezeptkategorie </span>
                                         <div className="marker">
                                             <div
                                                 className="normal">{DishCategory[recipe?.category as keyof typeof DishCategory]}</div>
@@ -135,7 +135,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                     />
 
                                     <div>
-                                        <label className="section-title"> Zubereitungszeit </label>
+                                        <span className="section-title"> Zubereitungszeit </span>
                                         <div className="marker">
                                             <div className={colorClass(recipe?.speed)}>
                                                 {PreparationSpeed[recipe?.speed as keyof typeof PreparationSpeed]}

@@ -33,7 +33,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
     const [isDirty, setIsDirty] = useState(false);
-    const [isLoading, setIsloading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useUnsavedChangesWarning(isDirty);
     useEffect(() => {
@@ -139,7 +139,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     };
 
     async function submitForm(event: FormEvent<HTMLFormElement>) {
-        setIsloading(true);
+        setIsLoading(true);
         event.preventDefault();
 
         const data: FormData = new FormData();
@@ -168,7 +168,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
         } catch (e) {
             alert("Fehler beim Speichern! " + e);
         } finally {
-            setIsloading(false);
+            setIsLoading(false);
         }
     }
 

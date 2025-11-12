@@ -81,18 +81,18 @@ export default function FavoriteList(props: FavoriteListProps) {
             .catch((e) => alert("Fehler beim Entfavorisieren! " + e));
     }, [handleUpdateFavoriteSuccess]);
 
+    const onAddRecipeToPlanError = (recipe: Recipe) => {
+        setAddedInMealPlan(prev => prev.filter(r => r.id !== recipe.id));
+    };
+
     const addRecipeToMealPlan = useCallback((recipe: Recipe) => {
             const updateList = (prev: Recipe[]) => {
                 const alreadyExists = prev.some(r => r.id === recipe.id);
                 return alreadyExists ? prev : [...prev, recipe];
             };
 
-            const handleAddError = () => {
-                setAddedInMealPlan(prev => prev.filter(r => r.id !== recipe.id));
-            };
-
             setAddedInMealPlan(updateList);
-            addToMealPlan(recipe).catch(handleAddError);
+            addToMealPlan(recipe).catch(onAddRecipeToPlanError);
         },
         [addToMealPlan]
     );
