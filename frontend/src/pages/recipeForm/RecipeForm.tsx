@@ -170,7 +170,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     return (
         <>
             <form onSubmit={submitForm}>
-                <div className="display-flex">
+                <div className="display-flex items-center">
                     <div>
                         <p className="page-title">{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</p>
                         {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
@@ -352,29 +352,26 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                             />
                         </div>
                     </div>
+
+                    <h4>Meinung zum Rezept</h4>
                     <div className="section">
-                        <div className="full-width">
-                            <h4>Meinung zum Rezept</h4>
-                            <textarea
-                                maxLength={200}
-                                name={"opinionOfTheDish"}
-                                className="full-width"
-                                value={formData.opinionOfTheDish}
-                                onChange={handleChange}
-                            />
-                        </div>
+                        <textarea
+                            maxLength={200}
+                            name={"opinionOfTheDish"}
+                            className="full-width"
+                            value={formData.opinionOfTheDish}
+                            onChange={handleChange}
+                        />
                     </div>
 
+                    <h4>Link zum Rezeptressource (z.B. YouTube-Video)</h4>
                     <div className="section">
-                        <div className="full-width">
-                            <h4>Link zum Rezeptressource (z.B. YouTube-Video)</h4>
-                            <textarea
-                                name={"linkToSource"}
-                                className="full-width"
-                                value={formData.linkToSource}
-                                onChange={handleChange}
-                            />
-                        </div>
+                        <textarea
+                            name={"linkToSource"}
+                            className="full-width"
+                            value={formData.linkToSource}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 

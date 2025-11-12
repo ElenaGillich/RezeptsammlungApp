@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import type {Ingredient} from "../../models/Ingredient.ts";
 import IngredientNames from "../../components/ingredientNames/IngredientNames.tsx";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import "./FavoriteList.scss"
 import {Tooltip} from "react-tooltip";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
@@ -15,18 +15,30 @@ import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {localStorageKey} from "../../const.ts";
 
 type FavoriteListProps = {
-    recipes: Recipe[],
-    onUpdateFavorite: (isFavorite: boolean) => void
+    recipes: Recipe[];
+    onUpdateFavorite: (isFavorite: boolean) => void;
 }
 
 export default function FavoriteList(props: FavoriteListProps) {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState<Recipe[]>([]);
-    const { addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan } = useAddRecipeToMealPlan();
+    const [addedInMealPlan, setAddedInMealPlan] = useState<Recipe[]>([]);
+    const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan} = useAddRecipeToMealPlan();
 
     useEffect(() => {
-        const favoured = props.recipes.filter(r => r.favorite) ?? [];
+        const favoured = props.recipes.filter((recipe: Recipe) => recipe.favorite) ?? [];
         setFavorites(favoured);
+    }, [props.recipes]);
+
+    useEffect(() => {
+        const activePlanId = localStorage.getItem(localStorageKey);
+        if (!activePlanId) {
+            return;
+        }
+
+        const storedIds = Object.keys(localStorage).filter(key => localStorage.getItem(key) === activePlanId);
+        const restored = props.recipes.filter((recipe: Recipe) => storedIds.includes(recipe.id));
+        setAddedInMealPlan(restored);
     }, [props.recipes]);
 
     const ingredientsTemplate = (recipe: Recipe) => {
@@ -34,51 +46,53 @@ export default function FavoriteList(props: FavoriteListProps) {
         return <IngredientNames ingredients={names}/>;
     }
 
-    const categoryTemplate = (recipe: Recipe) => {
-        return (
-            <div className="marker">
-                <div className="normal">{DishCategory[recipe.category as keyof typeof DishCategory]}</div>
-            </div>
-        )
-    }
+    const categoryTemplate = (recipe: Recipe) => (
+        <div className="marker">
+            <div className="normal">{DishCategory[recipe.category as keyof typeof DishCategory]}</div>
+        </div>
+    );
 
-    const speedTemplate = (recipe: Recipe) => {
-        return (
-            <div className="marker">
-                <div
-                    className={recipe.speed === "FAST" as PreparationSpeed
-                        ? "green" : (recipe.speed == "LONG" as PreparationSpeed
-                            ? "red" : "yellow")
-                    }
-                >
-                    {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}
-                </div>
+    const speedTemplate = (recipe: Recipe) => (
+        <div className="marker">
+            <div
+                className={
+                    recipe.speed === ("FAST" as PreparationSpeed)
+                        ? "green"
+                        : recipe.speed === ("LONG" as PreparationSpeed) ? "red" : "yellow"
+                }
+            >
+                {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}
             </div>
-        )
-    }
+        </div>
+    );
 
-    function updateFavoriteState(recipe: Recipe) {
-        axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=false")
+    const updateFavoriteState = useCallback((recipe: Recipe) => {
+        axios.put(`/api/recipes/${recipe.id}/favorite?isFavorite=false`)
             .then(() => {
                 props.onUpdateFavorite(false);
-                const filtered = favorites.filter(item => item.id !== recipe.id);
-                setFavorites(filtered);
+                setFavorites((prev) => prev.filter((item) => item.id !== recipe.id));
             })
-            .catch(e => alert("Fehler beim Entfavorisieren! " + e));
-    }
+            .catch((e) => alert("Fehler beim Entfavorisieren! " + e));
+    }, [props]);
 
-    function addRecipeToMealPlan(recipe: Recipe) {
-        addToMealPlan(recipe);
-    }
+    const addRecipeToMealPlan = useCallback((recipe: Recipe) => {
+            setAddedInMealPlan((prev) =>
+                prev.some((r) => r.id === recipe.id) ? prev : [...prev, recipe]
+            );
 
-    const actions = (recipe: Recipe) => {
-        const isRecipeInActiveMealPlan = !!localStorage.getItem(recipe.id) &&
-            localStorage.getItem(recipe.id) === localStorage.getItem(localStorageKey);
+            addToMealPlan(recipe).catch(() => {
+                setAddedInMealPlan((prev) => prev.filter(r => r.id !== recipe.id));
+            });
+        }, [addToMealPlan]
+    );
+
+    const actions = useCallback((recipe: Recipe) => {
+        const isAlreadyAdded: boolean = addedInMealPlan.some((item) => item.id === recipe.id);
 
         return (
             <div className="display-flex">
                 <button
-                    type={"button"}
+                    type="button"
                     className="icon-button"
                     onClick={() => updateFavoriteState(recipe)}
                     aria-label="Entfavorisieren"
@@ -95,13 +109,16 @@ export default function FavoriteList(props: FavoriteListProps) {
                 </button>
 
                 <button
-                    type={"button"}
-                    className="icon-button"
-                    onClick={() => addRecipeToMealPlan(recipe)}
+                    type="button"
+                    className={`icon-button ${isAlreadyAdded ? "disabled" : ""}`}
+                    onClick={() => !isAlreadyAdded && addRecipeToMealPlan(recipe)}
                     aria-label="Rezept zum Speiseplan hinzufügen"
-                    disabled={isRecipeInActiveMealPlan}
                     data-tooltip-id="toMenu"
-                    data-tooltip-content={isRecipeInActiveMealPlan ? "Das Rezept ist im aktiven Speiseplan enthalten" : "Rezept zum Speiseplan hinzufügen"}
+                    data-tooltip-content={
+                        isAlreadyAdded
+                            ? "Das Rezept ist bereits im aktiven Speiseplan"
+                            : "Rezept zum Speiseplan hinzufügen"
+                    }
                     data-tooltip-place="bottom-end"
                 >
                     <img
@@ -112,8 +129,8 @@ export default function FavoriteList(props: FavoriteListProps) {
                     />
                 </button>
             </div>
-        )
-    }
+        );
+    }, [addedInMealPlan, updateFavoriteState, addRecipeToMealPlan]);
 
     function navigateToDetails(event: DataTableRowClickEvent) {
         navigate(`/recipes/${event.data.id}`);
@@ -122,28 +139,33 @@ export default function FavoriteList(props: FavoriteListProps) {
     return (
         <>
             <p className="page-title">Meine Favoriten ({favorites.length})</p>
+
             <div className="container">
-                {props.recipes.length < 1 && <h2>Keine Favorite gefunden!</h2>}
-                {props.recipes.length > 0 &&
+                {props.recipes.length < 1 && <h2>Keine Favoriten gefunden!</h2>}
+
+                {props.recipes.length > 0 && (
                     <DataTable
+                        key={addedInMealPlan.map((r) => r.id).join(",")}
                         onRowClick={navigateToDetails}
-                        dataKey="id" value={favorites}
+                        dataKey="id"
+                        value={favorites}
                         removableSort
                         rowClassName={() => "clickable"}
                         resizableColumns
                     >
                         <Column field="name" header="Rezeptname"
-                                className={"truncate name"} sortable></Column>
+                                className={"truncate name"} sortable/>
                         <Column field="ingredients" header="Zutaten" className="widest"
-                                body={ingredientsTemplate}></Column>
+                                body={ingredientsTemplate}/>
                         <Column field="speed" header="Kategorie" className="medium"
-                                body={categoryTemplate} sortable></Column>
+                                body={categoryTemplate} sortable/>
                         <Column field="speed" header="Zeitaufwand" className="medium"
-                                body={speedTemplate} sortable></Column>
-                        <Column field="favorite" body={actions} className="narrowest"></Column>
+                                body={speedTemplate} sortable/>
+                        <Column field="favorite" body={actions} className="narrowest"/>
                     </DataTable>
-                }
+                )}
             </div>
+
             <Tooltip id="noFavorite" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>
 
@@ -154,5 +176,5 @@ export default function FavoriteList(props: FavoriteListProps) {
                 onCreateNewPlan={createNewMealPlan}
             />
         </>
-    )
+    );
 }

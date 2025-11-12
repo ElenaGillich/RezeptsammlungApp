@@ -8,12 +8,14 @@ import {Tooltip} from "react-tooltip";
 type MealPlanCardProps = {
     mealPlan: MealPlan;
     isActive: boolean;
+    isProductListVisible: boolean;
     onRemoveMealPlan: (planId: string) => void;
+    onRemoveRecipeFromMealPlan: (mealPlan: MealPlan) => void;
+    onShowProducts: () => void;
 };
 
 export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
-    const isActive = props.isActive;
-    const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
+    const isActiveMealPlan = props.isActive;
     const [mealPlan, setMealPlan] = useState<MealPlan>(props.mealPlan);
 
     function removeRecipe(recipeId: string) {
@@ -21,6 +23,7 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
             .then((result) => {
                 setMealPlan(result.data);
                 localStorage.removeItem(recipeId);
+                props.onRemoveRecipeFromMealPlan(result.data);
             })
             .catch((error) => alert("Fehler beim Entfernen des Rezepts vom Speiseplan: " + error));
     }
@@ -62,46 +65,55 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
         )
     }
 
+    function showIconButtons() {
+        return (
+            <div className="buttons">
+                {(isActiveMealPlan && !props.isProductListVisible && mealPlan.recipes.length > 0) &&
+                    <button
+                        type="button"
+                        className="action-button"
+                        data-tooltip-id="products"
+                        data-tooltip-content="Lebensmittelliste anzeigen"
+                        data-tooltip-place="top"
+                        onClick={() => {
+                            props.onShowProducts();
+                        }}
+                    >
+                        <img
+                            width={34}
+                            height={32}
+                            src="/grocery.png"
+                            alt="Grocery-Icon"
+                        />
+                    </button>
+                }
+
+                <button
+                    type="button"
+                    className="action-button"
+                    data-tooltip-id="remove"
+                    data-tooltip-content="Den Speiseplan löschen"
+                    data-tooltip-place="top"
+                    onClick={() => props.onRemoveMealPlan(mealPlan.id)}
+                >
+                    <img
+                        width={26}
+                        height={26}
+                        src="/delete.png"
+                        alt="Delete-Icon"
+                    />
+                </button>
+            </div>
+        );
+    }
+
     return (
         <>
-            <div className={`card-box ${isActive ? "active" : ""}`}>
-                <div className={`card-header ${isActive ? "header-active" : ""}`}>
+            <div className={`card-box ${isActiveMealPlan ? "active" : ""}`}>
+                <div className={`card-header ${isActiveMealPlan ? "header-active" : ""}`}>
                     <h4>{mealPlan.name}</h4>
 
-                    <div className="buttons">
-                        {(isActive && !isDisplayed && mealPlan.recipes.length > 0) &&
-                            <button
-                                type="button"
-                                className="action-button"
-                                data-tooltip-id="products"
-                                data-tooltip-content="Lebensmittelliste anzeigen"
-                                data-tooltip-place="top"
-                                onClick={() => setIsDisplayed(true)}
-                            >
-                                <img
-                                    width={34}
-                                    height={32}
-                                    src="/grocery.png"
-                                    alt="Grocery-Icon"
-                                />
-                            </button>}
-
-                        <button
-                            type="button"
-                            className="action-button"
-                            data-tooltip-id="remove"
-                            data-tooltip-content="Den Speiseplan löschen"
-                            data-tooltip-place="top"
-                            onClick={() => props.onRemoveMealPlan(mealPlan.id)}
-                        >
-                            <img
-                                width={26}
-                                height={26}
-                                src="/delete.png"
-                                alt="Delete-Icon"
-                            />
-                        </button>
-                    </div>
+                    {showIconButtons()}
                 </div>
 
                 <Tooltip id="remove" noArrow className="tooltip"/>
@@ -111,29 +123,6 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
                     {showBodyContent()}
                 </div>
             </div>
-
-            {(isActive && isDisplayed) &&
-                <div className="products">
-                    <div className="close">
-                        <button
-                            type="button"
-                            className="custom-button"
-                            onClick={() => setIsDisplayed(false)}
-                        >x</button>
-                    </div>
-
-                    {mealPlan.recipes.map((recipe) =>
-                        <div key={recipe.id}>
-                            <h4 className="recipe-title">{recipe.name}</h4>
-                            <ul>
-                                {recipe.ingredients.map((ing) =>
-                                    <li key={ing.name}>{ing.name} - {ing.quantity} {ing.unit}</li>
-                                )}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            }
         </>
     );
 }

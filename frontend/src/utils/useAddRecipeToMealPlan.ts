@@ -6,21 +6,26 @@ import type {Recipe} from "../models/Recipe.ts";
 export function useAddRecipeToMealPlan() {
     const [dialogVisible, setDialogVisible] = useState<boolean>(false);
     const [activeMealPlanId, setActiveMealPlanId] = useState<string | null>(localStorage.getItem(localStorageKey));
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    function addToMealPlan(recipe: Recipe) {
-        const currentPlanId = activeMealPlanId || localStorage.getItem(localStorageKey);
-        const isRecipeInCurrentPlan = localStorage.getItem(recipe.id) === currentPlanId;
+    const [isProcessing, setIsProcessing] = useState<boolean>(false);
+    const [temporaryRecipe, setTemporaryRecipe] = useState<Recipe | null>(null);
 
-        if (!currentPlanId) {
-            setDialogVisible(true);
-            return;
-        }
+    function addToMealPlan(recipe: Recipe): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            const currentPlanId = activeMealPlanId || localStorage.getItem(localStorageKey);
+            const isRecipeInCurrentPlan = localStorage.getItem(recipe.id) === currentPlanId;
 
-        if (isRecipeInCurrentPlan) {
-            alert("Das Rezept is bereits im aktiven Speiseplan!");
-            return;
-        } else {
-            setIsLoading(true);
+            if (!currentPlanId) {
+                setTemporaryRecipe(recipe);
+                setDialogVisible(true);
+                return resolve(false);
+            }
+
+            if (isRecipeInCurrentPlan) {
+                alert("Das Rezept is bereits im aktiven Speiseplan!");
+                return resolve(false);
+            }
+
+            setIsProcessing(true);
 
             axios.post(`/api/meal-plan/${currentPlanId}`, recipe)
                 .then((result) => {
@@ -29,14 +34,18 @@ export function useAddRecipeToMealPlan() {
                         localStorage.setItem(recipe.id, currentPlanId);
                         alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
                     }
+                    resolve(isSuccess);
                 })
-                .catch((error) => alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error))
-                .finally(() => setIsLoading(false));
-        }
+                .catch((error) => {
+                    alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error);
+                    reject(error);
+                })
+                .finally(() => setIsProcessing(false));
+        });
     }
 
     function createNewMealPlan(name: string) {
-        setIsLoading(true);
+        setIsProcessing(true);
 
         axios.post("/api/meal-plan", name, {
             headers: {"Content-Type": "text/plain"}
@@ -47,9 +56,14 @@ export function useAddRecipeToMealPlan() {
                 localStorage.setItem(localStorageKey, newPlanId);
                 setActiveMealPlanId(newPlanId);
                 setDialogVisible(false);
+                if (temporaryRecipe) {
+                    setIsProcessing(false);
+                    addToMealPlan(temporaryRecipe)
+                        .finally(() => setTemporaryRecipe(null));
+                }
             })
             .catch((error) => alert("Fehler beim Erstellen des Speiseplans. " + error))
-            .finally(() => setIsLoading(false));
+            .finally(() => setIsProcessing(false));
     }
 
     return {
@@ -58,6 +72,6 @@ export function useAddRecipeToMealPlan() {
         setDialogVisible,
         createNewMealPlan,
         activeMealPlanId,
-        isLoading,
+        isProcessing: isProcessing,
     };
 }

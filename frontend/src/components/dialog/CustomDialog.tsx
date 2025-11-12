@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Dialog } from "primereact/dialog";
-import { Button } from "primereact/button";
+import {useState} from "react";
+import {Dialog} from "primereact/dialog";
+import {Button} from "primereact/button";
 import "./CustomDialog.css"
 
 type CustomDialogProps = {
     visible: boolean;
     onHide: () => void;
-    onNavigateToMealPlans: () => void;
+    onNavigateToMealPlans?: () => void;
     onCreateNewPlan: (name: string) => void;
 };
 
@@ -32,8 +32,16 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
             modal
             onHide={onHide}
         >
-            <p>Du hast keinen aktiven Speiseplan.</p>
-            <p>Was möchtest du tun?</p>
+            <div className="in-center">
+                <p>
+                    Um Rezepte in einem bestimmten Speiseplan sammeln zu können, muss dieser erst aktiviert werden.
+                    Es gibt derzeit keinen aktiven Speiseplan.
+                    <br/>
+                    Sie können einen neuen erstellen (der wird automatisch aktiviert) oder auf die Seite navigieren,
+                    um dort einen der vorhandenen Speisepläne zu aktivieren.
+                </p>
+            </div>
+
 
             <div className="p-mt-3">
                 <Button
@@ -42,24 +50,26 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
                     className="p-button-secondary p-mr-2"
                     onClick={() => {
                         onHide();
-                        onNavigateToMealPlans();
+                        if (onNavigateToMealPlans) {
+                            onNavigateToMealPlans();
+                        }
                     }}
                 />
             </div>
 
-            <hr />
+            <hr/>
 
             <div>
-                <p>Oder neuen Speiseplan erstellen:</p>
+                <p>Neuen Speiseplan erstellen:</p>
+                <h4 className={"required"}>Wie nennen wir den neuen Speiseplan?</h4>
 
-                <label> Wie soll der neue Speiseplan heißen?{' '}
-                    <input
-                        value={newPlanName}
-                        onChange={(e) => setNewPlanName(e.target.value)}
-                        placeholder="Name des neuen Plans"
-                        className="full-width"
-                    />
-                </label>
+                <input
+                    value={newPlanName}
+                    onChange={(e) => setNewPlanName(e.target.value)}
+                    placeholder="Name des neuen Plans"
+                    className="full-width"
+                />
+
                 <Button
                     label={isCreating ? "Erstellen..." : "Erstellen und aktivieren"}
                     icon="pi pi-check"

@@ -1,0 +1,45 @@
+.products {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-top: 60px;
+}
+
+.title-with-close {
+    display: flex;
+    position: absolute;
+    background: linear-gradient(to top, rgba(250, 232, 215, .5), rgba(250, 232, 215, 1));
+    margin: -80px 0 0 -14px;
+    width: 364px;
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.title-with-close .custom-button {
+    width: 40px;
+    height: 34px;
+    padding: 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: none;
+}
+
+.title-with-close::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    box-shadow: inset 0 2px 4px rgba(188, 143, 143);
+}
+
+.title-with-close h3 {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}

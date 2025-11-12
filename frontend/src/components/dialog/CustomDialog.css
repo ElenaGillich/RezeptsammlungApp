@@ -1,5 +1,20 @@
 .p-dialog {
     background-color: white;
-    padding: 20px;
     width: 500px;
+    border-radius: 8px;
+}
+
+.p-dialog-content {
+    background-color: white;
+    padding: 20px;
+}
+
+.p-dialog-header {
+    background-color: #fbe2cf;
+    border-bottom: 1px solid #213547;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 20px;
 }

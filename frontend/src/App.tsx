@@ -31,9 +31,9 @@ function App() {
             .then((result) => setRecipeList(result.data))
             .catch(() => alert("Fehler beim Laden von Rezepten!"));
     }
-    // onSetRecipeToMealPlan={setRecipeInMealPlan}
+
     return (
-        <>
+        <div>
             <Header/>
             <Routes>
                 <Route path={"/dashboard"} element={<Dashboard recipes={recipeList}/>}/>
@@ -51,7 +51,7 @@ function App() {
                 <Route path={"/meal-plans"} element={<MealPlans/>}/>
             </Routes>
             <Footer/>
-        </>
+        </div>
     )
 }
 

@@ -1,5 +1,5 @@
 #root {
-  width: 1000px;
+  width: 1050px;
   height: 100%;
   margin: 0 auto;
   font-size: 1.1rem;
@@ -21,7 +21,7 @@
 }
 
 .container {
-  width: 100%;
+  width: inherit;
   min-height: calc(100vh - 160px);
   padding: 20px;
   border: #213547 1px solid;
@@ -70,8 +70,8 @@ textarea {
 
 .section {
   display: flex;
-  gap: 40px;
-  width: calc(100% - 8px);
+  gap: 35px;
+  width: 100%;
 
   .more {
     width: 60%;
@@ -188,4 +188,15 @@ table .action-button {
 
 .process {
   color: #bd2929;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.in-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px auto;
 }

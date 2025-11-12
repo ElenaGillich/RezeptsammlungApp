@@ -16,10 +16,6 @@ $actions-width: 50px;
   width: calc(100% - $image-width - $spaces);
 }
 
-.section {
-  width: calc(100% - 8px);
-}
-
 .selections {
   display: flex;
   justify-content: space-between;

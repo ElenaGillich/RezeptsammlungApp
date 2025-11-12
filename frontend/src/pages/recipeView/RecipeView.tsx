@@ -9,6 +9,7 @@ import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import {localStorageKey} from "../../const.ts";
+import Spinner from "../../components/spinner/Spinner.tsx";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
@@ -24,14 +25,18 @@ export default function RecipeView(props: RecipeViewProps) {
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>();
 
     useEffect(() => {
+        setIsLoading(true);
+
         axios.get(`/api/recipes/${params.id}`)
             .then((result) => {
                 setRecipe(result.data);
                 setIsFavorite(result.data.favorite);
             })
             .catch((error) => console.log(error))
+            .finally(() => setIsLoading(false));
     }, [isFavorite, params.id]);
 
     if (!recipe) {
@@ -48,6 +53,8 @@ export default function RecipeView(props: RecipeViewProps) {
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
         setIsFavorite(newFavorite);
+        setIsLoading(true);
+
         axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=" + newFavorite, {
             headers: {
                 'Content-Type': 'application/json'
@@ -56,7 +63,8 @@ export default function RecipeView(props: RecipeViewProps) {
             setIsFavorite(newFavorite);
             props.onUpdateFavorite(true);
         })
-            .catch(e => alert("Fehler beim Favoriten update! " + e));
+            .catch(e => alert("Fehler beim Favoriten update! " + e))
+            .finally(()=> setIsLoading(false));
     }
 
     function addRecipeToMealPlan() {
@@ -64,7 +72,8 @@ export default function RecipeView(props: RecipeViewProps) {
             return;
         }
 
-        addToMealPlan(recipe);
+        addToMealPlan(recipe)
+            .finally(() => setIsLoading(false));
     }
 
     const handleDelete = () => {
@@ -72,6 +81,7 @@ export default function RecipeView(props: RecipeViewProps) {
             return;
         }
 
+        setIsLoading(true);
         axios.delete(`/api/recipes/${recipe.id}`)
             .then(() => {
                 props.onDelete(true);
@@ -80,6 +90,7 @@ export default function RecipeView(props: RecipeViewProps) {
             .catch(error =>
                 alert("Fehler beim Löschen des Rezepts: " + error)
             )
+            .finally(() => setIsLoading(false));
     };
 
     return (
@@ -87,6 +98,12 @@ export default function RecipeView(props: RecipeViewProps) {
             <p className="page-title">{recipe.name}</p>
 
             <div className="container">
+                {isLoading &&
+                    <div className="in-center">
+                        <Spinner size={36}/>
+                    </div>
+                }
+
                 <div className="display-flex">
                     <div className="info">
                         <p>Zubereitungszeit: {PreparationSpeed[recipe.speed as keyof typeof PreparationSpeed]}</p>
