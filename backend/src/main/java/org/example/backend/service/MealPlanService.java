@@ -1,5 +1,6 @@
 package org.example.backend.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.backend.model.MealPlan;
 import org.example.backend.model.Recipe;
 import org.example.backend.repository.MealPlanRepository;
@@ -10,14 +11,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class MealPlanService {
     private final MealPlanRepository mealPlanRepository;
     private final IdService idService;
-
-    public MealPlanService(MealPlanRepository mealPlanRepository, IdService idService) {
-        this.mealPlanRepository = mealPlanRepository;
-        this.idService = idService;
-    }
 
     public List<MealPlan> getAll() {
         return mealPlanRepository.findAll();

@@ -1,29 +1,49 @@
 $image-width: 400px;
 $image-height: 300px;
-$spaces: 70px;
+$spaces: 130px;
 
 .recipe-image {
-    width: $image-width;
-    height: $image-height;
-    display: flex;
-    place-items: center;
-    justify-content: center;
-    border: 1px solid burlywood;
+  width: $image-width;
+  height: $image-height;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  border: 1px solid burlywood;
 
-    img {
-        object-fit: cover; // обрезает картинку, сохраняя пропорции
-    }
+  img {
+    object-fit: cover; // обрезает картинку, сохраняя пропорции
+  }
 }
 
 .info {
-    max-width: calc(100% - $image-width - $spaces);
+  width: calc(100% - $image-width - $spaces);
 }
 
 .actions {
-    width: 50px;
-    margin-right: 10px;
-    height: $image-height;
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
+  width: 50px;
+  margin-right: 10px;
+  height: $image-height;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.info .marker {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  height: 50px;
+  width: 30%;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+
+  .red,
+  .green,
+  .yellow,
+  .normal {
+    width: 140px;
+    height: 26px;
+    border-width: 2px;
+  }
+
 }

@@ -9,62 +9,64 @@ export function useAddRecipeToMealPlan() {
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [temporaryRecipe, setTemporaryRecipe] = useState<Recipe | null>(null);
 
-    function addToMealPlan(recipe: Recipe): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            const currentPlanId = activeMealPlanId || localStorage.getItem(localStorageKey);
-            const isRecipeInCurrentPlan = localStorage.getItem(recipe.id) === currentPlanId;
+    const addToMealPlan = async (recipe: Recipe): Promise<boolean> => {
+        const currentPlanId = activeMealPlanId || localStorage.getItem(localStorageKey);
+        const isRecipeInCurrentPlan = localStorage.getItem(recipe.id) === currentPlanId;
 
-            if (!currentPlanId) {
-                setTemporaryRecipe(recipe);
-                setDialogVisible(true);
-                return resolve(false);
-            }
+        if (!currentPlanId) {
+            setTemporaryRecipe(recipe);
+            setDialogVisible(true);
+            return false;
+        }
 
-            if (isRecipeInCurrentPlan) {
-                alert("Das Rezept is bereits im aktiven Speiseplan!");
-                return resolve(false);
-            }
+        if (isRecipeInCurrentPlan) {
+            alert("Das Rezept ist bereits im aktiven Speiseplan!");
+            return false;
+        }
 
-            setIsProcessing(true);
-
-            axios.post(`/api/meal-plan/${currentPlanId}`, recipe)
-                .then((result) => {
-                    const isSuccess: boolean = !!result.data.recipes.some((r: Recipe) => r.id === recipe.id);
-                    if (isSuccess) {
-                        localStorage.setItem(recipe.id, currentPlanId);
-                        alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
-                    }
-                    resolve(isSuccess);
-                })
-                .catch((error) => {
-                    alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error);
-                    reject(error);
-                })
-                .finally(() => setIsProcessing(false));
-        });
-    }
-
-    function createNewMealPlan(name: string) {
         setIsProcessing(true);
 
-        axios.post("/api/meal-plan", name, {
-            headers: {"Content-Type": "text/plain"}
-        })
-            .then((result) => {
-                const newPlanId: string = result.data.id;
+        try {
+            const result = await axios.post(`/api/meal-plan/${currentPlanId}`, recipe);
+            const isSuccess = !!result.data.recipes.some((r: Recipe) => r.id === recipe.id);
 
-                localStorage.setItem(localStorageKey, newPlanId);
-                setActiveMealPlanId(newPlanId);
-                setDialogVisible(false);
-                if (temporaryRecipe) {
-                    setIsProcessing(false);
-                    addToMealPlan(temporaryRecipe)
-                        .finally(() => setTemporaryRecipe(null));
-                }
-            })
-            .catch((error) => alert("Fehler beim Erstellen des Speiseplans. " + error))
-            .finally(() => setIsProcessing(false));
-    }
+            if (isSuccess) {
+                localStorage.setItem(recipe.id, currentPlanId);
+                alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
+            }
+
+            return isSuccess;
+        } catch (error) {
+            alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error);
+            return false;
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const createNewMealPlan = async (name: string) => {
+        setIsProcessing(true);
+
+        try {
+            const result = await axios.post("/api/meal-plan", name, {
+                headers: { "Content-Type": "text/plain" },
+            });
+
+            const newPlanId: string = result.data.id;
+            localStorage.setItem(localStorageKey, newPlanId);
+            setActiveMealPlanId(newPlanId);
+            setDialogVisible(false);
+
+            if (temporaryRecipe) {
+                await addToMealPlan(temporaryRecipe);
+                setTemporaryRecipe(null);
+            }
+        } catch (error) {
+            alert("Fehler beim Erstellen des Speiseplans: " + error);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     return {
         addToMealPlan,
@@ -72,6 +74,6 @@ export function useAddRecipeToMealPlan() {
         setDialogVisible,
         createNewMealPlan,
         activeMealPlanId,
-        isProcessing: isProcessing,
+        isProcessing,
     };
 }

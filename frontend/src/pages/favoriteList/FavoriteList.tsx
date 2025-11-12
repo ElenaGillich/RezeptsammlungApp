@@ -23,7 +23,7 @@ export default function FavoriteList(props: FavoriteListProps) {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState<Recipe[]>([]);
     const [addedInMealPlan, setAddedInMealPlan] = useState<Recipe[]>([]);
-    const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan} = useAddRecipeToMealPlan();
+    const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan, isProcessing} = useAddRecipeToMealPlan();
 
     useEffect(() => {
         const favoured = props.recipes.filter((recipe: Recipe) => recipe.favorite) ?? [];
@@ -82,18 +82,23 @@ export default function FavoriteList(props: FavoriteListProps) {
     }, [handleUpdateFavoriteSuccess]);
 
     const addRecipeToMealPlan = useCallback((recipe: Recipe) => {
-            setAddedInMealPlan((prev) =>
-                prev.some((r) => r.id === recipe.id) ? prev : [...prev, recipe]
-            );
+            const updateList = (prev: Recipe[]) => {
+                const alreadyExists = prev.some(r => r.id === recipe.id);
+                return alreadyExists ? prev : [...prev, recipe];
+            };
 
-            addToMealPlan(recipe).catch(() => {
-                setAddedInMealPlan((prev) => prev.filter(r => r.id !== recipe.id));
-            });
-        }, [addToMealPlan]
+            const handleAddError = () => {
+                setAddedInMealPlan(prev => prev.filter(r => r.id !== recipe.id));
+            };
+
+            setAddedInMealPlan(updateList);
+            addToMealPlan(recipe).catch(handleAddError);
+        },
+        [addToMealPlan]
     );
 
     const actions = useCallback((recipe: Recipe) => {
-        const isAlreadyAdded: boolean = addedInMealPlan.some((item) => item.id === recipe.id);
+        const isAlreadyAdded: boolean = !dialogVisible && addedInMealPlan.some((item) => item.id === recipe.id);
 
         return (
             <div className="display-flex">
@@ -136,7 +141,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                 </button>
             </div>
         );
-    }, [addedInMealPlan, updateFavoriteState, addRecipeToMealPlan]);
+    }, [dialogVisible, addedInMealPlan, updateFavoriteState, addRecipeToMealPlan]);
 
     function navigateToDetails(event: DataTableRowClickEvent) {
         navigate(`/recipes/${event.data.id}`);
@@ -160,7 +165,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                         resizableColumns
                     >
                         <Column field="name" header="Rezeptname"
-                                className={"truncate name"} sortable/>
+                                className="truncate name" sortable/>
                         <Column field="ingredients" header="Zutaten" className="widest"
                                 body={ingredientsTemplate}/>
                         <Column field="speed" header="Kategorie" className="medium"
@@ -179,6 +184,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}
                 onNavigateToMealPlans={() => navigate("/meal-plans")}
+                isCreating={isProcessing}
                 onCreateNewPlan={createNewMealPlan}
             />
         </>

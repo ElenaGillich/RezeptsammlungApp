@@ -146,10 +146,10 @@ export default function MealPlans() {
 
                         {activeMealPlan?.recipes &&
                             <div className="plan-products">
-                                {!isProductListOpen &&
+                                {(!isProductListOpen || activeMealPlan.recipes.length < 1) &&
                                     <p className="notice">
                                         In diesem Bereich kann man alle Zutaten aus den Rezepten des
-                                        <b> aktiven </b> Speiseplans einsehen, um daraus eine Einkaufsliste erstellen
+                                        {' '}<b> aktiven </b> Speiseplans einsehen, um daraus eine Einkaufsliste erstellen
                                         zu können. <br/> Zu diesem Zweck wird das Icon {' '}
                                         <img
                                             width={30}
@@ -182,6 +182,7 @@ export default function MealPlans() {
             </div>
 
             <CustomDialog
+                isMealPlanPage={true}
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}
                 onCreateNewPlan={createNewMealPlan}

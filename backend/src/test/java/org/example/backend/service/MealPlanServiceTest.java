@@ -57,7 +57,6 @@ class MealPlanServiceTest {
 
     @Test
     void getAll_shouldReturnEmptyList() {
-        //GIVEN
         //WHEN
         when(mockRepo.findAll()).thenReturn(List.of());
 
@@ -70,7 +69,6 @@ class MealPlanServiceTest {
 
     @Test
     void getMealPlanById_shouldReturnMealPlan() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById(testPlan.getId())).thenReturn(Optional.of(testPlan));
         MealPlan actual = mealPlanService.getMealPlanById(testPlan.getId());
@@ -148,7 +146,6 @@ class MealPlanServiceTest {
 
     @Test
     void deleteMealPlanById_shouldDeleteRecipe_whenCalledWithValidId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(testPlan));
 

@@ -74,7 +74,7 @@ export default function AskAI() {
                 </div>
 
                 <div className="request-box">
-                    <label>Ihre Eingabe:{' '}
+                    <label>Name der Zutat:{' '}
                         <input
                             type="text"
                             className="full-width"

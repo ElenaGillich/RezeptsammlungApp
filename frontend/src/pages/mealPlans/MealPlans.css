@@ -6,9 +6,8 @@
 
 .plan-cards {
     display: flex;
-    justify-content: space-between;
     gap: 40px;
-    flex-flow: row wrap;
+    flex-flow: column;
 }
 
 .plan-products {

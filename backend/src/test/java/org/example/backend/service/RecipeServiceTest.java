@@ -150,7 +150,6 @@ class RecipeServiceTest {
 
     @Test
     void updateRecipe_shouldThrowException_whenCalledWithNotExistingRecipeId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1nzu98349df7gtz345")).thenReturn(Optional.empty());
 
@@ -180,7 +179,6 @@ class RecipeServiceTest {
 
     @Test
     void updateFavoriteByRecipeId_shouldThrowException_whenCalledWithInvalidId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1")).thenReturn(Optional.empty());
 
@@ -198,7 +196,6 @@ class RecipeServiceTest {
 
     @Test
     void deleteRecipeById_shouldDeleteRecipe_whenCalledWithValidId() {
-        //GIVEN
         //WHEN
         when(mockRepo.findById("1")).thenReturn(Optional.ofNullable(recipe));
 

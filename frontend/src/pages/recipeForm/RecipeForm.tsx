@@ -33,6 +33,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
     const [isDirty, setIsDirty] = useState(false);
+    const [isLoading, setIsloading] = useState(false);
 
     useUnsavedChangesWarning(isDirty);
     useEffect(() => {
@@ -138,7 +139,9 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     };
 
     async function submitForm(event: FormEvent<HTMLFormElement>) {
+        setIsloading(true);
         event.preventDefault();
+
         const data: FormData = new FormData();
         data.append("data", new Blob([JSON.stringify(formData)], {'type': "application/json"}));
 
@@ -164,6 +167,8 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             }
         } catch (e) {
             alert("Fehler beim Speichern! " + e);
+        } finally {
+            setIsloading(false);
         }
     }
 
@@ -179,11 +184,11 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     </div>
                     <button
                         className="custom-button"
-                        disabled={!isDirty || !(
+                        disabled={!isDirty || isLoading || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        Speichern
+                        {isLoading ? "Speicherung..." : "Speichern"}
                     </button>
                 </div>
 
@@ -378,11 +383,11 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 <div className="full-width item-right">
                     <button
                         className="custom-button"
-                        disabled={!isDirty || !(
+                        disabled={!isDirty || isLoading || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        Speichern
+                        {isLoading ? "Speicherung..." : "Speichern"}
                     </button>
                 </div>
             </form>

@@ -1,5 +1,6 @@
 package org.example.backend.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.backend.model.MealPlan;
 import org.example.backend.model.Recipe;
 import org.example.backend.service.MealPlanService;
@@ -9,13 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/meal-plan")
 public class MealPlanController {
     private final MealPlanService mealPlanService;
-
-    public MealPlanController(MealPlanService mealPlanService) {
-        this.mealPlanService = mealPlanService;
-    }
 
     @GetMapping("/all")
     public List<MealPlan> getAllMealPlans() {

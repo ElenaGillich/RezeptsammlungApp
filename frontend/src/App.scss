@@ -21,7 +21,6 @@
 }
 
 .container {
-  width: inherit;
   min-height: calc(100vh - 160px);
   padding: 20px;
   border: #213547 1px solid;
@@ -199,4 +198,37 @@ table .action-button {
   align-items: center;
   justify-content: center;
   margin: 4px auto;
+}
+
+.marker {
+  text-align: center;
+  font-size: 0.9rem;
+
+  .red,
+  .green,
+  .yellow,
+  .normal {
+    width: 90px;
+    border: 3px solid;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: rgba(188, 143, 143) 2px 2px 2px;
+  }
+
+  .normal {
+    width: 110px;
+    border: 1px solid brown;
+  }
+
+  .red {
+    border-color: #ff4d4f;
+  }
+
+  .green {
+    border-color: #45a049;
+  }
+
+  .yellow {
+    border-color: #ffdd00;
+  }
 }
