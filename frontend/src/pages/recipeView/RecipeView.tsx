@@ -9,7 +9,6 @@ import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import {localStorageKey} from "../../const.ts";
-import Spinner from "../../components/spinner/Spinner.tsx";
 import {DishCategory} from "../../models/DishCategory.ts";
 
 type RecipeViewProps = {
@@ -47,7 +46,6 @@ export default function RecipeView(props: RecipeViewProps) {
     function updateFavoriteState() {
         const newFavorite = !isFavorite;
         setIsFavorite(newFavorite);
-        setIsLoading(true);
 
         axios.put("/api/recipes/" + recipe?.id + "/favorite?isFavorite=" + newFavorite, {
             headers: {
@@ -58,7 +56,6 @@ export default function RecipeView(props: RecipeViewProps) {
             props.onUpdateFavorite(true);
         })
             .catch(e => alert("Fehler beim Favoriten update! " + e))
-            .finally(() => setIsLoading(false));
     }
 
     function addRecipeToMealPlan() {
@@ -89,9 +86,9 @@ export default function RecipeView(props: RecipeViewProps) {
 
     const colorClass = (speed: string | undefined) => {
         switch (speed) {
-            case "Schnell":
+            case "FAST":
                 return "green";
-            case "Lange":
+            case "LONG":
                 return "red";
             default:
                 return "yellow"
@@ -103,22 +100,15 @@ export default function RecipeView(props: RecipeViewProps) {
             <p className="page-title">{recipe?.name}</p>
 
             <div className="container">
-                {isLoading &&
-                    <div className="in-center">
-                        <Spinner size={36}/>
-                    </div>
-                }
-
                 {(!isLoading && !recipe) &&
                     <h2>Kein Rezept mit ID={params.id} gefunden!</h2>
                 }
 
-
-                {!isLoading &&
+                {recipe &&
                     <div>
                         <div className="display-flex">
                             <div className="info">
-                                <div className="display-flex">
+                                <div className="in-center section">
                                     <div>
                                         <span className="section-title"> Rezeptkategorie </span>
                                         <div className="marker">
@@ -163,7 +153,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                         aria-label={isFavorite ? "Kein Favorit" : "Favorit"}
                                         data-tooltip-id="favorite"
                                         data-tooltip-content={isFavorite ? "Entfavorisieren" : "Favorisieren"}
-                                        data-tooltip-place="left"
+                                        data-tooltip-place="left-end"
                                     >
                                         <img
                                             width={30}
@@ -232,7 +222,6 @@ export default function RecipeView(props: RecipeViewProps) {
                                         data-tooltip-id="remove"
                                         data-tooltip-content="Rezept löschen"
                                         data-tooltip-place="left"
-                                        disabled={isLoading}
                                         onClick={handleDelete}
                                     >
                                         <img
