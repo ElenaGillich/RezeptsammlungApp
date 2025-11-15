@@ -146,8 +146,17 @@ select:not(.placeholder) {
 .error {
   color: #f10e11;
   font-weight: 600;
+  width: 355px;
+  text-align: right;
+  margin-left: -25px;
 }
 
 .item-right {
   text-align: right;
+}
+
+.page-title,
+.page-title-box .section {
+  width: unset;
+  align-items: baseline;
 }

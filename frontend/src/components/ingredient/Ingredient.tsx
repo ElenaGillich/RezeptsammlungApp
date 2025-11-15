@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import type { Ingredient } from "../../models/Ingredient.ts";
-import { units } from "../../const.ts";
+import { units } from "../../pages/information/InfoPageConst.ts";
 import "./Ingredient.css";
 
 type IngredientProps = {
@@ -8,11 +8,12 @@ type IngredientProps = {
     onSetIngredient: (ingredient: Ingredient) => void;
 };
 
+const emptyIngredient: Ingredient = { name: "", quantity: 0, unit: "g", additionalInfo: "" };
+
 export default function Ingredient(props: IngredientProps) {
     const { editableIngredient, onSetIngredient } = props;
-    const empty: Ingredient = { name: "", quantity: 0, unit: "g", additionalInfo: "" };
 
-    const [ingredient, setIngredient] = useState<Ingredient>(editableIngredient ?? empty);
+    const [ingredient, setIngredient] = useState<Ingredient>(editableIngredient ?? emptyIngredient);
     const [isEditable, setIsEditable] = useState<boolean>(!!editableIngredient);
 
     useEffect(() => {
@@ -20,7 +21,7 @@ export default function Ingredient(props: IngredientProps) {
             setIngredient(editableIngredient);
             setIsEditable(true);
         } else {
-            setIngredient(empty);
+            setIngredient(emptyIngredient);
             setIsEditable(false);
         }
     }, [editableIngredient]);
@@ -36,12 +37,12 @@ export default function Ingredient(props: IngredientProps) {
 
     const handleSave = () => {
         onSetIngredient(ingredient);
-        setIngredient(empty);
+        setIngredient(emptyIngredient);
         setIsEditable(false);
     };
 
     const handleCancel = () => {
-        setIngredient(empty);
+        setIngredient(emptyIngredient);
         setIsEditable(false);
     };
 

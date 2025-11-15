@@ -8,9 +8,11 @@ import Ingredient from "../../components/ingredient/Ingredient.tsx";
 import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
-import {emptyRecipeDto} from "../../const.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
+import {emptyRecipeDto} from "./EmptyRecipeConst.ts";
+import Spinner from "../../components/spinner/Spinner.tsx";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 type RecipeFormProps = {
     isEditMode: boolean,
@@ -159,7 +161,6 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             props.onSave(true);
             setIsDirty(false);
 
-
             if (isEditMode) {
                 globalThis.history.back();
             } else {
@@ -176,19 +177,28 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
         <>
             <form onSubmit={submitForm}>
                 <div className="display-flex items-center">
-                    <div>
-                        <p className="page-title">{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</p>
-                        {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
-                            <span className="error">* Bereiche mit Sternchen sind Pflichtfelder!</span>
+                    <PageTitle
+                        title={isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}
+                        hasAdditionalText={true}
+                        additionalText={
+                        !(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)
+                            ? "Bereiche mit Sternchen* sind Pflichtfelder!"
+                            : ""
                         }
-                    </div>
+                    ></PageTitle>
+
                     <button
                         className="custom-button"
                         disabled={!isDirty || isLoading || !(
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        {isLoading ? "Speicherung..." : "Speichern"}
+                        {isLoading ?
+                            <div className="center">
+                                <Spinner/> {"  "} Speicherung...
+                            </div>
+                            : "Speichern"
+                        }
                     </button>
                 </div>
 
@@ -387,7 +397,12 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                             formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
                         )}
                     >
-                        {isLoading ? "Speicherung..." : "Speichern"}
+                        {isLoading ?
+                            <div className="center">
+                                <Spinner/> {"  "} Speicherung...
+                            </div>
+                            : "Speichern"
+                        }
                     </button>
                 </div>
             </form>

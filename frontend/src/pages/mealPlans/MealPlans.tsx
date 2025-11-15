@@ -1,7 +1,6 @@
 import type {MealPlan} from "../../models/MealPlan.ts";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {localStorageKey} from "../../const.ts";
 import MealPlanCard from "../../components/mealPlanCard/MealPlanCard.tsx";
 import "./MealPlans.css"
 import {Tooltip} from "react-tooltip";
@@ -9,6 +8,8 @@ import ProductsToBuy from "../../components/productsToBuy/ProductsToBuy.tsx";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import Spinner from "../../components/spinner/Spinner.tsx";
+import {localStorageKey} from "../../models/LocalStorageConst.ts";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 export default function MealPlans() {
     const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
@@ -79,7 +80,8 @@ export default function MealPlans() {
     return (
         <>
             <div className="display-flex items-center">
-                <h2 className="page-title">Meine Speisepläne</h2>
+                <PageTitle title="Meine Speisepläne"></PageTitle>
+
                 <button
                     className="custom-button"
                     disabled={isProcessing}
@@ -91,7 +93,7 @@ export default function MealPlans() {
 
             <div className="container">
                 {isLoading &&
-                    <div className="in-center">
+                    <div className="center">
                         <Spinner size={36}/>
                     </div>
                 }

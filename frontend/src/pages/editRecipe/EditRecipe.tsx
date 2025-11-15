@@ -32,28 +32,22 @@ export default function EditRecipe(props: Readonly<EditRecipeProps>) {
             .finally(() => setLoading(false));
     }, [id]);
 
-    if (loading) {
-        return (
-            <div className="container">
-                <h2>Rezept wird geladen...</h2>
-                <div className="in-center">
-                    <Spinner size={36}/>
-                </div>
-            </div>
-        );
-    }
-
     if (error) {
         return <div className="container">{error}</div>;
     }
 
-    if (!recipe && !loading) {
+    if (loading) {
+        return (
+            <div className="container">
+                <h2>Rezept wird geladen...</h2>
+                <div className="center">
+                    <Spinner size={36}/>
+                </div>
+            </div>
+        );
+    } else if (!recipe) {
         return <div className="container"><h2>Kein Rezept mit ID={id} gefunden!</h2></div>;
+    } else {
+        return <RecipeForm isEditMode={true} recipe={recipe as Recipe} onSave={props.onSave}/>
     }
-
-    return (
-        <>
-            {!loading && <RecipeForm isEditMode={true} recipe={recipe as Recipe} onSave={props.onSave}/>}
-        </>
-    );
 }

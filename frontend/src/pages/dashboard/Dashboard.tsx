@@ -2,6 +2,7 @@ import type {Recipe} from "../../models/Recipe.ts";
 import RecipesCounter from "../../components/counter/RecipesCounter.tsx";
 import "./Dashboard.css";
 import {useState} from "react";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 type DashboardProps = {
     recipes: Recipe[];
@@ -60,7 +61,7 @@ export default function Dashboard(props: Readonly<DashboardProps>) {
 
     return (
         <>
-            <p className="page-title">Rezeptenanzahl in den beliebten Kategorien</p>
+            <PageTitle title="Rezeptenanzahl in den beliebten Kategorien"></PageTitle>
 
             <div className="container">
                 <div className="counters">

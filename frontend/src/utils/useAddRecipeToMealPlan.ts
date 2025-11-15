@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useState} from "react";
-import {localStorageKey} from "../const.ts";
 import type {Recipe} from "../models/Recipe.ts";
+import {localStorageKey} from "../models/LocalStorageConst.ts";
 
 export function useAddRecipeToMealPlan() {
     const [dialogVisible, setDialogVisible] = useState<boolean>(false);

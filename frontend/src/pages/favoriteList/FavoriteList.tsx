@@ -12,7 +12,8 @@ import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {DishCategory} from "../../models/DishCategory.ts";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
-import {localStorageKey} from "../../const.ts";
+import {localStorageKey} from "../../models/LocalStorageConst.ts";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 type FavoriteListProps = {
     recipes: Recipe[];
@@ -149,7 +150,7 @@ export default function FavoriteList(props: FavoriteListProps) {
 
     return (
         <>
-            <p className="page-title">Meine Favoriten ({favorites.length})</p>
+            <PageTitle title={`Meine Favoriten (${favorites.length})`}></PageTitle>
 
             <div className="container">
                 {props.recipes.length < 1 && <h2>Keine Favoriten gefunden!</h2>}

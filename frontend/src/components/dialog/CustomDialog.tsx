@@ -32,7 +32,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
         >
             {!props.isMealPlanPage &&
                 <div>
-                    <div className="in-center">
+                    <div className="center">
                         <p>
                             Um Rezepte in einem bestimmten Speiseplan sammeln zu können, muss dieser erst aktiviert
                             werden.
@@ -43,7 +43,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
                         </p>
                     </div>
 
-                    <div className="in-center">
+                    <div className="center">
                         <button
                             className="custom-button"
                             disabled={props.isCreating}
@@ -74,7 +74,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
                     className="full-width"
                 />
 
-                <div className="in-center">
+                <div className="center">
                     <button
                         className="custom-button"
                         disabled={!newPlanName.trim() || props.isCreating}

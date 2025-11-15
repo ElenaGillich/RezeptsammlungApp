@@ -8,8 +8,9 @@ import {handleImageError} from "../../utils/HandleImageError.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
-import {localStorageKey} from "../../const.ts";
 import {DishCategory} from "../../models/DishCategory.ts";
+import {localStorageKey} from "../../models/LocalStorageConst.ts";
+import Spinner from "../../components/spinner/Spinner.tsx";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
@@ -25,7 +26,8 @@ export default function RecipeView(props: RecipeViewProps) {
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -68,11 +70,12 @@ export default function RecipeView(props: RecipeViewProps) {
     }
 
     const handleDelete = () => {
+        setIsDeleting(true);
         if (!confirm("Möchten Sie das Rezept wirklich löschen?")) {
+            setIsDeleting(false);
             return;
         }
 
-        setIsLoading(true);
         axios.delete(`/api/recipes/${recipe?.id}`)
             .then(() => {
                 props.onDelete(true);
@@ -81,7 +84,7 @@ export default function RecipeView(props: RecipeViewProps) {
             .catch(error =>
                 alert("Fehler beim Löschen des Rezepts: " + error)
             )
-            .finally(() => setIsLoading(false));
+            .finally(() => setIsDeleting(false));
     };
 
     const colorClass = (speed: string | undefined) => {
@@ -97,23 +100,25 @@ export default function RecipeView(props: RecipeViewProps) {
 
     return (
         <>
-            <p className="page-title">{recipe?.name}</p>
+            <div className="page-title-box">
+                <div className="center for-spinner-in-page-title">
+                    {isLoading && <Spinner/>}
+                </div>
+                <div className="page-title">{recipe?.name}</div>
+            </div>
 
             <div className="container">
-                {(!isLoading && !recipe) &&
-                    <h2>Kein Rezept mit ID={params.id} gefunden!</h2>
-                }
-
-                {recipe &&
+                {recipe ?
                     <div>
                         <div className="display-flex">
                             <div className="info">
-                                <div className="in-center section">
+                                <div className="center section">
                                     <div>
                                         <span className="section-title"> Rezeptkategorie </span>
                                         <div className="marker">
-                                            <div
-                                                className="normal">{DishCategory[recipe?.category as keyof typeof DishCategory]}</div>
+                                            <div className="normal">
+                                                {DishCategory[recipe?.category as keyof typeof DishCategory]}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -144,6 +149,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                     )}
                                 </ol>
                             </div>
+
                             <div className="display-flex">
                                 <div className="actions">
                                     <button
@@ -219,19 +225,26 @@ export default function RecipeView(props: RecipeViewProps) {
                                         type={"button"}
                                         className="action-button"
                                         aria-label="Rezept löschen"
+                                        disabled={isDeleting}
                                         data-tooltip-id="remove"
                                         data-tooltip-content="Rezept löschen"
                                         data-tooltip-place="left"
                                         onClick={handleDelete}
                                     >
-                                        <img
-                                            width={26}
-                                            height={26}
-                                            src="/delete.png"
-                                            alt="Menu-Icon"
-                                        />
+                                        {isDeleting
+                                            ? <div className="center">
+                                                <Spinner/>
+                                            </div>
+                                            : <img
+                                                width={26}
+                                                height={26}
+                                                src="/delete.png"
+                                                alt="Menu-Icon"
+                                            />
+                                        }
                                     </button>
                                 </div>
+
                                 <div className={"recipe-image"}>
                                     <img
                                         width={recipe?.image ? 400 : 220}
@@ -262,8 +275,12 @@ export default function RecipeView(props: RecipeViewProps) {
                             </div>
                         }
                     </div>
+                    : <>
+                        {!isLoading && <h2>Kein Rezept mit ID={params.id} gefunden!</h2>}
+                    </>
                 }
             </div>
+
             <Tooltip id="favorite" noArrow className="tooltip"/>
             <Tooltip id="edit" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>

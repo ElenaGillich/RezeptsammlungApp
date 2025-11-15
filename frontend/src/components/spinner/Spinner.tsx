@@ -12,6 +12,7 @@ export default function Spinner(props: Readonly<SpinnerProps>) {
             style={{
                 width: size,
                 height: size,
+                borderWidth: size > 30 ? 5 : 3
             }}
         />
     );

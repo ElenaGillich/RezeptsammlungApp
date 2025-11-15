@@ -1,5 +1,7 @@
+$page-width: 1050px;
+
 #root {
-  width: 1050px;
+  width: $page-width;
   height: 100%;
   margin: 0 auto;
   font-size: 1.1rem;
@@ -52,11 +54,16 @@ textarea {
   background-color: floralwhite;
 }
 
+.page-title-box {
+  min-height: 85px;
+  width: calc(100% - 230px);
+}
+
 .page-title {
   font-size: 2.3rem;
   font-family: "Harlow Solid Italic", monospace;
-  font-weight: 900;
-  margin: 5px 0 10px;
+  font-weight: bold;
+  margin-top: -10px;
 }
 
 .full-width {
@@ -193,11 +200,15 @@ table .action-button {
   align-items: center;
 }
 
-.in-center {
+.center {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4px auto;
+}
+
+.center.for-spinner-in-page-title {
+  height: 40px;
+  width: $page-width;
 }
 
 .marker {
