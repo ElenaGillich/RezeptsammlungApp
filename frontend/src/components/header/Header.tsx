@@ -1,6 +1,7 @@
 import "./Header.css";
 import Navbar from "../Navbar.tsx";
 import {useNavigate} from "react-router-dom";
+import {Tooltip} from "react-tooltip";
 
 export default function Header() {
     const navigate = useNavigate();
@@ -26,8 +27,11 @@ export default function Header() {
             <button
                 type={"button"}
                 className="action-button"
-                aria-label="Rezept zum Speiseplan hinzufügen"
+                aria-label="Meine Speisepläne"
                 onClick={() => navigate("/meal-plans")}
+                data-tooltip-id="toMenu"
+                data-tooltip-content="Meine Speisepläne"
+                data-tooltip-place="bottom"
             >
                 <img
                     width={30}
@@ -36,6 +40,7 @@ export default function Header() {
                     alt="Menu-Icon"
                 />
             </button>
+            <Tooltip id="toMenu" noArrow className="tooltip"/>
         </header>
     )
 }

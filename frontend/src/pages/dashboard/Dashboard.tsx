@@ -50,10 +50,10 @@ export default function Dashboard(props: Readonly<DashboardProps>) {
                 </button>
                 <div className={`accordion-content ${isOpen ? "open" : ""}`}>
                     {isOpen && recipes.map((r) => (
-                            <a key={r.id} href={href(r.id)}>
-                                <div className="recipe-item">{r.name}</div>
-                            </a>
-                        ))}
+                        <a key={r.id} href={href(r.id)}>
+                            <div className="recipe-item">{r.name}</div>
+                        </a>
+                    ))}
                 </div>
             </div>
         );
@@ -81,26 +81,28 @@ export default function Dashboard(props: Readonly<DashboardProps>) {
                                     onClick={() => openSectionFromCounter("desserts")}/>
                 </div>
 
-                <div className="accordion">
-                    <h3>Mehr Kategorien:</h3>
-                    {showRecipesOfCategory("salats", "Salate", salats)}
-                    {showRecipesOfCategory("mainCourses", "Hauptgerichte", mainCourses)}
-                    {showRecipesOfCategory("soups", "Suppen", soups)}
-                    {showRecipesOfCategory("appetizers", "Vorspeisen", appetizers)}
-                    {showRecipesOfCategory("breakfasts", "Frühstück", breakfasts)}
-                    {showRecipesOfCategory("bakedGoods", "Backwaren", bakedGoods)}
-                    {showRecipesOfCategory("desserts", "Desserts", desserts)}
-                    {showRecipesOfCategory("sideDishes", "Beilagen", filterByCategory("SIDE_DISHES"))}
-                    {showRecipesOfCategory("grill", "Grillgerichte", filterByCategory("GRILL"))}
-                    {showRecipesOfCategory("pasta", "Pasta", filterByCategory("PASTA"))}
-                    {showRecipesOfCategory("sauce", "Soße", filterByCategory("SAUCE"))}
-                    {showRecipesOfCategory("kids", "Kindergerichte", filterByCategory("KIDS"))}
-                    {showRecipesOfCategory("preserve", "Einmachen", filterByCategory("PRESERVE"))}
-                    {showRecipesOfCategory("vegetarians", "Vegetarische Gerichte", filterByCategory("VEGETARIAN"))}
-                    {showRecipesOfCategory("vegans", "Vegane Gerichte", filterByCategory("VEGAN"))}
-                    {showRecipesOfCategory("drinks", "Getränke", filterByCategory("DRINK"))}
-                    {showRecipesOfCategory("others", "Sonstiges", filterByCategory("OTHER"))}
-                </div>
+                {props.recipes.length > 0 &&
+                    <div className="accordion">
+                        <h3>Mehr Kategorien:</h3>
+                        {showRecipesOfCategory("salats", "Salate", salats)}
+                        {showRecipesOfCategory("mainCourses", "Hauptgerichte", mainCourses)}
+                        {showRecipesOfCategory("soups", "Suppen", soups)}
+                        {showRecipesOfCategory("appetizers", "Vorspeisen", appetizers)}
+                        {showRecipesOfCategory("breakfasts", "Frühstück", breakfasts)}
+                        {showRecipesOfCategory("bakedGoods", "Backwaren", bakedGoods)}
+                        {showRecipesOfCategory("desserts", "Desserts", desserts)}
+                        {showRecipesOfCategory("sideDishes", "Beilagen", filterByCategory("SIDE_DISHES"))}
+                        {showRecipesOfCategory("grill", "Grillgerichte", filterByCategory("GRILL"))}
+                        {showRecipesOfCategory("pasta", "Pasta", filterByCategory("PASTA"))}
+                        {showRecipesOfCategory("sauce", "Soße", filterByCategory("SAUCE"))}
+                        {showRecipesOfCategory("kids", "Kindergerichte", filterByCategory("KIDS"))}
+                        {showRecipesOfCategory("preserve", "Einmachen", filterByCategory("PRESERVE"))}
+                        {showRecipesOfCategory("vegetarians", "Vegetarische Gerichte", filterByCategory("VEGETARIAN"))}
+                        {showRecipesOfCategory("vegans", "Vegane Gerichte", filterByCategory("VEGAN"))}
+                        {showRecipesOfCategory("drinks", "Getränke", filterByCategory("DRINK"))}
+                        {showRecipesOfCategory("others", "Sonstiges", filterByCategory("OTHER"))}
+                    </div>
+                }
             </div>
         </>
     );

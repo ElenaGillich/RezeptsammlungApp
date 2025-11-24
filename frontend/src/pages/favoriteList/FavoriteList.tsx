@@ -169,7 +169,7 @@ export default function FavoriteList(props: FavoriteListProps) {
                                 className="truncate name" sortable/>
                         <Column field="ingredients" header="Zutaten" className="widest"
                                 body={ingredientsTemplate}/>
-                        <Column field="speed" header="Kategorie" className="medium"
+                        <Column field="category" header="Kategorie" className="medium"
                                 body={categoryTemplate} sortable/>
                         <Column field="speed" header="Zeitaufwand" className="medium"
                                 body={speedTemplate} sortable/>

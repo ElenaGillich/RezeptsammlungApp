@@ -1,7 +1,9 @@
+import PageTitle from "../components/pageTitle/PageTitle.tsx";
+
 export default function Sources() {
     return (
         <>
-            <p className="page-title">Icon-Quellen</p>
+            <PageTitle title="Icon-Quellen"></PageTitle>
             <div className="container">
                 <div className="note">
                     Auf der Website wurden mehrere Icons von "Flaticon" verwendet. <br/>

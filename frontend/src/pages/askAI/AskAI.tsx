@@ -1,6 +1,7 @@
 import {type ChangeEvent, type KeyboardEvent, useRef, useState} from "react";
 import axios from "axios";
 import "./AskAI.css";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 export default function AskAI() {
     const [request, setRequest] = useState<string>("");
@@ -65,7 +66,7 @@ export default function AskAI() {
 
     return (
         <>
-            <p className="page-title">Anfrage an künstliche Intelligenz</p>
+            <PageTitle title="Anfrage an künstliche Intelligenz"></PageTitle>
             <div className="container">
                 <div className="note">
                     <span>Frage die KI nach einer Zutat, </span>

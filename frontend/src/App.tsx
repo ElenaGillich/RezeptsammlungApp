@@ -47,9 +47,9 @@ function App() {
                     <Routes>
                         <Route path="/dashboard" element={!isLoading && <Dashboard recipes={recipeList}/>}/>
                         <Route path="/" element={!isLoading && <AllRecipes recipes={recipeList}/>}/>
-                        <Route path="/favorites"
-                               element={!isLoading &&
-                                   <FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}/>
+                        <Route path="/favorites" element={!isLoading &&
+                                   <FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}
+                        />
                         <Route path="/recipes/new" element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
                         <Route path="/recipes/:id"
                                element={<RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved}/>}
