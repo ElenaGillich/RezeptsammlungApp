@@ -26,7 +26,7 @@ class RecipeServiceTest {
     Recipe recipe = Recipe.builder()
             .id("1")
             .name("Tomatensalat mit Schmand")
-            .category(DishCategory.SALAD)
+            .category(DishCategory.SALAD.getValue())
             .image("image")
             .speed(PreparationSpeed.FAST)
             .ingredients(List.of(
@@ -113,7 +113,7 @@ class RecipeServiceTest {
                 .withName("Rezept-1")
                 .withImage(dto.image())
                 .withNotes(dto.notes())
-                .withCategory(DishCategory.OTHER)
+                .withCategory(DishCategory.OTHER.getValue())
                 .withSpeed(PreparationSpeed.FAST);
 
         //WHEN

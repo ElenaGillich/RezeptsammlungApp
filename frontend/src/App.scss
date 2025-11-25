@@ -204,6 +204,10 @@ table .action-button {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .button-name {
+    margin-left: 6px;
+  }
 }
 
 .center.for-spinner-in-page-title {

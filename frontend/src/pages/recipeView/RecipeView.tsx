@@ -8,7 +8,6 @@ import {handleImageError} from "../../utils/HandleImageError.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
-import {DishCategory} from "../../models/DishCategory.ts";
 import {localStorageKey} from "../../models/LocalStorageConst.ts";
 import Spinner from "../../components/spinner/Spinner.tsx";
 
@@ -117,7 +116,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                         <span className="section-title"> Rezeptkategorie </span>
                                         <div className="marker">
                                             <div className="normal">
-                                                {DishCategory[recipe?.category as keyof typeof DishCategory]}
+                                                {recipe?.category}
                                             </div>
                                         </div>
                                     </div>

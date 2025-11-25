@@ -9,7 +9,6 @@ import {useCallback, useEffect, useState} from "react";
 import "./FavoriteList.scss"
 import {Tooltip} from "react-tooltip";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
-import {DishCategory} from "../../models/DishCategory.ts";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import CustomDialog from "../../components/dialog/CustomDialog.tsx";
 import {localStorageKey} from "../../models/LocalStorageConst.ts";
@@ -49,7 +48,7 @@ export default function FavoriteList(props: FavoriteListProps) {
 
     const categoryTemplate = (recipe: Recipe) => (
         <div className="marker">
-            <div className="normal">{DishCategory[recipe.category as keyof typeof DishCategory]}</div>
+            <div className="normal">{recipe.category}</div>
         </div>
     );
 

@@ -11,8 +11,8 @@ import type {Recipe} from "../../models/Recipe.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
 import {emptyRecipeDto} from "./EmptyRecipeConst.ts";
-import Spinner from "../../components/spinner/Spinner.tsx";
 import PageTitle from "../../components/pageTitle/PageTitle.tsx";
+import SaveButton from "../../components/saveButton/SaveButton.tsx";
 
 type RecipeFormProps = {
     isEditMode: boolean,
@@ -30,7 +30,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [ingredients, setIngredients] = useState<IngredientType[]>([]);
     const [image, setImage] = useState<File | string>();
     const [fileName, setFileName] = useState("");
-    const [imagePreview, setImagePreview] = useState<string>(isEditMode ? "/noRecipeImage.png" : "");
+    const [imagePreview, setImagePreview] = useState<string>("");
     const [formData, setFormData] = useState<RecipeDto>(emptyRecipeDto);
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
@@ -173,6 +173,10 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
         }
     }
 
+    const isSaveButtonDisabled: boolean = !isDirty || isLoading || !(
+        formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
+    )
+
     return (
         <>
             <form onSubmit={submitForm}>
@@ -187,19 +191,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                         }
                     ></PageTitle>
 
-                    <button
-                        className="custom-button"
-                        disabled={!isDirty || isLoading || !(
-                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
-                        )}
-                    >
-                        {isLoading ?
-                            <div className="center">
-                                <Spinner/> {"  "} Speicherung...
-                            </div>
-                            : "Speichern"
-                        }
-                    </button>
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}></SaveButton>
                 </div>
 
                 <div className="container">
@@ -226,8 +218,8 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                         onChange={handleChange}
                                     >
                                         <option value="" disabled hidden> Kategorie wählen...</option>
-                                        {dishCategories.map(([key, label]) =>
-                                            <option key={key} value={key}>{label}</option>)
+                                        {dishCategories.map(([key, value]) =>
+                                            <option key={key} value={value}>{value}</option>)
                                         }
                                     </select>
                                 </div>
@@ -391,19 +383,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 </div>
 
                 <div className="full-width item-right">
-                    <button
-                        className="custom-button"
-                        disabled={!isDirty || isLoading || !(
-                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
-                        )}
-                    >
-                        {isLoading ?
-                            <div className="center">
-                                <Spinner/> {"  "} Speicherung...
-                            </div>
-                            : "Speichern"
-                        }
-                    </button>
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}></SaveButton>
                 </div>
             </form>
         </>

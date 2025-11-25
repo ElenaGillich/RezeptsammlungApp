@@ -26,7 +26,7 @@ export const units: ShortFullInfo[] = [
     {short: "TL", full: "Teelöffel"},
     {short: "Tr.", full: "Tropfen"},
     {short: "Wf.", full: "Würfel"},
-    {short: "Z.", full: "Zehe"},
+    {short: "Z.", full: "Zehe(n)"},
 ];
 
 export const dimensions: ShortFullInfo[] = [
