@@ -13,6 +13,7 @@ import {handleImageError} from "../../utils/HandleImageError.ts";
 import {emptyRecipeDto} from "./EmptyRecipeConst.ts";
 import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 import SaveButton from "../../components/saveButton/SaveButton.tsx";
+import {useToast} from "../../utils/useToast.ts";
 
 type RecipeFormProps = {
     isEditMode: boolean,
@@ -23,6 +24,7 @@ type RecipeFormProps = {
 export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const {isEditMode, recipe} = props;
     const navigate = useNavigate();
+    const toast = useToast();
 
     const dishCategories = Object.entries(DishCategory);
     const speedValues = Object.entries(PreparationSpeed);
@@ -167,7 +169,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 navigate("/");
             }
         } catch (e) {
-            alert("Fehler beim Speichern! " + e);
+            toast.error("Fehler beim Speichern! \n" + e);
         } finally {
             setIsLoading(false);
         }

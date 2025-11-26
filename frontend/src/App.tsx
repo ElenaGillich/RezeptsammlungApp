@@ -1,5 +1,5 @@
 import './App.scss'
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import AllRecipes from "./pages/allRecipes/allRecipes.tsx";
@@ -16,6 +16,9 @@ import Header from "./components/header/Header.tsx";
 import AskAI from "./pages/askAI/AskAI.tsx";
 import MealPlans from "./pages/mealPlans/MealPlans.tsx";
 import Spinner from "./components/spinner/Spinner.tsx";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import {useToast} from "./utils/useToast.ts";
 
 function App() {
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
@@ -23,18 +26,20 @@ function App() {
     const [isSaved, setIsSaved] = useState<boolean>(false);
     const [removed, setRemoved] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const toast = useToast();
+
+    const loadAllRecipes = useCallback(() => {
+        setIsLoading(true);
+
+        axios.get("/api/recipes")
+            .then((result) => setRecipeList(result.data))
+            .catch(() => toast.error("Fehler beim Laden von Rezepten!"))
+            .finally(() => setIsLoading(false));
+    }, [toast]);
 
     useEffect(() => {
         loadAllRecipes();
-    }, [isUpdated, isSaved, removed]);
-
-    function loadAllRecipes() {
-        setIsLoading(true)
-        axios.get("/api/recipes")
-            .then((result) => setRecipeList(result.data))
-            .catch(() => alert("Fehler beim Laden von Rezepten!"))
-            .finally(() => setIsLoading(false));
-    }
+    }, [isUpdated, isSaved, removed, loadAllRecipes]);
 
     return (
         <>
@@ -47,8 +52,8 @@ function App() {
                     <Routes>
                         <Route path="/dashboard" element={!isLoading && <Dashboard recipes={recipeList}/>}/>
                         <Route path="/" element={!isLoading && <AllRecipes recipes={recipeList}/>}/>
-                        <Route path="/favorites" element={!isLoading &&
-                                   <FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}
+                        <Route path="/favorites"
+                           element={!isLoading && <FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}
                         />
                         <Route path="/recipes/new" element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
                         <Route path="/recipes/:id"

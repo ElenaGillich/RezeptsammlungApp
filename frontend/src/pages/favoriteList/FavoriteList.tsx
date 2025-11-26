@@ -10,9 +10,10 @@ import "./FavoriteList.scss"
 import {Tooltip} from "react-tooltip";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
-import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import MealPlanDialog from "../../components/dialog/MealPlanDialog.tsx";
 import {localStorageKey} from "../../models/LocalStorageConst.ts";
 import PageTitle from "../../components/pageTitle/PageTitle.tsx";
+import {useToast} from "../../utils/useToast.ts";
 
 type FavoriteListProps = {
     recipes: Recipe[];
@@ -21,6 +22,7 @@ type FavoriteListProps = {
 
 export default function FavoriteList(props: FavoriteListProps) {
     const navigate = useNavigate();
+    const toast = useToast();
     const [favorites, setFavorites] = useState<Recipe[]>([]);
     const [addedInMealPlan, setAddedInMealPlan] = useState<Recipe[]>([]);
     const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan, isProcessing} = useAddRecipeToMealPlan();
@@ -78,8 +80,8 @@ export default function FavoriteList(props: FavoriteListProps) {
     const updateFavoriteState = useCallback((recipe: Recipe) => {
         axios.put(`/api/recipes/${recipe.id}/favorite?isFavorite=false`)
             .then(() => handleUpdateFavoriteSuccess(recipe))
-            .catch((e) => alert("Fehler beim Entfavorisieren! " + e));
-    }, [handleUpdateFavoriteSuccess]);
+            .catch((e) => toast.error("Fehler beim Entfavorisieren! \n" + e));
+    }, [handleUpdateFavoriteSuccess, toast]);
 
     const onAddRecipeToPlanError = (recipe: Recipe) => {
         setAddedInMealPlan(prev => prev.filter(r => r.id !== recipe.id));
@@ -156,6 +158,7 @@ export default function FavoriteList(props: FavoriteListProps) {
 
                 {props.recipes.length > 0 && (
                     <DataTable
+                        className="favorites"
                         key={addedInMealPlan.map((r) => r.id).join(",")}
                         onRowClick={navigateToDetails}
                         dataKey="id"
@@ -180,7 +183,7 @@ export default function FavoriteList(props: FavoriteListProps) {
             <Tooltip id="noFavorite" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>
 
-            <CustomDialog
+            <MealPlanDialog
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}
                 onNavigateToMealPlans={() => navigate("/meal-plans")}

@@ -75,15 +75,17 @@ export default function AskAI() {
                 </div>
 
                 <div className="request-box">
-                    <label>Name der Zutat:{' '}
+                    <div className="name">
+                        <h4>Name der Zutat:</h4>
                         <input
                             type="text"
                             className="full-width"
-                            value={request} maxLength={50}
+                            value={request}
+                            maxLength={50}
                             onKeyDown={handleKeyDown}
                             onChange={(event) => handleInput(event)}
                         />
-                    </label>
+                    </div>
 
                     {loading ? (
                         <>

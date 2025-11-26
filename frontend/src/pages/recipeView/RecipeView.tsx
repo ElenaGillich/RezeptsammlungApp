@@ -5,11 +5,12 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {PreparationSpeed} from "../../models/PreparationSpeed.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
-import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import MealPlanDialog from "../../components/dialog/MealPlanDialog.tsx";
 import {Tooltip} from "react-tooltip";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
 import {localStorageKey} from "../../models/LocalStorageConst.ts";
 import Spinner from "../../components/spinner/Spinner.tsx";
+import {useToast} from "../../utils/useToast.ts";
 
 type RecipeViewProps = {
     onUpdateFavorite: (isUpdated: boolean) => void;
@@ -19,6 +20,7 @@ type RecipeViewProps = {
 export default function RecipeView(props: RecipeViewProps) {
     const params = useParams();
     const navigate = useNavigate();
+    const toast = useToast();
     const noFavorite = "/heart.png";
     const favorite = "/red-heart.png";
     const {addToMealPlan, dialogVisible, setDialogVisible, createNewMealPlan} = useAddRecipeToMealPlan();
@@ -56,7 +58,7 @@ export default function RecipeView(props: RecipeViewProps) {
             setIsFavorite(newFavorite);
             props.onUpdateFavorite(true);
         })
-            .catch(e => alert("Fehler beim Favoriten update! " + e))
+            .catch(e => toast.error("Fehler beim Favoriten update! \n" + e))
     }
 
     function addRecipeToMealPlan() {
@@ -80,9 +82,7 @@ export default function RecipeView(props: RecipeViewProps) {
                 props.onDelete(true);
                 navigate("/");
             })
-            .catch(error =>
-                alert("Fehler beim Löschen des Rezepts: " + error)
-            )
+            .catch(error => toast.error("Fehler beim Löschen des Rezepts: " + error))
             .finally(() => setIsDeleting(false));
     };
 
@@ -112,7 +112,7 @@ export default function RecipeView(props: RecipeViewProps) {
                         <div className="display-flex">
                             <div className="info">
                                 <div className="center section">
-                                    <div>
+                                    <div className="with-marker">
                                         <span className="section-title"> Rezeptkategorie </span>
                                         <div className="marker">
                                             <div className="normal">
@@ -128,7 +128,7 @@ export default function RecipeView(props: RecipeViewProps) {
                                         alt="kochzeit-Icon"
                                     />
 
-                                    <div>
+                                    <div className="with-marker">
                                         <span className="section-title"> Zubereitungszeit </span>
                                         <div className="marker">
                                             <div className={colorClass(recipe?.speed)}>
@@ -286,7 +286,7 @@ export default function RecipeView(props: RecipeViewProps) {
             <Tooltip id="askAI" noArrow className="tooltip"/>
             <Tooltip id="remove" noArrow className="tooltip"/>
 
-            <CustomDialog
+            <MealPlanDialog
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}
                 onNavigateToMealPlans={() => navigate("/meal-plans")}

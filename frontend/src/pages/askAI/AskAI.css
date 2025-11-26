@@ -6,8 +6,15 @@
     margin-top: 40px;
 }
 
+.request-box input {
+    width: 400px;
+}
+
+.request-box .custom-button {
+    margin-bottom: 0;
+}
+
 .response {
-    width: calc(100% - 16px);
     display: flex;
     flex-flow: column;
     padding-top: inherit;

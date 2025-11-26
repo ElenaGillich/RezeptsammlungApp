@@ -13,7 +13,8 @@ export default function RecipeCard(props: Readonly<RecipeCardProps>) {
     const favoriteIcon: string = "/red-heart.png";
 
     const allIngredients = useMemo(() => props.recipe.ingredients
-            .map((ingredient: Ingredient) => ingredient.name).join(", "), [props.recipe.ingredients]
+        .map((ingredient: Ingredient) => " " + ingredient.name.trim())
+        .join(","), [props.recipe.ingredients]
     );
 
     return (
