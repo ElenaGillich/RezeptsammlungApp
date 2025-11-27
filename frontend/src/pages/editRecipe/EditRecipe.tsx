@@ -29,14 +29,12 @@ export default function EditRecipe(props: Readonly<EditRecipeProps>) {
     }, [id]);
 
     return (
-        <>
-            <RecipeForm
-                isEditMode={true}
-                errorInEditMode={error}
-                recipe={recipe as Recipe}
-                onSave={props.onSave}
-                recipeLoading={loading}
-            />
-        </>
+        <RecipeForm
+            isEditMode={true}
+            errorInEditMode={error}
+            recipe={recipe as Recipe}
+            onSave={props.onSave}
+            recipeLoading={loading}
+        />
     )
 }
