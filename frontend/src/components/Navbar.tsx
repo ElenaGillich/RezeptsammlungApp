@@ -6,7 +6,6 @@ export default function Navbar() {
         <nav className={"navbar"}>
             <Link className="nav-link" to={"/"}> Alle Rezepte </Link>
             <Link className="nav-link" to={"/favorites"}> Favoriten </Link>
-            <Link className="nav-link" to={"/info"}> Hinweise </Link>
             <Link className="nav-link" to={"/recipes/new"}> Rezept anlegen</Link>
         </nav>
     )

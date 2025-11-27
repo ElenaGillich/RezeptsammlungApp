@@ -17,6 +17,8 @@ import {useToast} from "../../utils/useToast.ts";
 
 type RecipeFormProps = {
     isEditMode: boolean,
+    errorInEditMode?: string | null;
+    recipeLoading?: boolean;
     recipe?: Recipe | null,
     onSave: (isSaved: boolean) => void
 }
@@ -186,14 +188,15 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                     <PageTitle
                         title={isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}
                         hasAdditionalText={true}
+                        hasSpinner={props.recipeLoading}
                         additionalText={
-                        !(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)
-                            ? "Bereiche mit Sternchen* sind Pflichtfelder!"
-                            : ""
+                        (formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)
+                            ? ""
+                            : "Bereiche mit Sternchen* sind Pflichtfelder!"
                         }
                     ></PageTitle>
 
-                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}></SaveButton>
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}/>
                 </div>
 
                 <div className="container">
@@ -274,7 +277,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                             </div>
                         </div>
 
-                        <div className={"recipe-image"}>
+                        <div className="recipe-image">
                             <img
                                 width={imagePreview ? 400 : 230}
                                 height={imagePreview ? 300 : 180}
@@ -291,9 +294,11 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
 
                         <div className={"section"}>
                             <h4>Zutatenliste </h4>
-                            {isEditMode && <span>
-                                (Vergessen Sie nicht, nach der Anpassung der Zutaten auf <b>„Speichern“</b> zu klicken)
-                            </span>}
+                            {isEditMode &&
+                                <span>
+                                    (Vergessen Sie nicht, nach der Anpassung der Zutaten auf <b>„Speichern“</b> zu klicken)
+                                </span>
+                            }
                         </div>
                         <div className={ingredients.length < 1 ? "ingredients-list empty" : "ingredients-list"}>
                             {ingredients.length < 1 && <p className="empty">Es wurde noch keine Zutat hinzugefügt!</p>}
@@ -335,7 +340,6 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                 ))}
                             </ul>
                         </div>
-
                     </div>
 
                     <div className="section">
@@ -385,7 +389,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 </div>
 
                 <div className="full-width item-right">
-                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}></SaveButton>
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}/>
                 </div>
             </form>
         </>

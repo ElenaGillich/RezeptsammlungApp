@@ -5,7 +5,7 @@ type SaveButtonProps = {
     hasSpinner: boolean
 }
 
-export default function SaveButton(props: SaveButtonProps) {
+export default function SaveButton(props: Readonly<SaveButtonProps>) {
     return (
         <button
             className="custom-button"

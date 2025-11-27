@@ -29,14 +29,16 @@ export default function Sources() {
 
                     <p></p>
                     <h4>Weitere Icons</h4>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/veroffentliche-es"
+                       title="veröffentliche es Icons">Veröffentliche es Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/kochzeit" target="_blank"
                        title="kochzeit Icons">Kochzeit Icons erstellt von Flat Icons - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/chatgpt" target="_blank"
                        title="chatgpt Icons">Chatgpt Icons erstellt von Freepik - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/instrumententafel" target="_blank"
                        title="instrumententafel Icons">Instrumententafel Icons erstellt von feen - Flaticon</a>
-                    <a href="https://www.flaticon.com/de/kostenlose-icons/menu-offnen" target="_blank"
-                       title="menü öffnen Icons">Menü öffnen Icons erstellt von Freepik - Flaticon</a>
+                    <a href="https://www.flaticon.com/de/kostenlose-icons/essen-und-restaurant"
+                       title="essen und restaurant Icons">Essen und restaurant Icons erstellt von surang - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" target="_blank"
                        title="herz Icons">Herz Icons erstellt von Anggara - Flaticon</a>
                     <a href="https://www.flaticon.com/de/kostenlose-icons/herz" target="_blank"

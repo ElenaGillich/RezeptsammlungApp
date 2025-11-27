@@ -31,11 +31,6 @@
     align-items: center;
     background-color: #FED6BA;
 
-    .buttons {
-        display: flex;
-        gap: 20px;
-    }
-
     input {
         margin: 0;
         padding: 0;

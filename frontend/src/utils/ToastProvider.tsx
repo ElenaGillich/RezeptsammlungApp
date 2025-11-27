@@ -1,8 +1,8 @@
-import {type ReactNode, useRef} from "react";
+import {type ReactNode, useMemo, useRef} from "react";
 import { Toast } from "primereact/toast";
 import { ToastContext } from "./ToastContext";
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export function ToastProvider({ children }: Readonly<{ children: ReactNode }>) {
     const toastRef = useRef<Toast | null>(null);
 
     const success = (message: string) =>
@@ -37,8 +37,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             life: 10000,
         });
 
+    const value = useMemo(() => (
+        { success, error, warn, info }), []
+    );
+
     return (
-        <ToastContext.Provider value={{ success, error, warn, info }}>
+        <ToastContext.Provider value={value}>
             <Toast ref={toastRef} />
             {children}
         </ToastContext.Provider>

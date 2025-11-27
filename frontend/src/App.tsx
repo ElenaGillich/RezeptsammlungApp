@@ -15,59 +15,47 @@ import Footer from "./components/footer/Footer.tsx";
 import Header from "./components/header/Header.tsx";
 import AskAI from "./pages/askAI/AskAI.tsx";
 import MealPlans from "./pages/mealPlans/MealPlans.tsx";
-import Spinner from "./components/spinner/Spinner.tsx";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import {useToast} from "./utils/useToast.ts";
 
 function App() {
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
-    const [isUpdated, setIsUpdated] = useState<boolean>(false);
+    const [isFavoured, setIsFavoured] = useState<boolean | undefined>(undefined);
     const [isSaved, setIsSaved] = useState<boolean>(false);
     const [removed, setRemoved] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const toast = useToast();
 
     const loadAllRecipes = useCallback(() => {
-        setIsLoading(true);
-
         axios.get("/api/recipes")
             .then((result) => setRecipeList(result.data))
             .catch(() => toast.error("Fehler beim Laden von Rezepten!"))
-            .finally(() => setIsLoading(false));
     }, [toast]);
 
     useEffect(() => {
         loadAllRecipes();
-    }, [isUpdated, isSaved, removed, loadAllRecipes]);
+    }, [isFavoured, isSaved, removed, loadAllRecipes]);
 
     return (
         <>
-            {isLoading
-                ? <div className="center for-spinner-in-page-title">
-                    {isLoading && <Spinner size={40}/>}
-                </div>
-                : <>
-                    <Header/>
-                    <Routes>
-                        <Route path="/dashboard" element={!isLoading && <Dashboard recipes={recipeList}/>}/>
-                        <Route path="/" element={!isLoading && <AllRecipes recipes={recipeList}/>}/>
-                        <Route path="/favorites"
-                           element={!isLoading && <FavoriteList recipes={recipeList} onUpdateFavorite={setIsUpdated}/>}
-                        />
-                        <Route path="/recipes/new" element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
-                        <Route path="/recipes/:id"
-                               element={<RecipeView onUpdateFavorite={setIsUpdated} onDelete={setRemoved}/>}
-                        />
-                        <Route path="/recipes/:id/edit" element={<EditRecipe onSave={setIsSaved}/>}/>
-                        <Route path="/info" element={<Information/>}/>
-                        <Route path="/icon-sources" element={<Sources/>}/>
-                        <Route path="/ai" element={<AskAI/>}/>
-                        <Route path="/meal-plans" element={<MealPlans/>}/>
-                    </Routes>
-                    <Footer/></>
-            }
-        </>
+            <Header/>
+            <Routes>
+                <Route path="/dashboard" element={<Dashboard recipes={recipeList}/>}/>
+                <Route path="/" element={<AllRecipes recipes={recipeList}/>}/>
+                <Route path="/favorites"
+                       element={<FavoriteList recipes={recipeList} onUpdateFavorite={setIsFavoured}/>}
+                />
+                <Route path="/recipes/new" element={<RecipeForm isEditMode={false} onSave={setIsSaved}/>}/>
+                <Route path="/recipes/:id"
+                       element={<RecipeView onUpdateFavorite={setIsFavoured} onDelete={setRemoved}/>}
+                />
+                <Route path="/recipes/:id/edit" element={<EditRecipe onSave={setIsSaved}/>}/>
+                <Route path="/info" element={<Information/>}/>
+                <Route path="/icon-sources" element={<Sources/>}/>
+                <Route path="/ai" element={<AskAI/>}/>
+                <Route path="/meal-plans" element={<MealPlans/>}/>
+            </Routes>
+            <Footer/></>
     )
 }
 

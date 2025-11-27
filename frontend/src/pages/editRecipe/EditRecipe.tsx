@@ -3,7 +3,6 @@ import {useEffect, useState} from "react";
 import type {Recipe} from "../../models/Recipe.ts";
 import axios from "axios";
 import RecipeForm from "../recipeForm/RecipeForm.tsx";
-import Spinner from "../../components/spinner/Spinner.tsx";
 
 type EditRecipeProps = {
     onSave: (isSaved: boolean) => void
@@ -20,11 +19,8 @@ export default function EditRecipe(props: Readonly<EditRecipeProps>) {
     useEffect(() => {
         if (!id) return;
 
-        setLoading(true);
         axios.get(`/api/recipes/${id}`)
-            .then((result) => {
-                setRecipe(result.data);
-            })
+            .then((result) => setRecipe(result.data))
             .catch((error) => {
                 console.log(error);
                 setError("Fehler beim Laden des Rezepts!");
@@ -32,22 +28,15 @@ export default function EditRecipe(props: Readonly<EditRecipeProps>) {
             .finally(() => setLoading(false));
     }, [id]);
 
-    if (error) {
-        return <div className="container">{error}</div>;
-    }
-
-    if (loading) {
-        return (
-            <div className="container">
-                <h2>Rezept wird geladen...</h2>
-                <div className="center">
-                    <Spinner size={36}/>
-                </div>
-            </div>
-        );
-    } else if (!recipe) {
-        return <div className="container"><h2>Kein Rezept mit ID={id} gefunden!</h2></div>;
-    } else {
-        return <RecipeForm isEditMode={true} recipe={recipe as Recipe} onSave={props.onSave}/>
-    }
+    return (
+        <>
+            <RecipeForm
+                isEditMode={true}
+                errorInEditMode={error}
+                recipe={recipe as Recipe}
+                onSave={props.onSave}
+                recipeLoading={loading}
+            />
+        </>
+    )
 }

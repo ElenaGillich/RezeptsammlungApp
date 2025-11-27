@@ -24,22 +24,43 @@ export default function Header() {
 
             <Navbar/>
 
-            <button
-                type={"button"}
-                className="action-button"
-                aria-label="Meine Speisepläne"
-                onClick={() => navigate("/meal-plans")}
-                data-tooltip-id="toMenu"
-                data-tooltip-content="Meine Speisepläne"
-                data-tooltip-place="bottom"
-            >
-                <img
-                    width={30}
-                    height={30}
-                    src="/meal-plan.png"
-                    alt="Menu-Icon"
-                />
-            </button>
+            <div className="buttons">
+                <button
+                    type={"button"}
+                    className="action-button"
+                    aria-label="Anmerkungen"
+                    onClick={() => navigate("/info")}
+                    data-tooltip-id="notes"
+                    data-tooltip-content="Anmerkungen"
+                    data-tooltip-place="bottom"
+                >
+                    <img
+                        width={30}
+                        height={30}
+                        src="/notes.png"
+                        alt="Notes-Icon"
+                    />
+                </button>
+
+                <button
+                    type={"button"}
+                    className="action-button"
+                    aria-label="Meine Speisepläne"
+                    onClick={() => navigate("/meal-plans")}
+                    data-tooltip-id="toMenu"
+                    data-tooltip-content="Meine Speisepläne"
+                    data-tooltip-place="bottom"
+                >
+                    <img
+                        width={30}
+                        height={30}
+                        src="/menu.png"
+                        alt="Menu-Icon"
+                    />
+                </button>
+            </div>
+            
+            <Tooltip id="notes" noArrow className="tooltip"/>
             <Tooltip id="toMenu" noArrow className="tooltip"/>
         </header>
     )
