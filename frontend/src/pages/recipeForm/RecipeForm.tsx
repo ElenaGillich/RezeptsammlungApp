@@ -8,12 +8,17 @@ import Ingredient from "../../components/ingredient/Ingredient.tsx";
 import type {Ingredient as IngredientType} from "../../models/Ingredient.ts";
 import {useNavigate} from "react-router-dom";
 import type {Recipe} from "../../models/Recipe.ts";
-import {emptyRecipeDto} from "../../const.ts";
 import {useUnsavedChangesWarning} from "./useUnsavedChangesWarning.ts";
 import {handleImageError} from "../../utils/HandleImageError.ts";
+import {emptyRecipeDto} from "./EmptyRecipeConst.ts";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
+import SaveButton from "../../components/saveButton/SaveButton.tsx";
+import {useToast} from "../../utils/useToast.ts";
 
 type RecipeFormProps = {
     isEditMode: boolean,
+    errorInEditMode?: string | null;
+    recipeLoading?: boolean;
     recipe?: Recipe | null,
     onSave: (isSaved: boolean) => void
 }
@@ -21,6 +26,7 @@ type RecipeFormProps = {
 export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const {isEditMode, recipe} = props;
     const navigate = useNavigate();
+    const toast = useToast();
 
     const dishCategories = Object.entries(DishCategory);
     const speedValues = Object.entries(PreparationSpeed);
@@ -28,7 +34,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     const [ingredients, setIngredients] = useState<IngredientType[]>([]);
     const [image, setImage] = useState<File | string>();
     const [fileName, setFileName] = useState("");
-    const [imagePreview, setImagePreview] = useState<string>(isEditMode ? "/noRecipeImage.png" : "");
+    const [imagePreview, setImagePreview] = useState<string>("");
     const [formData, setFormData] = useState<RecipeDto>(emptyRecipeDto);
     const [error, setError] = useState<string>("");
     const [edibleIngredient, setEdibleIngredient] = useState<IngredientType | undefined>(undefined);
@@ -159,37 +165,38 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
             props.onSave(true);
             setIsDirty(false);
 
-
             if (isEditMode) {
                 globalThis.history.back();
             } else {
                 navigate("/");
             }
         } catch (e) {
-            alert("Fehler beim Speichern! " + e);
+            toast.error("Fehler beim Speichern! \n" + e);
         } finally {
             setIsLoading(false);
         }
     }
 
+    const isSaveButtonDisabled: boolean = !isDirty || isLoading || !(
+        formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
+    )
+
     return (
         <>
             <form onSubmit={submitForm}>
                 <div className="display-flex items-center">
-                    <div>
-                        <p className="page-title">{isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}</p>
-                        {!(formData.name && formData.category && formData.speed && formData.ingredients?.length > 0) &&
-                            <span className="error">* Bereiche mit Sternchen sind Pflichtfelder!</span>
+                    <PageTitle
+                        title={isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}
+                        hasAdditionalText={true}
+                        hasSpinner={props.recipeLoading}
+                        additionalText={
+                        (formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)
+                            ? ""
+                            : "Bereiche mit Sternchen* sind Pflichtfelder!"
                         }
-                    </div>
-                    <button
-                        className="custom-button"
-                        disabled={!isDirty || isLoading || !(
-                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
-                        )}
-                    >
-                        {isLoading ? "Speicherung..." : "Speichern"}
-                    </button>
+                    ></PageTitle>
+
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}/>
                 </div>
 
                 <div className="container">
@@ -216,8 +223,8 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                         onChange={handleChange}
                                     >
                                         <option value="" disabled hidden> Kategorie wählen...</option>
-                                        {dishCategories.map(([key, label]) =>
-                                            <option key={key} value={key}>{label}</option>)
+                                        {dishCategories.map(([key, value]) =>
+                                            <option key={key} value={value}>{value}</option>)
                                         }
                                     </select>
                                 </div>
@@ -270,7 +277,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                             </div>
                         </div>
 
-                        <div className={"recipe-image"}>
+                        <div className="recipe-image">
                             <img
                                 width={imagePreview ? 400 : 230}
                                 height={imagePreview ? 300 : 180}
@@ -287,9 +294,11 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
 
                         <div className={"section"}>
                             <h4>Zutatenliste </h4>
-                            {isEditMode && <span>
-                                (Vergessen Sie nicht, nach der Anpassung der Zutaten auf <b>„Speichern“</b> zu klicken)
-                            </span>}
+                            {isEditMode &&
+                                <span>
+                                    (Vergessen Sie nicht, nach der Anpassung der Zutaten auf <b>„Speichern“</b> zu klicken)
+                                </span>
+                            }
                         </div>
                         <div className={ingredients.length < 1 ? "ingredients-list empty" : "ingredients-list"}>
                             {ingredients.length < 1 && <p className="empty">Es wurde noch keine Zutat hinzugefügt!</p>}
@@ -331,7 +340,6 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                                 ))}
                             </ul>
                         </div>
-
                     </div>
 
                     <div className="section">
@@ -381,14 +389,7 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
                 </div>
 
                 <div className="full-width item-right">
-                    <button
-                        className="custom-button"
-                        disabled={!isDirty || isLoading || !(
-                            formData.name && formData.category && formData.speed && formData.ingredients?.length > 0
-                        )}
-                    >
-                        {isLoading ? "Speicherung..." : "Speichern"}
-                    </button>
+                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}/>
                 </div>
             </form>
         </>

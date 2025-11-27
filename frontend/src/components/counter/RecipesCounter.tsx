@@ -22,6 +22,7 @@ export default function RecipesCounter(props: Readonly<RecipesCounterProps>) {
                         width={props.width ? props.width : 50}
                         height={props.height ? props.height : 50}
                         src={props.imageSrc}
+                        loading="lazy"
                         alt=""
                     />
                     <div>{props.title}</div>

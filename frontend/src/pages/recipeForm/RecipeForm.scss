@@ -38,7 +38,7 @@ h4 {
 }
 
 .custom-button {
-  height: 48px;
+  height: 42px;
   width: 210px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -48,6 +48,7 @@ h4 {
   font-weight: bold;
   border: 2px solid rgb(253, 185, 136);
   box-shadow: gray 3px 2px 3px;
+  padding: 0;
 }
 
 .upload {
@@ -78,7 +79,7 @@ h4 {
 }
 
 .recipe-name-input {
-  width: calc(100% - 16px);
+  width: 100%;
 }
 
 .ingredients-list {
@@ -146,8 +147,17 @@ select:not(.placeholder) {
 .error {
   color: #f10e11;
   font-weight: 600;
+  width: 355px;
+  text-align: right;
+  margin-left: -25px;
 }
 
 .item-right {
   text-align: right;
+}
+
+.page-title,
+.page-title-box .section {
+  width: unset;
+  align-items: baseline;
 }

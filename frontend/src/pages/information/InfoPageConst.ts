@@ -1,6 +1,4 @@
-import type {RecipeDto} from "./models/RecipeDto.ts";
-
-export type ShortFullInfo = {
+type ShortFullInfo = {
     short: string,
     full: string
 }
@@ -28,7 +26,7 @@ export const units: ShortFullInfo[] = [
     {short: "TL", full: "Teelöffel"},
     {short: "Tr.", full: "Tropfen"},
     {short: "Wf.", full: "Würfel"},
-    {short: "Z.", full: "Zehe"},
+    {short: "Z.", full: "Zehe(n)"},
 ];
 
 export const dimensions: ShortFullInfo[] = [
@@ -38,18 +36,3 @@ export const dimensions: ShortFullInfo[] = [
     {short: "1 Gl", full: "250 ml"},
     {short: "1 L", full: "1000 ml"},
 ];
-
-export const  emptyRecipeDto: RecipeDto = {
-    name: "",
-    category: "",
-    image: "",
-    ingredients: [],
-    description: "",
-    speed: "",
-    notes: "",
-    opinionOfTheDish: "",
-    linkToSource: "",
-    favorite: false
-}
-
-export const localStorageKey: string = "activeMealPlan";

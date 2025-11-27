@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {Dialog} from "primereact/dialog";
-import "./CustomDialog.css"
+import "./MealPlanDialog.css"
 
-type CustomDialogProps = {
+type MealPlanDialogProps = {
     isMealPlanPage?: boolean;
     isCreating?: boolean;
     visible: boolean;
@@ -11,12 +11,14 @@ type CustomDialogProps = {
     onCreateNewPlan: (name: string) => void;
 };
 
-export default function CustomDialog(props: Readonly<CustomDialogProps>) {
+export default function MealPlanDialog(props: Readonly<MealPlanDialogProps>) {
     const {visible, onHide, onNavigateToMealPlans, onCreateNewPlan} = props;
     const [newPlanName, setNewPlanName] = useState<string>("");
 
     const handleCreate = () => {
-        if (!newPlanName.trim()) return;
+        if (!newPlanName.trim()) {
+            return;
+        }
 
         onCreateNewPlan(newPlanName);
         setNewPlanName("");
@@ -32,7 +34,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
         >
             {!props.isMealPlanPage &&
                 <div>
-                    <div className="in-center">
+                    <div className="center">
                         <p>
                             Um Rezepte in einem bestimmten Speiseplan sammeln zu können, muss dieser erst aktiviert
                             werden.
@@ -43,7 +45,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
                         </p>
                     </div>
 
-                    <div className="in-center">
+                    <div className="center">
                         <button
                             className="custom-button"
                             disabled={props.isCreating}
@@ -60,7 +62,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
 
                     <hr/>
 
-                    <p>Hier können Sie einen neuen Speiseplan erstellen, der wird automatisch aktiviert.</p>
+                    <p>Hier können Sie einen neuen Speiseplan erstellen, der automatisch aktiviert wird.</p>
                 </div>
             }
             <div className="new-plan">
@@ -74,7 +76,7 @@ export default function CustomDialog(props: Readonly<CustomDialogProps>) {
                     className="full-width"
                 />
 
-                <div className="in-center">
+                <div className="center">
                     <button
                         className="custom-button"
                         disabled={!newPlanName.trim() || props.isCreating}

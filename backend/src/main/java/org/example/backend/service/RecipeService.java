@@ -58,7 +58,7 @@ public class RecipeService {
         Recipe newRecipe = Recipe.builder()
                 .id(recipeID)
                 .name(recipeDto.name().trim().isEmpty() ? "Rezept-" + recipeID : recipeDto.name().trim())
-                .category(recipeDto.category() == null ? DishCategory.OTHER : recipeDto.category())
+                .category(recipeDto.category() == null ? DishCategory.OTHER.getValue() : recipeDto.category())
                 .image(recipeDto.image())
                 .speed(recipeDto.speed() == null ? PreparationSpeed.FAST : recipeDto.speed())
                 .ingredients(recipeDto.ingredients())

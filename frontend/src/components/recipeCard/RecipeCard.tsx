@@ -3,6 +3,7 @@ import "./RecipeCard.css";
 import type { Ingredient } from "../../models/Ingredient.ts";
 import IngredientNames from "../ingredientNames/IngredientNames.tsx";
 import {handleImageError} from "../../utils/HandleImageError.ts";
+import {useMemo} from "react";
 
 type RecipeCardProps = {
     recipe: Recipe;
@@ -11,8 +12,10 @@ type RecipeCardProps = {
 export default function RecipeCard(props: Readonly<RecipeCardProps>) {
     const favoriteIcon: string = "/red-heart.png";
 
-    const allIngredients: string = props.recipe.ingredients
-        .map((ingredient: Ingredient) => " " + ingredient.name).toString();
+    const allIngredients = useMemo(() => props.recipe.ingredients
+        .map((ingredient: Ingredient) => " " + ingredient.name.trim())
+        .join(","), [props.recipe.ingredients]
+    );
 
     return (
         <div className="small-card">
@@ -34,6 +37,7 @@ export default function RecipeCard(props: Readonly<RecipeCardProps>) {
                         height={props.recipe.image ? 200 : 180}
                         src={props.recipe.image ? props.recipe.image : "/noRecipeImage.png"}
                         alt="Gerichtbild"
+                        loading="lazy"
                         onError={handleImageError}
                     />
                 </div>

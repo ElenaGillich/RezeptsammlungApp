@@ -22,7 +22,7 @@ class MealPlanServiceTest {
     Recipe recipe = Recipe.builder()
             .id("1")
             .name("Tomatensalat mit Schmand")
-            .category(DishCategory.SALAD)
+            .category(DishCategory.SALAD.getValue())
             .image("image")
             .speed(PreparationSpeed.FAST)
             .ingredients(List.of(

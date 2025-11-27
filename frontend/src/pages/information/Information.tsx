@@ -1,11 +1,12 @@
 import "./Information.css";
-import {dimensions, units} from "../../const.ts";
+import {dimensions, units} from "./InfoPageConst.ts";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
 
 export default function Information() {
-
     return (
         <>
-            <p className="page-title">Einige nützliche Informationen</p>
+            <PageTitle title="Einige nützliche Informationen"></PageTitle>
+
             <div className="container">
                 <div className="display-flex">
                     <div>

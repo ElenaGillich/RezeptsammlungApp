@@ -1,9 +1,11 @@
 import axios from "axios";
 import {useState} from "react";
-import {localStorageKey} from "../const.ts";
 import type {Recipe} from "../models/Recipe.ts";
+import {localStorageKey} from "../models/LocalStorageConst.ts";
+import {useToast} from "./useToast.ts";
 
 export function useAddRecipeToMealPlan() {
+    const toast = useToast();
     const [dialogVisible, setDialogVisible] = useState<boolean>(false);
     const [activeMealPlanId, setActiveMealPlanId] = useState<string | null>(localStorage.getItem(localStorageKey));
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -20,7 +22,7 @@ export function useAddRecipeToMealPlan() {
         }
 
         if (isRecipeInCurrentPlan) {
-            alert("Das Rezept ist bereits im aktiven Speiseplan!");
+            toast.info("Das Rezept ist bereits im aktiven Speiseplan!");
             return false;
         }
 
@@ -32,12 +34,12 @@ export function useAddRecipeToMealPlan() {
 
             if (isSuccess) {
                 localStorage.setItem(recipe.id, currentPlanId);
-                alert(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
+                toast.success(`"${recipe.name}" wurde zum aktiven Speiseplan hinzugefügt!`);
             }
 
             return isSuccess;
         } catch (error) {
-            alert("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error);
+            toast.error("Fehler beim Hinzufügen des Rezepts zum Speiseplan: " + error);
             return false;
         } finally {
             setIsProcessing(false);
@@ -62,7 +64,7 @@ export function useAddRecipeToMealPlan() {
                 setTemporaryRecipe(null);
             }
         } catch (error) {
-            alert("Fehler beim Erstellen des Speiseplans: " + error);
+            toast.error("Fehler beim Erstellen des Speiseplans: " + error);
         } finally {
             setIsProcessing(false);
         }

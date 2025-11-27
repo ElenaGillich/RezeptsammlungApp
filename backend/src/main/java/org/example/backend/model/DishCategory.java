@@ -17,7 +17,7 @@ public enum DishCategory {
     PRESERVE("Einmachen", "Заготовка"),
     GRILL("Grillgericht", "Блюдо на гриле"),
     PASTA("Pasta", "Паста / Макароны"),
-    OTHER("Andere", "Другое");
+    OTHER("Sonstiges", "Другое");
 
     private final String germanName;
     private final String russianName;

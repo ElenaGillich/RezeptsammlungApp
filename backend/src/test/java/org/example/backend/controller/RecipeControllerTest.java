@@ -35,7 +35,7 @@ class RecipeControllerTest {
     Recipe recipe = Recipe.builder()
             .id("1")
             .name("Tomatensalat mit Schmand")
-            .category(DishCategory.SALAD)
+            .category(DishCategory.SALAD.getValue())
             .image("image")
             .speed(PreparationSpeed.FAST)
             .ingredients(List.of(
@@ -73,7 +73,7 @@ class RecipeControllerTest {
                           {
                           "id": "1",
                           "name": "Tomatensalat mit Schmand",
-                          "category": "SALAD",
+                          "category": "Salat",
                           "image": "image",
                           "speed": "FAST",
                           "ingredients": [
@@ -114,7 +114,7 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("""
                           {
                           "name": "Tomaten-Salat mit Sauerrahm",
-                          "category": "SALAD",
+                          "category": "Salat",
                           "image": "https://mock.cloudinary.com/image.jpg",
                           "speed": "FAST",
                           "ingredients": [
@@ -153,7 +153,7 @@ class RecipeControllerTest {
                           {
                           "id": "1",
                           "name": "Tomaten-Salat mit Sauerrahm",
-                          "category": "SALAD",
+                          "category": "Salat",
                           "image": "https://mock.cloudinary.com/image.jpg",
                           "speed": "FAST",
                           "ingredients": [
@@ -171,7 +171,7 @@ class RecipeControllerTest {
         String dto = """
                   {
                   "name": "Tomaten-Salat mit Sauerrahm",
-                  "category": "SALAD",
+                  "category": "Salat",
                   "image": "",
                   "speed": "FAST",
                   "ingredients": [
@@ -224,7 +224,7 @@ class RecipeControllerTest {
                           {
                           "id": "1",
                           "name": "Tomatensalat mit Schmand",
-                          "category": "SALAD",
+                          "category": "Salat",
                           "image": "image",
                           "speed": "FAST",
                           "ingredients": [

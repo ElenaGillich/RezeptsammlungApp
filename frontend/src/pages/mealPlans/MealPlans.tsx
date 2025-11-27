@@ -1,30 +1,27 @@
 import type {MealPlan} from "../../models/MealPlan.ts";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
-import {localStorageKey} from "../../const.ts";
 import MealPlanCard from "../../components/mealPlanCard/MealPlanCard.tsx";
 import "./MealPlans.css"
 import {Tooltip} from "react-tooltip";
 import ProductsToBuy from "../../components/productsToBuy/ProductsToBuy.tsx";
 import {useAddRecipeToMealPlan} from "../../utils/useAddRecipeToMealPlan.ts";
-import CustomDialog from "../../components/dialog/CustomDialog.tsx";
+import MealPlanDialog from "../../components/dialog/MealPlanDialog.tsx";
 import Spinner from "../../components/spinner/Spinner.tsx";
+import {localStorageKey} from "../../models/LocalStorageConst.ts";
+import PageTitle from "../../components/pageTitle/PageTitle.tsx";
+import {useToast} from "../../utils/useToast.ts";
 
 export default function MealPlans() {
+    const toast = useToast();
     const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
     const [activeMealPlan, setActiveMealPlan] = useState<MealPlan | null>(null);
     const [isProductListOpen, setIsProductListOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>();
     const {dialogVisible, setDialogVisible, createNewMealPlan, isProcessing} = useAddRecipeToMealPlan();
 
-    useEffect(() => {
-        setIsLoading(true);
-        loadAllMealPlans();
-    }, [isProcessing]);
-
-    function loadAllMealPlans() {
-        axios
-            .get("/api/meal-plan/all")
+    const loadAllMealPlans = useCallback(() => {
+        axios.get("/api/meal-plan/all")
             .then((result) => {
                 setMealPlans(result.data);
                 for (const mealPlan of result.data) {
@@ -33,9 +30,14 @@ export default function MealPlans() {
                     }
                 }
             })
-            .catch(() => alert("Fehler beim Laden der Speisepläne!"))
+            .catch(() => toast.error("Fehler beim Laden der Speisepläne!"))
             .finally(() => setIsLoading(false));
-    }
+    }, [toast]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        loadAllMealPlans();
+    }, [isProcessing, loadAllMealPlans]);
 
     function removeMealPlan(planId: string) {
         if (!confirm("Möchten Sie den Speiseplan wirklich löschen?")) {
@@ -50,11 +52,11 @@ export default function MealPlans() {
                 if (localStorage.getItem(localStorageKey) === planId) {
                     localStorage.clear();
                     setActiveMealPlan(null);
-                    alert("Die aktive Speisekarte wird gerade gelöscht! Damit die ausgewählten Gerichte " +
+                    toast.info("Die aktive Speisekarte wird gerade gelöscht! Damit die ausgewählten Gerichte " +
                         "zu einer bestimmten Speisekarte hinzugefügt werden können, muss diese erst aktiviert werden.");
                 }
             })
-            .catch(() => alert("Fehler beim Löschen des Speiseplanes!"));
+            .catch(() => toast.error("Fehler beim Löschen des Speiseplanes!"));
     }
 
     function selectPlan(plan: MealPlan) {
@@ -79,7 +81,8 @@ export default function MealPlans() {
     return (
         <>
             <div className="display-flex items-center">
-                <h2 className="page-title">Meine Speisepläne</h2>
+                <PageTitle title="Meine Speisepläne"></PageTitle>
+
                 <button
                     className="custom-button"
                     disabled={isProcessing}
@@ -91,7 +94,7 @@ export default function MealPlans() {
 
             <div className="container">
                 {isLoading &&
-                    <div className="in-center">
+                    <div className="center">
                         <Spinner size={36}/>
                     </div>
                 }
@@ -181,7 +184,7 @@ export default function MealPlans() {
                 )}
             </div>
 
-            <CustomDialog
+            <MealPlanDialog
                 isMealPlanPage={true}
                 visible={dialogVisible}
                 onHide={() => setDialogVisible(false)}

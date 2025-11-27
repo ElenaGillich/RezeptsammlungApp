@@ -4,6 +4,7 @@ import {useState} from "react";
 import {DishCategory} from "../../models/DishCategory.ts";
 import axios from "axios";
 import {Tooltip} from "react-tooltip";
+import {useToast} from "../../utils/useToast.ts";
 
 type MealPlanCardProps = {
     mealPlan: MealPlan;
@@ -15,6 +16,7 @@ type MealPlanCardProps = {
 };
 
 export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
+    const toast = useToast();
     const isActiveMealPlan = props.isActive;
     const [mealPlan, setMealPlan] = useState<MealPlan>(props.mealPlan);
 
@@ -25,7 +27,7 @@ export default function MealPlanCard(props: Readonly<MealPlanCardProps>) {
                 localStorage.removeItem(recipeId);
                 props.onRemoveRecipeFromMealPlan(result.data);
             })
-            .catch((error) => alert("Fehler beim Entfernen des Rezepts vom Speiseplan: " + error));
+            .catch((error) => toast.error("Fehler beim Entfernen des Rezepts vom Speiseplan: " + error));
     }
 
     function showBodyContent() {

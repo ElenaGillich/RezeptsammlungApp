@@ -4,7 +4,8 @@ export default function Footer() {
     return (
         <footer>
             <span>© Elena Gillich, 2025</span>
-            <a href="/icon-sources">Quellen für verwendete Icons</a>
+            <a href="https://github.com/ElenaGillich/RezeptsammlungApp" target="_blank">App-Code in GitHub</a>
+            <a href="/icon-sources">Icons-Quellen</a>
         </footer>
     )
 }

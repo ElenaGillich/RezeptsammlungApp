@@ -10,7 +10,7 @@ import java.util.List;
 public class Recipe {
     String id;
     String name;
-    DishCategory category;
+    String category;
     String image;
     List<Ingredient> ingredients;
     String description;
