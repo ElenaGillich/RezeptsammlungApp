@@ -60,7 +60,7 @@ Die App ist mit der OpenAI-API verbunden, sodass man bei Bedarf Informationen ü
 
 
 ---
-<div style="text-align: center;">
+<div style="text-align: center; width: 100%;">
     RezeptsammlungApp - alle Rezepte an einem Ort!
 </div>
 
