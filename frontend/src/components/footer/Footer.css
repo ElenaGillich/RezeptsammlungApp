@@ -2,7 +2,9 @@ footer {
     font-size: 0.9rem;
     height: 50px;
     display: flex;
-    justify-content: space-around;
+    gap: 200px;
+    justify-content: center;
+    text-align: center;
     align-items: center;
     background: rgb(200, 60, 60);
     color: white;
@@ -12,7 +14,7 @@ footer {
         color: #fbe2cf;
         font-weight: bold;
         text-decoration: underline;
-        width: 150px;
+        min-width: 146px;
 
         &:hover {
             color: white;
