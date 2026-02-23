@@ -127,8 +127,10 @@ export default function RecipeView(props: RecipeViewProps) {
 
                         {recipe?.linkToSource &&
                             <div className="info-box">
-                                <label className="section-title">Link</label>:
-                                <a href={recipe.linkToSource} title="Link zum Ressource"> {recipe.linkToSource} </a>
+                                <label className="section-title">Link</label>:{" "}
+                                <a href={recipe.linkToSource} title="Link zum Ressource" target="_blank">
+                                    {recipe.linkToSource}
+                                </a>
                             </div>
                         }
                     </div>

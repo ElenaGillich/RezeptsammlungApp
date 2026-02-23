@@ -184,20 +184,19 @@ export default function RecipeForm(props: Readonly<RecipeFormProps>) {
     return (
         <>
             <form onSubmit={submitForm}>
-                <div className="display-flex items-center">
-                    <PageTitle
-                        title={isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}
-                        hasAdditionalText={true}
-                        hasSpinner={props.recipeLoading}
-                        additionalText={
+                <PageTitle
+                    title={isEditMode ? "Rezept bearbeiten" : "Neues Rezept erstellen"}
+                    hasAdditionalText={true}
+                    hasSpinner={props.recipeLoading}
+                    hasSaveButton={true}
+                    hasButtonSpinner={isLoading}
+                    isButtonDisabled={isSaveButtonDisabled}
+                    additionalText={
                         (formData.name && formData.category && formData.speed && formData.ingredients?.length > 0)
                             ? ""
                             : "Bereiche mit Sternchen* sind Pflichtfelder!"
-                        }
-                    ></PageTitle>
-
-                    <SaveButton isDisabled={isSaveButtonDisabled} hasSpinner={isLoading}/>
-                </div>
+                    }
+                ></PageTitle>
 
                 <div className="container">
                     <div className="display-flex">

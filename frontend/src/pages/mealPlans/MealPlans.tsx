@@ -80,17 +80,12 @@ export default function MealPlans() {
 
     return (
         <>
-            <div className="display-flex items-center">
-                <PageTitle title="Meine Speisepläne"></PageTitle>
-
-                <button
-                    className="custom-button"
-                    disabled={isProcessing}
-                    onClick={() => setDialogVisible(true)}
-                >
-                    {isProcessing ? "Erstellung..." : "Neu erstellen"}
-                </button>
-            </div>
+            <PageTitle
+                title="Meine Speisepläne"
+                hasMealPlanCreationButton={true}
+                isButtonDisabled={isProcessing}
+                onClick={() => setDialogVisible(true)}
+            ></PageTitle>
 
             <div className="container">
                 {isLoading &&
