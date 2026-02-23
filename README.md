@@ -18,7 +18,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=elenagillich_RezeptsammlungApp_backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=elenagillich_RezeptsammlungApp_backend)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=elenagillich_RezeptsammlungApp_backend&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=elenagillich_RezeptsammlungApp_backend)
 
-
+![Start page](docs/startpage.png)
 ## Projektbeschreibung
 
 Das ist ein Full-Stack Capstone Projekt, das Java / SpringBoot (Backend) sowie React / TypeScript (Frontend) und externe OpenAI-API (zum Abfragen von Informationen über unbekannte Zutaten) kombiniert.
